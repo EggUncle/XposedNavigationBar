@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by EggUncle on 17-6-4 下午9:03
+  ~ Copyright (c) 2017.  All rights reserved
+  ~
+  ~ Last modified 17-6-4 下午9:03
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:paddingLeft="@dimen/space_m"
+    android:paddingRight="@dimen/space_m"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ed_dialog"
+        />
+
+</LinearLayout>

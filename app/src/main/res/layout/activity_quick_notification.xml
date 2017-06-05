@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by EggUncle on 17-6-4 下午7:56
+  ~ Copyright (c) 2017.  All rights reserved
+  ~
+  ~ Last modified 17-6-4 下午7:56
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.QuickNotificationActivity">
+
+</android.support.constraint.ConstraintLayout>
