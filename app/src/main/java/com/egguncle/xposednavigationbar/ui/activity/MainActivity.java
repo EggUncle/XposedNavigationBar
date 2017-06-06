@@ -7,21 +7,20 @@
 
 package com.egguncle.xposednavigationbar.ui.activity;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import com.egguncle.xposednavigationbar.R;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 
 public class MainActivity extends BaseActivity {
-    private final static String TAG="MainActivity";
+    private final static String TAG = "MainActivity";
     private Button btnTest;
     private ImageView img;
-
-
 
 
     @Override
@@ -48,24 +47,41 @@ public class MainActivity extends BaseActivity {
         btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Intent intent = packageManager.getLaunchIntentForPackage(packageName);
-//                Intent intent=new Intent("com.egguncle.xposednavigationbar.QuickNotificationActivity");
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-                Intent intent = new Intent("com.egguncle.xposednavigationbar.BlackActivity");
-                //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出activity时仍然显示软件的界面的bug
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-//                View v = getWindow().getDecorView();
-//                v.setDrawingCacheEnabled(true);
-//                v.buildDrawingCache();
-//
-//                Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache(), 0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
-//                v.setDrawingCacheEnabled(false);
-//                v.destroyDrawingCache();
-
-             //   img.setImageBitmap(bitmap);
+                requestRoot();
             }
         });
+    }
+
+    public boolean requestRoot() {
+        boolean result = false;
+        DataOutputStream dataOutputStream = null;
+
+        try {
+            // 申请su权限
+            Process process = Runtime.getRuntime().exec("su");
+            dataOutputStream = new DataOutputStream(process.getOutputStream());
+            // 模拟手势下拉
+            String command = "input swipe 100 1 100 500 300 \n";
+            String command2 = "input tap 100 100 \n";
+            dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
+            dataOutputStream.flush();
+            dataOutputStream.writeBytes("exit\n");
+            dataOutputStream.flush();
+            process.waitFor();
+
+            result = true;
+        } catch (Exception e) {
+
+        } finally {
+            try {
+                if (dataOutputStream != null) {
+                    dataOutputStream.close();
+                }
+
+            } catch (IOException e) {
+
+            }
+        }
+        return result;
     }
 }
