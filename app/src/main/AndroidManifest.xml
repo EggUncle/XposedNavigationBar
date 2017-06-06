@@ -34,16 +34,17 @@
 
         <activity android:name=".ui.activity.SetFuncActivity" />
 
-       <!--给快速备忘activity设置透明背景 -->
+        <!-- 给快速备忘activity设置透明背景 -->
         <activity
             android:name=".ui.activity.QuickNotificationActivity"
-            android:theme="@style/myTransparentTheme"
-            >
+            android:theme="@style/myTransparentTheme">
             <intent-filter>
-                <action android:name="com.egguncle.xposednavigationbar.QuickNotificationActivity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.egguncle.xposednavigationbar.QuickNotificationActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

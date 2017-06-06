@@ -7,11 +7,16 @@
 
 package com.egguncle.xposednavigationbar.hook;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Looper;
+import android.os.PowerManager;
+import android.os.SystemClock;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -51,9 +58,17 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     //状态栏是否展开
     private boolean statusBarExpend = false;
 
-    //用于获取phonestatbar对象
-    private Object obj;
-    private Method clearAllNotifications;
+    //用于获取phonestatusbar对象和clearAllNotifications方法
+    private Object phoneStatusBar;
+    private Method clearAllNotificationsMethod;
+
+    //用于获取phoneWindowManager对象和takescreenshot方法
+    private Object phoneWindowManager;
+    private Method takeScreenShot;
+
+    private Class<?> c;
+
+
 
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
@@ -86,16 +101,22 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 p.weight = 1;
                 Button btn1 = new Button(context);
-              //  btn1.setBackgroundColor(Color.alpha(255));
+                btn1.setText("启动应用");
+                Button btn2 = new Button(context);
+                btn2.setText("下拉通知");
+                Button btn3 = new Button(context);
+                btn3.setText("快速备忘");
+                Button btn4 = new Button(context);
+                btn4.setText("清除通知");
+                Button btn5 = new Button(context);
+                btn5.setText("息屏");
                 btn1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                      launchActivity(view.getContext(),"com.egguncle.imagetohtml");
+                        launchActivity(view.getContext(), "com.egguncle.imagetohtml");
                     }
                 });
-                Button btn2 = new Button(context);
-                Button btn3 = new Button(context);
-                Button btn4 = new Button(context);
+
                 btn2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -121,18 +142,21 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                         //这个方法只能清除对应应用里面的通知
 //                        NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 //                        nm.cancelAll();
-                        try {
-                            //反射取到这个清除所有通知的方法
-                            clearAllNotifications.invoke(obj);
-                            //方法执行后，不会马上清除所有的消息，而是在通知栏下拉，通知内容变得可见后才清除。
-                            //所以在这里调用一次下拉通知栏的方法
-                            expandStatusBar(context);
-                            //再收起通知栏
-                         //   collapseStatusBar(context);
+                        clearAllNotifications(context);
 
+                    }
+                });
+
+                btn5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            screenOff(view.getContext());
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
-                        } catch (InvocationTargetException e) {
+                        } catch (NoSuchMethodException e) {
                             e.printStackTrace();
                         }
                     }
@@ -142,6 +166,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 vpLine.addView(btn2, p);
                 vpLine.addView(btn3, p);
                 vpLine.addView(btn4, p);
+                vpLine.addView(btn5, p);
 
                 //  textView2.setBackgroundColor(Color.BLUE);
                 List<View> list1 = new ArrayList<View>();
@@ -201,25 +226,37 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //过滤包名
-        if (!lpparam.packageName.equals("com.android.systemui"))
-            return;
-        XposedBridge.log("filter package");
-        Class<?> c = lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
-        Method m=c.getDeclaredMethod("clearAllNotifications");
-        m.setAccessible(true);
-        //获取到clearAllNotifications方法
-        clearAllNotifications=m;
-      //  XposedBridge.log("====hook success====");
-        XposedHelpers.findAndHookMethod(c,
-                "start", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                super.afterHookedMethod(param);
-                //在哲理获取到PhoneStatusBar对象
-                obj=param.thisObject;
-                XposedBridge.log("====hook success====");
-            }
-        });
+        if (lpparam.packageName.equals("com.android.systemui")) {
+            XposedBridge.log("filter package");
+            //获取清除通知的方法
+            Class<?> phoneStatusBarClass =
+                    lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
+            Method method1 = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
+            method1.setAccessible(true);
+            //获取到clearAllNotifications方法
+            clearAllNotificationsMethod = method1;
+            XposedBridge.log("====hook PhoneStatusBar success====");
+            //       phoneStatusBar=XposedHelpers.findClass("com.android.systemui.statusbar.phone.PhoneStatusBar",lpparam.classLoader);
+            XposedHelpers.findAndHookMethod(phoneStatusBarClass,
+                    "start", new XC_MethodHook() {
+                        @Override
+                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                            super.afterHookedMethod(param);
+                            //在这里获取到PhoneStatusBar对象
+                            phoneStatusBar = param.thisObject;
+                            XposedBridge.log("====hook clear notifications success====");
+                        }
+                    });
+
+
+
+
+        } else if (lpparam.packageName.equals("android.os")) {
+            XposedBridge.log("--filter package");
+
+        }
+
+
 
     }
 
@@ -281,12 +318,51 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     /**
      * 启动其他app
+     *
      * @param context
      * @param pkgName 对应app的包名
      */
-    public void launchActivity(Context context,String pkgName){
+    public void launchActivity(Context context, String pkgName) {
         PackageManager packageManager = context.getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage(pkgName);
         context.startActivity(intent);
     }
+
+    /**
+     * 清除所有通知
+     *
+     * @param context
+     */
+    public void clearAllNotifications(Context context) {
+        if (clearAllNotificationsMethod == null || phoneStatusBar == null) {
+            return;
+        }
+        try {
+            //反射取到这个清除所有通知的方法
+            clearAllNotificationsMethod.invoke(phoneStatusBar);
+            //方法执行后，不会马上清除所有的消息，而是在通知栏下拉，通知内容变得可见后才清除。
+            //所以在这里调用一次下拉通知栏的方法
+            expandStatusBar(context);
+            //再收起通知栏
+            collapseStatusBar(context);
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void screenOff(Context context) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        PowerManager pm= (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+
+            Method goToSleep=pm.getClass().getMethod("goToSleep",long.class);
+            goToSleep.invoke(pm, SystemClock.uptimeMillis());
+
+
+    }
+
+//    public void takeScreenShot(Context context) {
+//
+//    }
 }
