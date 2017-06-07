@@ -54,6 +54,7 @@ public class QuickNotificationActivity extends Activity {
         final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("快速备忘")
+               // .setIcon(R.drawable.notice)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -64,7 +65,7 @@ public class QuickNotificationActivity extends Activity {
                         builder.setContentText(noticeStr)
                                 .setContentTitle("备忘")
                                 .setWhen(System.currentTimeMillis())
-                                .setSmallIcon(R.mipmap.ic_launcher);
+                                .setSmallIcon(R.drawable.notice);
                                // .setAutoCancel(true);
                         Notification notice = builder.build();
                         //使用通知内容的hashcode来作为通知的id，即防止了内容重复造成多个通知，
