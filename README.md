@@ -1,6 +1,8 @@
 # XposedNavigationBar
 基于Xposed框架实现的导航栏功能拓展模块
 在导航栏中实现一个左划菜单，实现多种快捷功能
+下载地址
+http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 
 --开发中--
 
