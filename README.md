@@ -54,3 +54,8 @@ http://www.jianshu.com/p/d17ce2880753
         context.startActivity(intent);
     }
 ```
+
+## 踩到的一些小坑
+获取上下文对象可以通过在hook资源时拿到某个view，再getContext
+
+资源文件要放在asset文件夹下，使用时取出来转换为byte[]再去转换为需要的类型
