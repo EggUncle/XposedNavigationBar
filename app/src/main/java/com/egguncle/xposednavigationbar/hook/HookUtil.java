@@ -22,7 +22,12 @@ package com.egguncle.xposednavigationbar.hook;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.XModuleResources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.PowerManager;
@@ -34,6 +39,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -45,17 +52,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 
 import static android.view.View.VISIBLE;
@@ -66,7 +78,7 @@ import static android.view.View.VISIBLE;
  * 一个hook模块，为了在android设备的底部导航栏虚拟按键上实现类似mac touch bar的效果
  */
 
-public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageResources {
+public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageResources, IXposedHookZygoteInit {
 
     private final static String TAG = "HookUtil";
 
@@ -75,6 +87,17 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     //启动后台清理
     private final static String ACTION_CLEAR_BACK = "com.egguncle.xposednavigationbar.ClearMemActivity";
 
+    private final static String IMG_BACK = "back";
+    private final static String CLEAR_MEM = "clear_mem";
+    private final static String CLEAR_NOTIFICATION = "clear_notification";
+    private final static String DOWN = "down";
+    private final static String LIGHT = "light";
+    private final static String QUICK_NOTICES = "quick_notices";
+    private final static String SCREEN_OFF = "screen_off";
+    private final static String UP = "up";
+    private final static String VOLUME = "volume";
+    private final static String SMALL_PONIT = "small_ponit";
+
     //状态栏是否展开
     private boolean statusBarExpend = false;
 
@@ -82,10 +105,55 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     private Object phoneStatusBar;
     private Method clearAllNotificationsMethod;
 
+    //用于加载图片资源
+    private Map<String, byte[]> mapImgRes = new HashMap<>();
+
+
+    @Override
+    public void initZygote(StartupParam startupParam) throws Throwable {
+        //读取sp，查看程序是否被允许激活
+        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        boolean activation = pre.getBoolean("activation", false);
+        if (activation) {
+            //加载图片资源文件
+            Resources res = XModuleResources.createInstance(startupParam.modulePath, null);
+            byte[] backImg = XposedHelpers.assetAsByteArray(res, "back.png");
+            byte[] clearMenImg = XposedHelpers.assetAsByteArray(res, "clear_mem.png");
+            byte[] clearNotificationImg = XposedHelpers.assetAsByteArray(res, "clear_notification.png");
+            byte[] downImg = XposedHelpers.assetAsByteArray(res, "down.png");
+            byte[] lightImg = XposedHelpers.assetAsByteArray(res, "light.png");
+            byte[] quickNoticesImg = XposedHelpers.assetAsByteArray(res, "quick_notices.png");
+            byte[] screenOffImg = XposedHelpers.assetAsByteArray(res, "screenoff.png");
+            byte[] upImg = XposedHelpers.assetAsByteArray(res, "up.png");
+            byte[] volume = XposedHelpers.assetAsByteArray(res, "volume.png");
+            byte[] smallPonit = XposedHelpers.assetAsByteArray(res, "small_point.png");
+            mapImgRes.put(IMG_BACK, backImg);
+            mapImgRes.put(CLEAR_MEM, clearMenImg);
+            mapImgRes.put(CLEAR_NOTIFICATION, clearNotificationImg);
+            mapImgRes.put(DOWN, downImg);
+            mapImgRes.put(LIGHT, lightImg);
+            mapImgRes.put(QUICK_NOTICES, quickNoticesImg);
+            mapImgRes.put(SCREEN_OFF, screenOffImg);
+            mapImgRes.put(UP, upImg);
+            mapImgRes.put(VOLUME, volume);
+            mapImgRes.put(SMALL_PONIT, smallPonit);
+        }
+
+        // BitmapFactory.decodeByteArray(img,0,img.length);
+    }
+
+    private Bitmap byte2Bitmap(byte[] imgBytes) {
+        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+
+    }
 
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
-
+        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        boolean activation = pre.getBoolean("activation", false);
+        if (!activation) {
+            return;
+        }
         //过滤包名
         if (!resparam.packageName.equals("com.android.systemui"))
             return;
@@ -104,40 +172,80 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                 LinearLayout parentView = new LinearLayout(context);
                 //加入一个viewpager，第一页为空，是导航栏本身的功能
-                ViewPager vpXphook = new ViewPager(context);
+                final ViewPager vpXphook = new ViewPager(context);
                 parentView.addView(vpXphook);
-                TextView textView1 = new TextView(context);
+                //   TextView textView1 = new TextView(context);
+                //第一个界面，与原本的导航栏重合，实际在导航栏的下层
+                LinearLayout linepage1 = new LinearLayout(context);
+                //用于呼出整个扩展导航栏的工具
+                final ImageButton btnCall = new ImageButton(context);
+                btnCall.setImageBitmap(byte2Bitmap(mapImgRes.get(SMALL_PONIT)));
+                btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btnCall.setBackgroundColor(Color.alpha(255));
+                LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                line1Params.gravity = Gravity.LEFT;
+                linepage1.addView(btnCall, line1Params);
+                //点击这个按钮，跳转到扩展部分
+                btnCall.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        vpXphook.setCurrentItem(1);
+                    }
+                });
 
                 //viewpage的第二页
                 //整个页面的基础
-                final FrameLayout frameLayout = new FrameLayout(context);
+                final FrameLayout framePage2 = new FrameLayout(context);
                 LinearLayout vpLine = new LinearLayout(context);
-                frameLayout.addView(vpLine);
+                framePage2.addView(vpLine);
                 vpLine.setOrientation(LinearLayout.HORIZONTAL);
-                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 p.weight = 1;
 //                Button btn1 = new Button(context);
 //                btn1.setText("启动应用");
-                Button btn2 = new Button(context);
-                btn2.setText("下拉通知");
-                Button btn3 = new Button(context);
-                btn3.setText("快速备忘");
-                Button btn4 = new Button(context);
-                btn4.setText("清除通知");
-                Button btn5 = new Button(context);
-                btn5.setText("息屏");
-                Button btn6 = new Button(context);
-                btn6.setText("清理后台");
-                Button btn7 = new Button(context);
-                btn7.setText("屏幕亮度");
-                Button btn8 = new Button(context);
-                btn8.setText("声音调整");
-//                btn1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        launchActivity(view.getContext(), "com.egguncle.imagetohtml");
-//                    }
-//                });
+                ImageButton btn2 = new ImageButton(context);
+                // btn2.setText("下拉通知");
+                btn2.setImageBitmap(byte2Bitmap(mapImgRes.get(DOWN)));
+                btn2.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn2.setBackgroundColor(Color.alpha(255));
+
+                ImageButton btn3 = new ImageButton(context);
+                //  btn3.setText("快速备忘");
+                btn3.setImageBitmap(byte2Bitmap(mapImgRes.get(QUICK_NOTICES)));
+                btn3.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn3.setBackgroundColor(Color.alpha(255));
+
+                ImageButton btn4 = new ImageButton(context);
+                //  btn4.setText("清除通知");
+                btn4.setImageBitmap(byte2Bitmap(mapImgRes.get(CLEAR_NOTIFICATION)));
+                btn4.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn4.setBackgroundColor(Color.alpha(255));
+
+                ImageButton btn5 = new ImageButton(context);
+                // btn5.setText("息屏");
+                btn5.setImageBitmap(byte2Bitmap(mapImgRes.get(SCREEN_OFF)));
+                btn5.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn5.setBackgroundColor(Color.alpha(255));
+
+                ImageButton btn6 = new ImageButton(context);
+                // btn6.setText("清理后台");
+                btn6.setImageBitmap(byte2Bitmap(mapImgRes.get(CLEAR_MEM)));
+                btn6.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn6.setBackgroundColor(Color.alpha(255));
+
+                ImageButton btn7 = new ImageButton(context);
+                //  btn7.setText("屏幕亮度");
+                btn7.setImageBitmap(byte2Bitmap(mapImgRes.get(LIGHT)));
+                btn7.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn7.setBackgroundColor(Color.alpha(255));
+
+                ImageButton btn8 = new ImageButton(context);
+                // btn8.setText("声音调整");
+                btn8.setImageBitmap(byte2Bitmap(mapImgRes.get(VOLUME)));
+                btn8.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                btn8.setBackgroundColor(Color.alpha(255));
 
                 btn2.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -196,8 +304,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                     public void onClick(View view) {
                         LinearLayout line = new LinearLayout(context);
                         line.setBackgroundColor(Color.BLACK);
-                        setBacklightBrightness(context, line, frameLayout);
-                        frameLayout.addView(line);
+                        setBacklightBrightness(context, line, framePage2);
+                        framePage2.addView(line);
 
                     }
                 });
@@ -206,8 +314,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                     public void onClick(View view) {
                         LinearLayout line = new LinearLayout(context);
                         line.setBackgroundColor(Color.BLACK);
-                        setPhoneVolume(context, line, frameLayout);
-                        frameLayout.addView(line);
+                        setPhoneVolume(context, line, framePage2);
+                        framePage2.addView(line);
                     }
                 });
 
@@ -221,14 +329,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 vpLine.addView(btn8, p);
 
                 //  textView2.setBackgroundColor(Color.BLUE);
+                //将这些布局都添加到viewpageadapter中
                 List<View> list1 = new ArrayList<View>();
-                list1.add(textView1);
-                list1.add(frameLayout);
-
-                //亮度调整模块
-//                LinearLayout line = new LinearLayout(context);
-//                setBacklightBrightness(context, line);
-//                list1.add(line);
+                list1.add(linepage1);
+                list1.add(framePage2);
 
                 MyViewPagerAdapter pagerAdapter = new MyViewPagerAdapter(list1);
 
@@ -280,26 +384,15 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             }
         });
 
-//        resparam.res.hookLayout(resparam.packageName, "layout", "status_bar_recent_panel", new XC_LayoutInflated() {
-//
-//            @Override
-//            public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-//                XposedBridge.log("=========================hook linearlayout success");
-//                LinearLayout recentLinear = (LinearLayout) liparam.view.findViewById(liparam.res.getIdentifier("recents_linear_layout", "id", "com.android.systemui"));
-//                recentLinear.setBackgroundColor(Color.WHITE);
-//                FrameLayout fg = (FrameLayout) liparam.view.findViewById(liparam.res.getIdentifier("recents_bg_protect", "id", "com.android.systemui"));
-//                fg.setBackgroundColor(Color.BLUE);
-//                int count = recentLinear.getChildCount();
-//                for (int i = 0; i < count; i++) {
-//                    View childView = recentLinear.getChildAt(i);
-//                    XposedBridge.log("--" + childView.getClass().getName());
-//                }
-//            }
-//        });
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        boolean activation = pre.getBoolean("activation", false);
+        if (!activation) {
+            return;
+        }
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
             XposedBridge.log("filter package");
@@ -338,19 +431,25 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         //如果在6.0环境下，尝试申请root权限来解决通知栏展开缓慢的问题
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && requestRoot()) {
             //申请成功后会模拟手势进行下拉
+            //如果失败了，就按照普通的方式下拉
+          //  expandAllStatusBarWithOutRoot(context);
+            XposedBridge.log("testestset");
         } else {
+            expandAllStatusBarWithOutRoot(context);
+        }
+    }
 
-            try {
-                Object statusBarManager = context.getSystemService("statusbar");
-                Method expand;
+    public void expandAllStatusBarWithOutRoot(Context context) {
+        try {
+            Object statusBarManager = context.getSystemService("statusbar");
+            Method expand;
 //            if (Build.VERSION.SDK_INT <= 16) {
 //              由于支持的系统版本为5.0～6.0,所以不对版本做适配
 //            } else {
-                expand = statusBarManager.getClass().getMethod("expandSettingsPanel");
-                expand.invoke(statusBarManager);
-            } catch (Exception localException) {
-                localException.printStackTrace();
-            }
+            expand = statusBarManager.getClass().getMethod("expandSettingsPanel");
+            expand.invoke(statusBarManager);
+        } catch (Exception localException) {
+            localException.printStackTrace();
         }
     }
 
@@ -470,51 +569,53 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     public boolean requestRoot() {
         //先申请root权限
         Process process = null;
-        boolean result = false;
+        boolean result=false;
         try {
+            XposedBridge.log("申请root");
             process = Runtime.getRuntime().exec("su");
             result = true;
+            XposedBridge.log("申请成功");
+            final Process finalProcess = process;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // boolean result = false;
+                    DataOutputStream dataOutputStream = null;
+
+                    try {
+                        dataOutputStream = new DataOutputStream(finalProcess.getOutputStream());
+                        // 模拟手势下拉
+                        String command = "input swipe 100 10 100 500 400 \n";
+                        String command2 = "input tap 200 150 \n";
+                        dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
+                        SystemClock.sleep(500);
+                        dataOutputStream.write(command2.getBytes(Charset.forName("utf-8")));
+                        dataOutputStream.flush();
+                        dataOutputStream.writeBytes("exit\n");
+                        dataOutputStream.flush();
+                        finalProcess.waitFor();
+
+
+                    } catch (Exception e) {
+
+                    } finally {
+                        try {
+                            if (dataOutputStream != null) {
+                                dataOutputStream.close();
+                            }
+
+                        } catch (IOException e) {
+
+                        }
+                    }
+
+                }
+            }).start();
         } catch (IOException e) {
             e.printStackTrace();
+            XposedBridge.log("申请 失败");
         }
-        final Process finalProcess = process;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // boolean result = false;
-                DataOutputStream dataOutputStream = null;
 
-                try {
-                    // 申请su权限
-
-                    dataOutputStream = new DataOutputStream(finalProcess.getOutputStream());
-                    // 模拟手势下拉
-                    String command = "input swipe 100 10 100 500 400 \n";
-                    String command2 = "input tap 100 100 \n";
-                    dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
-                    SystemClock.sleep(300);
-                    dataOutputStream.write(command2.getBytes(Charset.forName("utf-8")));
-                    dataOutputStream.flush();
-                    dataOutputStream.writeBytes("exit\n");
-                    dataOutputStream.flush();
-                    finalProcess.waitFor();
-
-                    //   result = true;
-                } catch (Exception e) {
-
-                } finally {
-                    try {
-                        if (dataOutputStream != null) {
-                            dataOutputStream.close();
-                        }
-
-                    } catch (IOException e) {
-
-                    }
-                }
-                //    return result;
-            }
-        }).start();
         return result;
     }
 
@@ -535,9 +636,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         seekBarParam.weight = 2;
         seekBarParam.gravity = Gravity.CENTER_VERTICAL;
 
-        Button button = new Button(context);
-        button.setText("关闭");
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnBack = new ImageButton(context);
+        btnBack.setImageBitmap(byte2Bitmap(mapImgRes.get(IMG_BACK)));
+        btnBack.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        btnBack.setBackgroundColor(Color.alpha(255));
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rootGroup.removeView(viewGroup);
@@ -565,7 +669,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
             }
         });
-        viewGroup.addView(button, btnParam);
+        viewGroup.addView(btnBack, btnParam);
         viewGroup.addView(seekBar, seekBarParam);
 
     }
@@ -616,9 +720,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         seekBarParam.weight = 2;
         seekBarParam.gravity = Gravity.CENTER_VERTICAL;
 
-        Button button = new Button(context);
-        button.setText("关闭");
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnBack = new ImageButton(context);
+        btnBack.setImageBitmap(byte2Bitmap(mapImgRes.get(IMG_BACK)));
+        btnBack.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        btnBack.setBackgroundColor(Color.alpha(255));
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rootGroup.removeView(viewGroup);
@@ -647,7 +753,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
             }
         });
-        viewGroup.addView(button, btnParam);
+        viewGroup.addView(btnBack, btnParam);
         viewGroup.addView(seekBar, seekBarParam);
 
     }

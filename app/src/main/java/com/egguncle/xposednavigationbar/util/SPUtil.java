@@ -32,6 +32,7 @@ public class SPUtil {
     private static SharedPreferences.Editor mEditor;
     private static SPUtil instance;
     private static final String SP_NAME = "XposedNavigationBar";
+    private static final String ACTIVATION="activation";
 
 
     private SPUtil() {
@@ -42,14 +43,30 @@ public class SPUtil {
         if (instance == null) {
             synchronized (SPUtil.class) {
                 instance = new SPUtil();
-                mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_PRIVATE);
+                //由于xp模块需要读取sp的内容，所以将sp的类型设置为MODE_WORLD_READABLE
+                mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_WORLD_READABLE);
                 mEditor = mSharedPreferences.edit();
             }
         }
         return instance;
     }
 
-    public static void saveAppInfo(String packageName){}
+    /**
+     * 模块激活开关
+     * @param b
+     */
+    public  void setActivation(boolean b){
+        mEditor.putBoolean(ACTIVATION,b);
+        mEditor.commit();
+    }
+
+    /**
+     * 获取当前模块是否激活
+     * @return
+     */
+    public  boolean getActivation(){
+        return mSharedPreferences.getBoolean(ACTIVATION,false);
+    }
 
 
 }

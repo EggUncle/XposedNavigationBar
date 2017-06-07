@@ -45,8 +45,6 @@
             android:name="xposedminversion"
             android:value="53" />
 
-        <activity android:name=".ui.activity.SetFuncActivity" />
-
         <!-- 给快速备忘activity设置透明背景 -->
         <activity
             android:name=".ui.activity.QuickNotificationActivity"
