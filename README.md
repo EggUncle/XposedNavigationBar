@@ -6,9 +6,9 @@
 
 ## 截图
 
-## 音量调整
+## 音量调整 ✓
 
-## 亮度调整
+## 亮度调整 ✓
 
 ## 通知栏下拉 ✓
 通过反射调用了collapsePanels（收起),expandSettingsPanel(完全展开),expandNotificationsPanel(展开一部分),
@@ -38,7 +38,8 @@ http://www.jianshu.com/p/d17ce2880753
 ## 息屏 ✓ 
 这个功能的实现比较简单，阅读源码后发现gotosleep这个方法被hide了，解决方法也很简单，直接通过反射去调用即可。
 
-## 后台清理
+## 后台清理 ✓
+待改进，清理效果不是很理想。
 
 ## 手电筒
 
