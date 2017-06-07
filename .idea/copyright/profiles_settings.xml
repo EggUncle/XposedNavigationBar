@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="tushuo">
+  <settings default="xposednavigationbar">
     <module2copyright>
-      <element module="Project Files" copyright="tushuo" />
+      <element module="Project Files" copyright="xposednavigationbar" />
     </module2copyright>
   </settings>
 </component>

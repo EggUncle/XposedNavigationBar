@@ -1,46 +1,46 @@
 /*
- * Create by EggUncle on 17-6-2 下午2:27
- * Copyright (c) 2017.  All rights reserved
+ *     Navigation bar function expansion module
+ *     Copyright (C) 2017 egguncle
  *
- * Last modified 17-6-2 下午2:19
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.egguncle.xposednavigationbar.hook;
 
-import android.app.ActivityManager;
-import android.app.Instrumentation;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
@@ -489,7 +489,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                     dataOutputStream = new DataOutputStream(finalProcess.getOutputStream());
                     // 模拟手势下拉
-                    String command = "input swipe 100 10 100 500 300 \n";
+                    String command = "input swipe 100 10 100 500 400 \n";
                     String command2 = "input tap 100 100 \n";
                     dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
                     SystemClock.sleep(300);
