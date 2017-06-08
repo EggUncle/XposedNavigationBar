@@ -61,8 +61,12 @@ public class ClearMemActivity extends Activity {
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         am.getMemoryInfo(mi);
         long totalMem = mi.totalMem / (1024 * 1024);
-        Toast.makeText(this, "clear " + clearMem + "m " + afterMen + "/" + totalMem+"m", Toast.LENGTH_SHORT).show();
+        try {
+            //酷安有位用红米note4x的朋友出现了一些问题，报错点可能在这里
+            Toast.makeText(this, "clear " + clearMem + "m " + afterMen + "/" + totalMem + "m", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
 
+        }
         finish();
     }
 

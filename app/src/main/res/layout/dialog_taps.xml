@@ -17,11 +17,23 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <dimen name="space_xs">4dp</dimen>
-    <dimen name="space_s">8dp</dimen>
-    <dimen name="space_m">16dp</dimen>
-    <dimen name="img_size">20dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="txt_m">16sp</dimen>
-</resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/space_m">
+
+    <TextView
+        android:padding="@dimen/space_s"
+        android:textSize="@dimen/txt_m"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/set_fun_dialog"
+        />
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nolonger_apper" />
+
+
+</LinearLayout>

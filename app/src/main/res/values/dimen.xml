@@ -18,5 +18,5 @@
   -->
 
 <resources>
-    <dimen name="item_height">60dp</dimen>
+    <dimen name="item_height">50dp</dimen>
 </resources>

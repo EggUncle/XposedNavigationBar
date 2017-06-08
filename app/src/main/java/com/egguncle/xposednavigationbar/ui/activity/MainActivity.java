@@ -19,14 +19,14 @@
 package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.util.SPUtil;
@@ -35,7 +35,12 @@ import com.egguncle.xposednavigationbar.util.SPUtil;
 public class MainActivity extends BaseActivity {
     private final static String TAG = "MainActivity";
     private Switch swApp;
-    private TextView tvMarket;
+    private LinearLayout btnSettingBtns;
+    private LinearLayout btnSettingOther;
+    private LinearLayout btnAbout;
+
+
+
 
     @Override
     int getLayoutId() {
@@ -45,13 +50,16 @@ public class MainActivity extends BaseActivity {
     @Override
     void initView() {
         swApp = (Switch) findViewById(R.id.sw_app);
-        tvMarket = (TextView) findViewById(R.id.tv_market);
     }
 
     @Override
     void initVar() {
         boolean act = SPUtil.getInstance(this).getActivation();
+        swApp = (Switch) findViewById(R.id.sw_app);
         swApp.setChecked(act);
+        btnSettingBtns = (LinearLayout) findViewById(R.id.btn_setting_btns);
+        btnSettingOther = (LinearLayout) findViewById(R.id.btn_setting_other);
+        btnAbout = (LinearLayout) findViewById(R.id.btn_about);
 
     }
 
@@ -63,21 +71,44 @@ public class MainActivity extends BaseActivity {
                 SPUtil.getInstance(MainActivity.this).setActivation(b);
             }
         });
-        tvMarket.setOnClickListener(new View.OnClickListener() {
+        btnSettingBtns.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
-                    Uri uri = Uri.parse("market://details?id="+getPackageName());
-                    Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }catch(Exception e){
-                    Toast.makeText(MainActivity.this, "您的手机没有安装Android应用市场", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
+                Intent intent=new Intent(MainActivity.this,SetFunActivity.class);
+                startActivity(intent);
             }
         });
+        btnAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+            }
+        });
+
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main_act_menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.menu_about) {
+//            startActivity(new Intent(MainActivity.this, AboutActivity.class));
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
 }

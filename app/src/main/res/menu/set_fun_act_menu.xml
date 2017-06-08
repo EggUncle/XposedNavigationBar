@@ -17,11 +17,13 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <dimen name="space_xs">4dp</dimen>
-    <dimen name="space_s">8dp</dimen>
-    <dimen name="space_m">16dp</dimen>
-    <dimen name="img_size">20dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="txt_m">16sp</dimen>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/save"
+        android:id="@+id/menu_save"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_save"
+        />
+</menu>

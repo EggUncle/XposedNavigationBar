@@ -15,7 +15,6 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string name="app_name">导航栏扩展模块</string>
     <string name="switch_app">模块总开关(重启后生效)</string>
@@ -28,6 +27,24 @@
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，你的支持是我最大的动力。
     </string>
     <string name="author">
-        版本 1.0.1\n联系作者\ncicadashadow@gmail.com
+        版本 1.1.0\n联系作者\ncicadashadow@gmail.com
     </string>
+    <string name="about_app">
+        关于
+    </string>
+
+    <string name="no_select">
+        没有快捷方式了(╯°Д°）╯︵ /(.□ . \)
+    </string>
+    <string name="save">保存</string>
+    <string name="save_success">已保存 重启后生效</string>
+    <string name="set_fun_dialog">
+        使用添加按钮添加新功能，列表项可以长按拖动来调整顺序，点击右上角保存按钮进行保存，重启后生效。
+    </string>
+    <string name="i_know">我知道了</string>
+    <string name="taps">提示</string>
+    <string name="nolonger_apper">不再显示</string>
+    <string name="taps_too_mang_sc">一页最多只能放10个(╯°Д°）╯︵ /(.□ . \)</string>
+    <string name="setting_btn">快捷按钮设置</string>
+    <string name="setting_other">其他设置</string>
 </resources>
