@@ -792,12 +792,15 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         int nowLight = ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE))
                 .getStreamVolume(AudioManager.STREAM_MUSIC);
         seekBar.setProgress(nowLight);
-        //亮度最小为0,最大为7
-        seekBar.setMax(7);
+        //获取最大音量值
+        final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        int maxVolume=am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        seekBar.setMax(maxVolume);
+        XposedBridge.log("max volume is "+maxVolume);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                setVolume(context, i);
+                setVolume(am, i);
             }
 
             @Override
@@ -818,11 +821,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     /**
      * 调整声言
      *
-     * @param context
+     * @param am
      * @param volume
      */
-    private void setVolume(Context context, int volume) {
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    private void setVolume(AudioManager am, int volume) {
+
         //调整媒体声言，不播放声言也不振动
         am.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
     }
