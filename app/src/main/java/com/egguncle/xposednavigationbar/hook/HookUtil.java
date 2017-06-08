@@ -119,6 +119,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     //扩展出来的主界面
     private ViewPager vpXphook;
 
+    private String homePointPosition;
+
 
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
@@ -129,6 +131,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         if ("".equals(json)) {
             return;
         }
+        homePointPosition = pre.getString(FuncName.HOME_POINT, FuncName.LEFT);
+        XposedBridge.log(homePointPosition + "=====");
         Gson gson = new Gson();
         shortCutList = gson.fromJson(json, ShortCutData.class).getData();
         for (ShortCut sc : shortCutList) {
@@ -192,7 +196,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 //垂直状态下的导航栏三大按钮布局
                 final LinearLayout lineBtn = (LinearLayout) liparam.view.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
                 final Context context = navBarBg.getContext();
-
                 LinearLayout parentView = new LinearLayout(context);
                 //加入一个viewpager，第一页为空，是导航栏本身的功能
                 vpXphook = new ViewPager(context);
@@ -200,23 +203,31 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 //   TextView textView1 = new TextView(context);
                 //第一个界面，与原本的导航栏重合，实际在导航栏的下层
                 LinearLayout linepage1 = new LinearLayout(context);
-                //用于呼出整个扩展导航栏的工具
-                final ImageButton btnCall = new ImageButton(context);
-                btnCall.setImageBitmap(byte2Bitmap(mapImgRes.get(FuncName.SMALL_POINT)));
-                btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                btnCall.setBackgroundColor(Color.alpha(255));
-                LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                line1Params.gravity = Gravity.LEFT;
-                linepage1.addView(btnCall, line1Params);
-                //点击这个按钮，跳转到扩展部分
-                btnCall.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        vpXphook.setCurrentItem(1);
-                    }
-                });
+                if (!homePointPosition.equals(FuncName.DISMISS)) {
+                    //用于呼出整个扩展导航栏的一个小点
+                    ImageButton btnCall = new ImageButton(context);
+                    btnCall.setImageBitmap(byte2Bitmap(mapImgRes.get(FuncName.SMALL_POINT)));
+                    btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    btnCall.setBackgroundColor(Color.alpha(255));
+                    LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
+                    if (homePointPosition.equals(FuncName.LEFT)) {
+                        //line1Params.gravity = Gravity.LEFT;
+                        linepage1.setGravity(Gravity.LEFT);
+                    } else if (homePointPosition.equals(FuncName.RIGHT)) {
+                        //  line1Params.gravity = Gravity.RIGHT;
+                        linepage1.setGravity(Gravity.RIGHT);
+                    }
+                    linepage1.addView(btnCall, line1Params);
+                    //点击这个按钮，跳转到扩展部分
+                    btnCall.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            vpXphook.setCurrentItem(1);
+                        }
+                    });
+                }
 
                 //viewpage的第二页
                 //整个页面的基础
@@ -685,6 +696,13 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             }
         });
         SeekBar seekBar = new SeekBar(context);
+        final int screenMode = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.SCREEN_BRIGHTNESS_MODE, 1);
+        // 如果当前的屏幕亮度调节调节模式为自动调节，则改为手动调节屏幕亮度
+        if (screenMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
+            Settings.System.putInt(context.getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+        }
         //获取当前亮度并设置
         int nowLight = Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, -1);
         seekBar.setProgress(nowLight);
@@ -703,7 +721,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                //设置回原来的亮度模式
+                Settings.System.putInt(context.getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS_MODE, screenMode);
             }
         });
         viewGroup.addView(btnBack, btnParam);

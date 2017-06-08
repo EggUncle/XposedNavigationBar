@@ -70,6 +70,9 @@
         <activity
             android:name=".ui.activity.SetFunActivity"
             android:parentActivityName=".ui.activity.MainActivity" />
+        <activity
+            android:name=".ui.activity.OtherSettingActivity"
+            android:parentActivityName=".ui.activity.MainActivity" />
     </application>
 
 </manifest>

@@ -40,7 +40,12 @@ public class SPUtil {
     private static SPUtil instance;
     private static final String SP_NAME = "XposedNavigationBar";
     private static final String ACTIVATION = "activation";
-    private static final String TAPS_APPEAR="taps_appear";
+    private static final String TAPS_APPEAR = "taps_appear";
+    //在原导航键上添加一个小点，点击后出现扩展的部分
+    private static final String HOME_POINT = "home_point";
+    private static final String LEFT = "left";
+    private static final String RIGHT = "right";
+    private static final String DISMISS = "notShow";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -163,11 +168,26 @@ public class SPUtil {
     /**
      * 在打开设置界面的时候会有一个对话框提示，如果点击不再提示，则不再显示
      */
-    public void nolongerTaps(){
-        mEditor.putBoolean(TAPS_APPEAR,false);
+    public void nolongerTaps() {
+        mEditor.putBoolean(TAPS_APPEAR, false);
         mEditor.commit();
     }
-    public boolean getTapsStatus(){
-        return mSharedPreferences.getBoolean(TAPS_APPEAR,true);
+
+    public boolean getTapsStatus() {
+        return mSharedPreferences.getBoolean(TAPS_APPEAR, true);
+    }
+
+    /**
+     * 设置主导航栏上小点的位置 左 右 或者不显示
+     *
+     * @param str
+     */
+    public void setHomePointPosition(String str) {
+        mEditor.putString(HOME_POINT, str);
+        mEditor.commit();
+    }
+
+    public String getHomePointPosition(){
+        return mSharedPreferences.getString(HOME_POINT,LEFT);
     }
 }

@@ -40,8 +40,6 @@ public class MainActivity extends BaseActivity {
     private LinearLayout btnAbout;
 
 
-
-
     @Override
     int getLayoutId() {
         return R.layout.activity_main;
@@ -74,8 +72,14 @@ public class MainActivity extends BaseActivity {
         btnSettingBtns.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,SetFunActivity.class);
+                Intent intent = new Intent(MainActivity.this, SetFunActivity.class);
                 startActivity(intent);
+            }
+        });
+        btnSettingOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, OtherSettingActivity.class));
             }
         });
         btnAbout.setOnClickListener(new View.OnClickListener() {

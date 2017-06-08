@@ -46,4 +46,9 @@ public class FuncName {
     public final static String FUNC_VOLUME = "调节声音";
     public final static String FUNC_LIGHT = "调节亮度";
     public final static String FUNC_HOME="回到主导航栏";
+
+    public static final String HOME_POINT = "home_point";
+    public static final String LEFT = "left";
+    public static final String RIGHT = "right";
+    public static final String DISMISS = "notShow";
 }
