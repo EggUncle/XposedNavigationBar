@@ -27,6 +27,7 @@ import android.content.res.XModuleResources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
@@ -34,6 +35,7 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +76,7 @@ import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 import com.google.gson.Gson;
 
+import static android.R.attr.bitmap;
 import static android.view.View.VISIBLE;
 
 /**
@@ -115,6 +118,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     private Map<String, byte[]> mapImgRes = new HashMap<>();
     //用于获取保存的快捷按键设置
     private List<ShortCut> shortCutList;
+    private int iconScale;
 
     //扩展出来的主界面
     private ViewPager vpXphook;
@@ -131,13 +135,16 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         if ("".equals(json)) {
             return;
         }
+        //获取主导行栏小点的位置
         homePointPosition = pre.getString(FuncName.HOME_POINT, FuncName.LEFT);
-        XposedBridge.log(homePointPosition + "=====");
+        //获取快捷按钮设置数据
         Gson gson = new Gson();
         shortCutList = gson.fromJson(json, ShortCutData.class).getData();
         for (ShortCut sc : shortCutList) {
             XposedBridge.log(sc.getName() + " " + sc.getShortCutName() + " " + sc.getPage() + " " + sc.getPostion());
         }
+        //获取图片缩放大小
+        iconScale = pre.getInt(FuncName.ICON_SIZE, 100);
 
         if (activation) {
             //加载图片资源文件
@@ -330,9 +337,20 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                         }
                     });
 
-        } else if (lpparam.packageName.equals("android.os")) {
-
-
+        } else if (lpparam.packageName.equals("com.android.server.policy")) {
+//            //尝试hook GlobalActions调用关机菜单
+//            XposedBridge.log("filter package");
+//            Class<?> globalActionsClass =
+//                    lpparam.classLoader.loadClass("com.android.server.policy.GlobalActions");
+//            Class<?> windowManagerFuncsClass=
+//                    lpparam.classLoader.loadClass("android.view.WindowManagerPolicy.WindowManagerFuncs");
+//            XposedHelpers.findAndHookConstructor(globalActionsClass, Context.class, windowManagerFuncsClass, new XC_MethodHook() {
+//                @Override
+//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                    super.afterHookedMethod(param);
+//                    XposedBridge.log("====hook globalActionsClass success====");
+//                }
+//            });
         }
 
 
@@ -349,9 +367,16 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
+        XposedBridge.log("====" + iconScale);
+        //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton btn = new ImageButton(context);
-        btn.setImageBitmap(byte2Bitmap(mapImgRes.get(name)));
+        if (iconScale != 100) {
+            btn.setImageBitmap(zoomBitmap(mapImgRes.get(name), iconScale));
+        } else {
+            btn.setImageBitmap(byte2Bitmap(mapImgRes.get(name)));
+        }
         btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
         btn.setBackgroundColor(Color.alpha(255));
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -387,6 +412,28 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             }
         });
         line.addView(btn, p);
+    }
+
+    /**
+     * 缩放图片
+     *
+     * @param bmByte
+     * @param scale
+     * @return
+     */
+    public static Bitmap zoomBitmap(byte[] bmByte, int scale) {
+//        int height=bm.getHeight();
+//        int width=bm.getWidth();
+//        height = (int) (height * (scale/100.0));
+//        width = (int) (width * (scale/100.0));
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = false;
+        Bitmap bm = BitmapFactory.decodeByteArray(bmByte, 0, bmByte.length, opts);
+
+        Matrix matrix = new Matrix();
+        matrix.postScale((float) (scale / 100.0), (float) (scale / 100.0));
+        Bitmap bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+        return bitmap;
     }
 
     /**
@@ -481,7 +528,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             //申请成功后会模拟手势进行下拉
             //如果失败了，就按照普通的方式下拉
             //  expandAllStatusBarWithOutRoot(context);
-            XposedBridge.log("testestset");
         } else {
             expandAllStatusBarWithOutRoot(context);
         }
@@ -633,10 +679,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                     try {
                         dataOutputStream = new DataOutputStream(finalProcess.getOutputStream());
                         // 模拟手势下拉 这个地方模拟点击有写别的rom会点击到别的快捷开关，所以做两次下拉
-                        String command = "input swipe 100 10 100 500 300 \n";
-                       // String command2 = "input tap 200 150 \n";
+                        String command = "input swipe 100 10 100 1000 200 \n";
+                        // String command2 = "input tap 200 150 \n";
                         dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
-                        SystemClock.sleep(300);
+                        SystemClock.sleep(200);
                         dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
                         dataOutputStream.flush();
                         dataOutputStream.writeBytes("exit\n");
@@ -794,9 +840,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         seekBar.setProgress(nowLight);
         //获取最大音量值
         final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        int maxVolume=am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         seekBar.setMax(maxVolume);
-        XposedBridge.log("max volume is "+maxVolume);
+        XposedBridge.log("max volume is " + maxVolume);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {

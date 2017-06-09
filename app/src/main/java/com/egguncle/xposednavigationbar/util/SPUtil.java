@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.google.gson.Gson;
@@ -46,6 +47,8 @@ public class SPUtil {
     private static final String LEFT = "left";
     private static final String RIGHT = "right";
     private static final String DISMISS = "notShow";
+    private static final String CLEAR_MEM_LEVEL="clear_mem_level";
+    private static final String ICON_SIZE="icon_size";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -189,5 +192,31 @@ public class SPUtil {
 
     public String getHomePointPosition(){
         return mSharedPreferences.getString(HOME_POINT,LEFT);
+    }
+
+
+    /**
+     * 设置内存清理等级
+     * @param level
+     */
+    public void setClearMemLevel(int level){
+        mEditor.putInt(CLEAR_MEM_LEVEL,level);
+        mEditor.commit();
+    }
+    public int getClearMemLevel(){
+        return mSharedPreferences.getInt(CLEAR_MEM_LEVEL, FuncName.IMPORTANCE_VISIBLE);
+    }
+
+    /**
+     * 设置图标大小
+     * @param
+     */
+    public void setIconSize(int size){
+        mEditor.putInt(ICON_SIZE,size);
+        mEditor.commit();
+    }
+
+    public int getIconSize(){
+        return mSharedPreferences.getInt(ICON_SIZE, 100);
     }
 }

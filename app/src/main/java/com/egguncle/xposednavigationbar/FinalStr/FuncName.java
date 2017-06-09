@@ -33,8 +33,8 @@ public class FuncName {
     public final static String QUICK_NOTICE = "quick_notice";
     public final static String LIGHT = "light";
     public final static String VOLUME = "volume";
-    public final static String SMALL_POINT="small_point";
-    public final static String HOME="home";
+    public final static String SMALL_POINT = "small_point";
+    public final static String HOME = "home";
 
     public final static String CLOCK = "clock";
 
@@ -45,10 +45,31 @@ public class FuncName {
     public final static String FUNC_CLEAR_MEM = "清理内存";
     public final static String FUNC_VOLUME = "调节声音";
     public final static String FUNC_LIGHT = "调节亮度";
-    public final static String FUNC_HOME="回到主导航栏";
+    public final static String FUNC_HOME = "回到主导航栏";
 
     public static final String HOME_POINT = "home_point";
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
     public static final String DISMISS = "notShow";
+
+    public static final int IMPORTANCE_PERSISTENT = 50;
+    public static final int IMPORTANCE_FOREGROUND = 100;
+    public static final int IMPORTANCE_VISIBLE = 200;
+    public static final int IMPORTANCE_PERCEPTIBLE = 130;
+    public static final int IMPORTANCE_CANT_SAVE_STATE = 170;
+    public static final int IMPORTANCE_SERVICE = 300;
+    public static final int IMPORTANCE_BACKGROUND = 400;
+    public static final int IMPORTANCE_EMPTY = 500;
+
+    public static final String IMPORTANCE_PERSISTENT_NAME = "IMPORTANCE_PERSISTENT";
+    public static final String IMPORTANCE_FOREGROUND_NAME = "IMPORTANCE_FOREGROUND";
+    public static final String IMPORTANCE_VISIBLE_NAME = "IMPORTANCE_VISIBLE";
+    public static final String IMPORTANCE_PERCEPTIBLE_NAME = "IMPORTANCE_PERCEPTIBLE";
+    public static final String IMPORTANCE_CANT_SAVE_STATE_NAME = "IMPORTANCE_CANT_SAVE_STATE";
+    public static final String IMPORTANCE_SERVICE_NAME = "IMPORTANCE_SERVICE_NAME";
+    public static final String IMPORTANCE_BACKGROUND_NAME = "IMPORTANCE_BACKGROUND";
+    public static final String IMPORTANCE_EMPTY_NAME = "IMPORTANCE_EMPTY";
+
+    public static final String ICON_SIZE="icon_size";
+
 }

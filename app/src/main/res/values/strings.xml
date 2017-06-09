@@ -27,7 +27,7 @@
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，你的支持是我最大的动力。
     </string>
     <string name="author">
-        版本 1.1.0\n联系作者\ncicadashadow@gmail.com
+        版本 1.1.1\n联系作者\ncicadashadow@gmail.com
     </string>
     <string name="about_app">
         关于
@@ -49,4 +49,6 @@
     <string name="setting_btn">快捷按钮设置</string>
     <string name="setting_other">其他设置</string>
     <string name="home_point">主导航栏的小点位置</string>
+    <string name="clear_mem_level">内存清理强度</string>
+    <string name="icon_size">图标大小调整</string>
 </resources>

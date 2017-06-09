@@ -24,9 +24,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.util.SPUtil;
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ import de.robv.android.xposed.XposedBridge;
 
 
 public class ClearMemActivity extends Activity {
+    private final static String TAG="ClearMemActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +45,21 @@ public class ClearMemActivity extends Activity {
         //状态栏透明
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
+        //获取清除内存强度
+        int clearMemLevel= SPUtil.getInstance(this).getClearMemLevel();
+        Log.i(TAG, " level is "+clearMemLevel);
+
         long beforeMem = getAvailabaleMemory(this);
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processInfoList = am.getRunningAppProcesses();
         if (processInfoList != null && processInfoList.size() != 0) {
             for (int i = 0; i < processInfoList.size(); i++) {
                 ActivityManager.RunningAppProcessInfo processInfo = processInfoList.get(i);
-                if (processInfo.importance > ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE) {
+                if (processInfo.importance > clearMemLevel) {
                     String[] pkgList = processInfo.pkgList;
                     for (String pkgName : pkgList) {
                         am.killBackgroundProcesses(pkgName);
+                        Log.i(TAG, "clear: "+pkgName);
                     }
                 }
             }
@@ -63,7 +71,7 @@ public class ClearMemActivity extends Activity {
         long totalMem = mi.totalMem / (1024 * 1024);
         try {
             //酷安有位用红米note4x的朋友出现了一些问题，报错点可能在这里
-            Toast.makeText(this, "clear " + clearMem + "m " + afterMen + "/" + totalMem + "m", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, afterMen + "/" + totalMem + "m", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
 
         }
