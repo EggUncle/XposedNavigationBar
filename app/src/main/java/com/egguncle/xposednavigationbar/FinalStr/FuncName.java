@@ -72,4 +72,5 @@ public class FuncName {
 
     public static final String ICON_SIZE="icon_size";
 
+
 }

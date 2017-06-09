@@ -240,12 +240,13 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 //整个页面的基础
                 final FrameLayout framePage2 = new FrameLayout(context);
                 LinearLayout vpLine = new LinearLayout(context);
-                vpLine.setPadding(40, 0, 0, 0);
+               // vpLine.setPadding(0, 0, 0, 0);
                 framePage2.addView(vpLine);
                 vpLine.setOrientation(LinearLayout.HORIZONTAL);
 //                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
 //                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 //                p.weight = 1;
+                vpLine.setGravity(Gravity.CENTER_VERTICAL);
 
                 for (ShortCut sc : shortCutList) {
                     createBtnAndSetFunc(context, framePage2, vpLine, sc.getShortCutName());
@@ -365,8 +366,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
      */
     public void createBtnAndSetFunc(final Context context, final FrameLayout frame, LinearLayout line, final String name) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
+        p.gravity = Gravity.CENTER;
         XposedBridge.log("====" + iconScale);
         //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton btn = new ImageButton(context);
