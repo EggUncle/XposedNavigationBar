@@ -632,12 +632,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                     try {
                         dataOutputStream = new DataOutputStream(finalProcess.getOutputStream());
-                        // 模拟手势下拉
-                        String command = "input swipe 100 10 100 500 400 \n";
-                        String command2 = "input tap 200 150 \n";
+                        // 模拟手势下拉 这个地方模拟点击有写别的rom会点击到别的快捷开关，所以做两次下拉
+                        String command = "input swipe 100 10 100 500 300 \n";
+                       // String command2 = "input tap 200 150 \n";
                         dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
-                        SystemClock.sleep(500);
-                        dataOutputStream.write(command2.getBytes(Charset.forName("utf-8")));
+                        SystemClock.sleep(300);
+                        dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
                         dataOutputStream.flush();
                         dataOutputStream.writeBytes("exit\n");
                         dataOutputStream.flush();
