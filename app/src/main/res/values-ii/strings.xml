@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     Navigation bar function expansion module
+  ~     Copyright (C) 2017 egguncle
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">导航栏扩展模块</string>
+    <string name="switch_app">模块总开关(重启后生效)</string>
+    <string name="about">
+        启动该模块后，点击导航栏左侧的小点，或者左划导航栏即可呼出快捷菜单。
+        \n\n该模块供有虚拟导航栏的机型使用，目前仅在原生和CM ROM上进行过测试，部分功能可能在其他ROM上无法正常使用，如果激活模块以后反复出现“系统界面停止运行”导致手机无法正常使用，连接电脑使用adb指令“adb uninstall com.egguncle.xposednavigationbar”卸载该模块即可。
+        \n\nandroid6.0在使用expandSettingsPanel方法来下拉通知栏的时候，展开动画会变得十分缓慢，授予系统界面root权限，能够变通的解决这个问题，不授予root权限不会影响别的功能的使用。
+    </string>
+    <string name="market">
+        如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，你的支持是我最大的动力。
+    </string>
+    <string name="author">
+        版本 1.1.1\n联系作者\ncicadashadow@gmail.com
+    </string>
+    <string name="about_app">
+        关于
+    </string>
+
+    <string name="no_select">
+        没有快捷方式了(╯°Д°）╯︵ /(.□ . \)
+    </string>
+    <string name="save">保存</string>
+    <string name="save_success">已保存 重启后生效</string>
+    <string name="need_reboot">重启后生效</string>
+    <string name="set_fun_dialog">
+        使用添加按钮添加新功能，列表项可以长按拖动来调整顺序，点击右上角保存按钮进行保存，重启后生效。
+    </string>
+    <string name="i_know">我知道了</string>
+    <string name="taps">提示</string>
+    <string name="nolonger_apper">不再显示</string>
+    <string name="taps_too_mang_sc">一页最多只能放10个(╯°Д°）╯︵ /(.□ . \)</string>
+    <string name="setting_btn">快捷按钮设置</string>
+    <string name="setting_other">其他设置</string>
+    <string name="home_point">主导航栏的小点位置</string>
+    <string name="clear_mem_level">内存清理强度</string>
+    <string name="icon_size">图标大小调整</string>
+</resources>

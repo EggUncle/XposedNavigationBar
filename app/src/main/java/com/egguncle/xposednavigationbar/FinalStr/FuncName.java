@@ -18,6 +18,11 @@
 
 package com.egguncle.xposednavigationbar.FinalStr;
 
+
+import android.content.Context;
+
+import java.util.Locale;
+
 /**
  * Created by egguncle on 17-6-7.
  */
@@ -37,6 +42,7 @@ public class FuncName {
     public final static String HOME = "home";
 
     public final static String CLOCK = "clock";
+
 
     public final static String FUNC_DOWN = "下拉通知栏";
     public final static String FUNC_QUICK_NOTICE = "快速备忘";
@@ -70,7 +76,7 @@ public class FuncName {
     public static final String IMPORTANCE_BACKGROUND_NAME = "IMPORTANCE_BACKGROUND";
     public static final String IMPORTANCE_EMPTY_NAME = "IMPORTANCE_EMPTY";
 
-    public static final String ICON_SIZE="icon_size";
+    public static final String ICON_SIZE = "icon_size";
 
 
 }

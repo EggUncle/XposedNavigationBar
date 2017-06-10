@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     Navigation bar function expansion module
+  ~     Copyright (C) 2017 egguncle
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">NavBar extension module</string>
+    <string name="switch_app">Global Switch(need reboot)</string>
+    <string name="about">
+        when you activation this module,you can see a small point on your NavBar,click it or swipe left,
+        then you can see extension func
+        \n\nthis module can use on some phone with NavBar,now only test on Cyanogenmod and Android,
+        maybe there are some functions could not run.
+        when you reboot phone and there are a dialog show "systemui has stoped"
+        ,you can use “adb uninstall com.egguncle.xposednavigationbar” to unstall it
+        \n\nwhen android 6.0 use expandSettingsPanel，the anim is slow，
+        give systemuiApplication root permission，this can solve it use a other ways，
+        have not root notinfluences other functions
+    </string>
+    <string name="market"></string>
+    <string name="author">
+        version 1.1.1\ncontact me\ncicadashadow@gmail.com
+    </string>
+    <string name="about_app">
+        about
+    </string>
+
+    <string name="no_select">
+    </string>
+    <string name="save">save</string>
+    <string name="save_success">save success ,effective after reboot</string>
+    <string name="need_reboot">effective after reboot</string>
+    <string name="set_fun_dialog">
+Use the Add button to add new features, list items can be dragged to adjust the order, click the upper right corner of the Save button to save, restart after the entry into force.
+    </string>
+    <string name="i_know">Ok</string>
+    <string name="taps">taps</string>
+    <string name="nolonger_apper">now longer show</string>
+    <string name="taps_too_mang_sc">could not add so much item(╯°Д°）╯︵ /(.□ . \)</string>
+    <string name="setting_btn">short cut setting</string>
+    <string name="setting_other">other setting</string>
+    <string name="home_point">the samll point position</string>
+    <string name="clear_mem_level">clear mem level</string>
+    <string name="icon_size">Icon size adjustment</string>
+</resources>

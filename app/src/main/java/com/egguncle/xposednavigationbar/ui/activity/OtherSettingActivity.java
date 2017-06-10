@@ -104,7 +104,8 @@ public class OtherSettingActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(OtherSettingActivity.this);
-                builder.setTitle(getResources().getString(R.string.need_reboot))
+                builder
+                        //.setTitle(getResources().getString(R.string.need_reboot))
                         .setSingleChoiceItems(clearMemLevels, 0, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
