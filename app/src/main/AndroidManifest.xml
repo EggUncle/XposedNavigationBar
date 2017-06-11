@@ -74,7 +74,8 @@
         <activity
             android:name=".ui.activity.OtherSettingActivity"
             android:parentActivityName=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.AppShortCutActivity">
+        <activity android:name=".ui.activity.AppShortCutActivity"
+            android:theme="@style/myTransparentTheme">
             <intent-filter>
                 <action android:name="com.egguncle.xposednavigationbar.ui.activity.AppShortCutActivity" />
 

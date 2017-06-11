@@ -51,4 +51,9 @@
     <string name="home_point">主导航栏的小点位置</string>
     <string name="clear_mem_level">内存清理强度</string>
     <string name="icon_size">图标大小调整</string>
+    <string name="select_apps">请选择要添加的快捷方式</string>
+    <string name="delect_apps">请选择要删除的快捷方式</string>
+    <string name="ok">确定</string>
+    <string name="no">取消</string>
+    <string name="delete">删除</string>
 </resources>

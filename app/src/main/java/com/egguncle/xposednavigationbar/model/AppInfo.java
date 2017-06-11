@@ -82,4 +82,16 @@ public class AppInfo extends DataSupport {
     public void setShortCutName(String shortCutName) {
         this.shortCutName = shortCutName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean b=false;
+        if (obj instanceof AppInfo){
+            AppInfo appInfo= (AppInfo) obj;
+            b=(this.type==appInfo.getType())&&(this.packgeName.equals(appInfo.getPackgeName()))
+                    &&(this.label.equals(appInfo.getLabel()));
+        }
+
+        return b;
+    }
 }

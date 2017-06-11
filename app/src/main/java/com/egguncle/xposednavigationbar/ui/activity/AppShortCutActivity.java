@@ -19,32 +19,60 @@
 package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.AppInfo;
+import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.ui.adapter.AppActAdapter;
+import com.egguncle.xposednavigationbar.ui.adapter.DialogItemAdapter;
+import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelpCallBack;
+import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelper;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * 这个activity用来当作快速启动app或者app快捷阿方式的按钮
  */
 public class AppShortCutActivity extends Activity {
-    private ImageView ivAdd;
-    private ImageView ivClose;
+    private ImageButton ivRemove;
+    private ImageButton ivAdd;
+    private ImageButton ivClose;
     private RecyclerView rcvApp;
+
+
+
+
+    private final static String TAG = "AppShortCutActivity";
+
+    //显示被选择的快捷方式
+    private List<AppInfo> selectAppInfos;
+    private AppActAdapter appActAdapter;
+
+    //被删除的列表
+    private List<AppInfo> deleteAppInfos;
 
     //表格布局一行的数量
     private final static int SPAN_COUNT = 4;
@@ -60,23 +88,118 @@ public class AppShortCutActivity extends Activity {
 
 
     private void initView() {
-        ivAdd = (ImageView) findViewById(R.id.iv_add);
-        ivClose = (ImageView) findViewById(R.id.iv_close);
+        //状态栏透明
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+
+        ivRemove = (ImageButton) findViewById(R.id.iv_remove);
+        ivAdd = (ImageButton) findViewById(R.id.iv_add);
+        ivClose = (ImageButton) findViewById(R.id.iv_close);
         rcvApp = (RecyclerView) findViewById(R.id.rcv_app);
         rcvApp.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT));
     }
 
     private void initVar() {
-        List<AppInfo> appInfos = new ArrayList<>();
-        AppActAdapter appActAdapter = new AppActAdapter(this, appInfos);
+        deleteAppInfos = new ArrayList<>();
+        selectAppInfos = new ArrayList<>();
+        selectAppInfos.addAll(DataSupport.findAll(AppInfo.class));
+        appActAdapter = new AppActAdapter(this, selectAppInfos);
         rcvApp.setAdapter(appActAdapter);
 
-        appInfos.addAll(loadAppWithoutSystemApp());
-        appInfos.addAll(loadAppShortCut());
+        //设置rcv可拖动
+        MyItemTouchHelper myItemTouchHelper = new MyItemTouchHelper(onItemTouchCallbackListener);
+        myItemTouchHelper.attachToRecyclerView(rcvApp);
+
     }
 
     private void initAction() {
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
+        //添加新的快捷方式
+        ivAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ivAdd.setClickable(false);
+                //快捷方式列表
+                List<AppInfo> appInfos = new ArrayList<>();
+                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
+                RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
+                rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
+                rcvDialogApps.setAdapter(adapter);
+
+                //去除已经选中的app
+                List<AppInfo> appDataWithoutSystem = loadAppWithoutSystemApp();
+                appDataWithoutSystem.removeAll(selectAppInfos);
+                appInfos.addAll(appDataWithoutSystem);
+                List<AppInfo> notSelectShort=loadAppShortCut();
+                notSelectShort.removeAll(selectAppInfos);
+                appInfos.addAll(notSelectShort);
+
+                adapter.notifyDataSetChanged();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(getResources().getString(R.string.select_apps))
+                        .setView(dialogView)
+                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //不添加重复的
+                                for (AppInfo appInfo : adapter.getSelectedData()) {
+                                    if (!selectAppInfos.contains(appInfo)) {
+                                        //    selectAppInfos.addAll(adapter.getSelectedData());
+                                        selectAppInfos.add(appInfo);
+                                    }
+                                }
+
+                                appActAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.no), null)
+                        .create().show();
+                ivAdd.setClickable(true);
+            }
+        });
+        ivRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ivRemove.setClickable(false);
+                //快捷方式列表
+                List<AppInfo> appInfos = new ArrayList<>();
+                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
+                RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
+                rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
+                rcvDialogApps.setAdapter(adapter);
+
+                appInfos.addAll(selectAppInfos);
+                adapter.notifyDataSetChanged();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(getResources().getString(R.string.delect_apps))
+                        .setView(dialogView)
+                        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //不添加重复的
+                                for (AppInfo appInfo : adapter.getSelectedData()) {
+                                    Log.i(TAG, "onClick: " + appInfo.getLabel());
+                                    deleteAppInfos.add(appInfo);
+                                    selectAppInfos.remove(appInfo);
+
+                                }
+                                appActAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.no), null)
+                        .create().show();
+                ivRemove.setClickable(true);
+            }
+        });
     }
 
     /**
@@ -127,5 +250,45 @@ public class AppShortCutActivity extends Activity {
         }
 
         return appInfoList;
+    }
+
+    private MyItemTouchHelpCallBack.OnItemTouchCallbackListener onItemTouchCallbackListener = new MyItemTouchHelpCallBack.OnItemTouchCallbackListener() {
+        @Override
+        public void onSwiped(int adapterPosition) {
+            // 滑动删除的时候，从数据源移除，并刷新这个Item。
+            if (selectAppInfos != null) {
+                selectAppInfos.remove(adapterPosition);
+                appActAdapter.notifyItemRemoved(adapterPosition);
+            }
+        }
+
+        @Override
+        public boolean onMove(int srcPosition, int targetPosition) {
+            if (selectAppInfos != null) {
+                // 更换数据源中的数据Item的位置
+                Collections.swap(selectAppInfos, srcPosition, targetPosition);
+                // 更新UI中的Item的位置，主要是给用户看到交互效果
+                appActAdapter.notifyItemMoved(srcPosition, targetPosition);
+                Log.i(TAG, "onMove: ---");
+                return true;
+            }
+            return false;
+        }
+    };
+
+
+    //在destory中做最后对应的保存
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: update all");
+        for (AppInfo appInfo : selectAppInfos) {
+            appInfo.save();
+            Log.i(TAG, "onDestroy: update"+appInfo.getLabel());
+        }
+        for (AppInfo appInfo : deleteAppInfos) {
+            appInfo.delete();
+            Log.i(TAG, "onDestroy: delete"+appInfo.getLabel());
+        }
     }
 }
