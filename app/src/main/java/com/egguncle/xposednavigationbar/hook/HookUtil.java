@@ -163,6 +163,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] volume = XposedHelpers.assetAsByteArray(res, "volume.png");
             byte[] smallPonit = XposedHelpers.assetAsByteArray(res, "small_point.png");
             byte[] home = XposedHelpers.assetAsByteArray(res, "ic_home.png");
+            byte[] startActs=XposedHelpers.assetAsByteArray(res, "start_acts.png");
             mapImgRes.put(FuncName.BACK, backImg);
             mapImgRes.put(FuncName.CLEAR_MEM, clearMenImg);
             mapImgRes.put(FuncName.CLEAR_NOTIFICATION, clearNotificationImg);
@@ -174,6 +175,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             mapImgRes.put(FuncName.VOLUME, volume);
             mapImgRes.put(FuncName.SMALL_POINT, smallPonit);
             mapImgRes.put(FuncName.HOME, home);
+            mapImgRes.put(FuncName.START_ACTS,startActs);
         }
 
 
@@ -182,52 +184,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
         initHook(startupParam);
-        //读取sp，查看程序是否被允许激活
-//        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
-//        boolean activation = pre.getBoolean("activation", false);
-//        String json = pre.getString(SHORT_CUT_DATA, "");
-//        if ("".equals(json)) {
-//            return;
-//        }
-//        //获取主导行栏小点的位置
-//        homePointPosition = pre.getString(FuncName.HOME_POINT, FuncName.LEFT);
-//        //获取快捷按钮设置数据
-//        Gson gson = new Gson();
-//        shortCutList = gson.fromJson(json, ShortCutData.class).getData();
-////        for (ShortCut sc : shortCutList) {
-////            XposedBridge.log(sc.getName() + " " + sc.getShortCutName() + " " + sc.getPage() + " " + sc.getPostion());
-////        }
-//        //获取图片缩放大小
-//        iconScale = pre.getInt(FuncName.ICON_SIZE, 100);
-//
-//        if (activation) {
-//            //加载图片资源文件
-//            Resources res = XModuleResources.createInstance(startupParam.modulePath, null);
-//            byte[] backImg = XposedHelpers.assetAsByteArray(res, "back.png");
-//            byte[] clearMenImg = XposedHelpers.assetAsByteArray(res, "clear_mem.png");
-//            byte[] clearNotificationImg = XposedHelpers.assetAsByteArray(res, "clear_notification.png");
-//            byte[] downImg = XposedHelpers.assetAsByteArray(res, "down.png");
-//            byte[] lightImg = XposedHelpers.assetAsByteArray(res, "light.png");
-//            byte[] quickNoticesImg = XposedHelpers.assetAsByteArray(res, "quick_notices.png");
-//            byte[] screenOffImg = XposedHelpers.assetAsByteArray(res, "screenoff.png");
-//            //  byte[] upImg = XposedHelpers.assetAsByteArray(res, "up.png");
-//            byte[] volume = XposedHelpers.assetAsByteArray(res, "volume.png");
-//            byte[] smallPonit = XposedHelpers.assetAsByteArray(res, "small_point.png");
-//            byte[] home = XposedHelpers.assetAsByteArray(res, "ic_home.png");
-//            mapImgRes.put(FuncName.BACK, backImg);
-//            mapImgRes.put(FuncName.CLEAR_MEM, clearMenImg);
-//            mapImgRes.put(FuncName.CLEAR_NOTIFICATION, clearNotificationImg);
-//            mapImgRes.put(FuncName.DOWN, downImg);
-//            mapImgRes.put(FuncName.LIGHT, lightImg);
-//            mapImgRes.put(FuncName.QUICK_NOTICE, quickNoticesImg);
-//            mapImgRes.put(FuncName.SCREEN_OFF, screenOffImg);
-//            //  mapImgRes.put(FuncName.UP, upImg);
-//            mapImgRes.put(FuncName.VOLUME, volume);
-//            mapImgRes.put(FuncName.SMALL_POINT, smallPonit);
-//            mapImgRes.put(FuncName.HOME, home);
-//        }
-
-        // BitmapFactory.decodeByteArray(img,0,img.length);
     }
 
     private Bitmap byte2Bitmap(byte[] imgBytes) {
@@ -372,6 +328,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 LinearLayout parentView = new LinearLayout(context);
                 //加入一个viewpager，第一页为空，是导航栏本身的功能
                 final ViewPager vpXphook = new ViewPager(context);
+
 
 
                 parentView.addView(vpXphook);

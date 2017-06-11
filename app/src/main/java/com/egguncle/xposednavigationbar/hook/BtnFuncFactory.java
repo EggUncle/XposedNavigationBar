@@ -37,6 +37,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnBackLight;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearAllNotifications;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearBackground;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnNavBarGoHome;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnOpenActPanel;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnQuickNotice;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenOff;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
@@ -88,6 +89,8 @@ public class BtnFuncFactory {
                 return new BtnBackLight(mRootViewGroup,byte2Bitmap(mMapImgRes.get(FuncName.BACK)));
             case FuncName.HOME:
                return new BtnNavBarGoHome(mViewPager);
+            case FuncName.START_ACTS:
+                return new BtnOpenActPanel();
         }
         return null;
     }

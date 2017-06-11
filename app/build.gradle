@@ -23,7 +23,7 @@ android {
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.egguncle.xposednavigationbar"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 4
         versionName "1.1.1"
@@ -37,6 +37,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -46,11 +48,15 @@ dependencies {
     })
     //如果需要引入文档，方便查看的话
     provided 'de.robv.android.xposed:api:82:sources'
+
+
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.google.code.gson:gson:2.8.1'
+    compile 'org.litepal.android:core:1.5.1'
     testCompile 'junit:junit:4.12'
     provided 'de.robv.android.xposed:api:82'
 }

@@ -19,15 +19,37 @@
 package com.egguncle.xposednavigationbar.model;
 
 import android.graphics.drawable.Drawable;
+
+import org.litepal.crud.DataSupport;
+
 /**
- * Created by egguncle on 17-5-25.
- * 用于保存app的信息
+ * 用于保存app或者快捷开关的信息
  */
 
-public class AppInfo {
+public class AppInfo extends DataSupport {
+    //快捷启动的类型，app或者是快捷方式
+    public final static int TYPE_APP=0;
+    public final static int TYPE_SHORT_CUT=1;
+
+    private int type;
+    //两种方式均需要包名和应用本身的名字
+    //包名
     private String packgeName;
-    private String appName;
-    private Drawable appIcon;
+    //快捷方式的名字，或者对应app的名字
+    private String label;
+
+    //下面这些是快捷方式特有的
+    private int flag;
+    //快捷方式启动的目标的名字
+    private String shortCutName;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getPackgeName() {
         return packgeName;
@@ -37,19 +59,27 @@ public class AppInfo {
         this.packgeName = packgeName;
     }
 
-    public String getAppName() {
-        return appName;
+    public String getLabel() {
+        return label;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    public Drawable getAppIcon() {
-        return appIcon;
+    public int getFlag() {
+        return flag;
     }
 
-    public void setAppIcon(Drawable appIcon) {
-        this.appIcon = appIcon;
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public String getShortCutName() {
+        return shortCutName;
+    }
+
+    public void setShortCutName(String shortCutName) {
+        this.shortCutName = shortCutName;
     }
 }

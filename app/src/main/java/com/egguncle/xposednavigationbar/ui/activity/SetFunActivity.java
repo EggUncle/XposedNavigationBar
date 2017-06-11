@@ -71,7 +71,8 @@ public class SetFunActivity extends BaseActivity {
             FuncName.FUNC_CLEAR_MEM,
             FuncName.FUNC_VOLUME,
             FuncName.FUNC_LIGHT,
-            FuncName.FUNC_HOME
+            FuncName.FUNC_HOME,
+            FuncName.FUNC_START_ACTS
     };
 
     @Override
@@ -222,6 +223,8 @@ public class SetFunActivity extends BaseActivity {
                 case FuncName.FUNC_HOME:
                     shortCutName = FuncName.HOME;
                     break;
+                case FuncName.FUNC_START_ACTS:
+                    shortCutName=FuncName.START_ACTS;
             }
             Log.i(TAG, "addToShortCutList: ");
             if (!"".equals(shortCutName)) {

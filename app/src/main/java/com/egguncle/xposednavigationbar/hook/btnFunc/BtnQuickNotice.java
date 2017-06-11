@@ -30,7 +30,7 @@ import com.egguncle.xposednavigationbar.hook.hookFunc.QuickNotification;
 
 public class BtnQuickNotice implements QuickNotification,View.OnClickListener{
     //启动快速备忘
-    private final static String ACTION_QUICK_NOTICE = "com.egguncle.xposednavigationbar.QuickNotificationActivity";
+    private final static String ACTION_QUICK_NOTICE = "com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity";
 
     @Override
     public void quickNotification(Context context) {
