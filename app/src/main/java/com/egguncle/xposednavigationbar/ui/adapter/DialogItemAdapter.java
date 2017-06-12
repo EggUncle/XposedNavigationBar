@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,25 +36,31 @@ import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.AppInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by egguncle on 17-6-11.
  */
 
 public class DialogItemAdapter extends RecyclerView.Adapter<DialogItemAdapter.DialogViewHolder> {
+    private final static String TAG = "DialogItemAdapter";
+
     //传入的数据
     private List<AppInfo> appInfoData;
     //要添加的app
     private List<AppInfo> selectedData;
 
-
     private PackageManager pm;
     private Context mContext;
+
+    // private Map<Integer,Boolean> selectMap;
 
     public DialogItemAdapter(Context context, List<AppInfo> data) {
         mContext = context;
         appInfoData = data;
+        //     selectMap=new HashMap<>();
         selectedData = new ArrayList<>();
         pm = mContext.getPackageManager();
     }
@@ -64,14 +71,21 @@ public class DialogItemAdapter extends RecyclerView.Adapter<DialogItemAdapter.Di
     }
 
     @Override
-    public void onBindViewHolder(final DialogViewHolder holder, int position) {
+    public void onBindViewHolder(final DialogViewHolder holder, final int position) {
         final AppInfo appInfo = appInfoData.get(position);
         final String pkgName = appInfo.getPackgeName();
         String label = appInfo.getLabel();
         holder.tvItemDialog.setText(label);
 
-        int type = appInfo.getType();
+        holder.cbItemDialog.setChecked(selectedData.contains(appInfo));
+//        if (selectMap.get(position)==null){
+//            selectMap.put(position,false);
+//            holder.cbItemDialog.setChecked(false);
+//        }else{
+//            holder.cbItemDialog.setChecked(selectMap.get(position));
+//        }
 
+        final int type = appInfo.getType();
         //如果这个item是一个app的快捷启动
         if (type == AppInfo.TYPE_APP) {
             try {
@@ -99,23 +113,22 @@ public class DialogItemAdapter extends RecyclerView.Adapter<DialogItemAdapter.Di
         holder.cbItemDialog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    selectedData.add(appInfo);
-                } else {
-                    selectedData.remove(appInfo);
-                }
+
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean checked = holder.cbItemDialog.isChecked();
+                //   selectMap.put(position,checked);
                 if (checked) {
+                       selectedData.remove(appInfo);
                     holder.cbItemDialog.setChecked(false);
+
                 } else {
+                     selectedData.add(appInfo);
                     holder.cbItemDialog.setChecked(true);
                 }
-
             }
         });
 
@@ -123,10 +136,13 @@ public class DialogItemAdapter extends RecyclerView.Adapter<DialogItemAdapter.Di
 
     @Override
     public int getItemCount() {
-        return appInfoData == null ? 0 : appInfoData.size();
+        int count = appInfoData == null ? 0 : appInfoData.size();
+        return count;
     }
 
+
     public List<AppInfo> getSelectedData() {
+        Log.i(TAG, "getSelectedData: " + selectedData.size());
         return selectedData;
     }
 

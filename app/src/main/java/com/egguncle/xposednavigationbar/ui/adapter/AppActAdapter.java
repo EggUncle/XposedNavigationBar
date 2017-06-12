@@ -18,16 +18,21 @@
 
 package com.egguncle.xposednavigationbar.ui.adapter;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.AppInfo;
@@ -43,28 +48,30 @@ public class AppActAdapter extends RecyclerView.Adapter<AppActAdapter.AppViewHol
     private Context mContext;
     private PackageManager pm;
 
-    public AppActAdapter(Context context,List<AppInfo> appInfoList){
-        mAppInfoList=appInfoList;
-        mContext=context;
-        pm=mContext.getPackageManager();
+    private final static String TAG = "AppActAdapter";
+
+    public AppActAdapter(Context context, List<AppInfo> appInfoList) {
+        mAppInfoList = appInfoList;
+        mContext = context;
+        pm = mContext.getPackageManager();
     }
 
     @Override
     public AppActAdapter.AppViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new AppViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app,parent,false));
+        return new AppViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app, parent, false));
     }
 
     @Override
     public void onBindViewHolder(AppActAdapter.AppViewHolder holder, int position) {
-        AppInfo appInfo=mAppInfoList.get(position);
-        final String pkgName=appInfo.getPackgeName();
-        String label=appInfo.getLabel();
+        final AppInfo appInfo = mAppInfoList.get(position);
+        final String pkgName = appInfo.getPackgeName();
+        String label = appInfo.getLabel();
         holder.itemTvAppName.setText(label);
-        int type=appInfo.getType();
+        int type = appInfo.getType();
         //如果这个item是一个app的快捷启动
-        if (type==AppInfo.TYPE_APP){
+        if (type == AppInfo.TYPE_APP) {
             try {
-                Drawable icon=pm.getApplicationIcon(pkgName);
+                Drawable icon = pm.getApplicationIcon(pkgName);
                 holder.itemIvIcon.setImageDrawable(icon);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
@@ -72,21 +79,28 @@ public class AppActAdapter extends RecyclerView.Adapter<AppActAdapter.AppViewHol
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = pm.getLaunchIntentForPackage(pkgName);
-                    view.getContext().startActivity(intent);
+                    Log.i(TAG, "onClick: start app");
+                    try {
+                        Intent intent = pm.getLaunchIntentForPackage(pkgName);
+                        view.getContext().startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(view.getContext(),view.getResources().getString(R.string.cant_start_act),Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             });
-        }else if(type==AppInfo.TYPE_SHORT_CUT){
+        } else if (type == AppInfo.TYPE_SHORT_CUT) {
             //如果这个item是一个快捷方式的快捷启动
-            String shortCutName=appInfo.getShortCutName();
-            int flag=appInfo.getFlag();
+            String shortCutName = appInfo.getShortCutName();
+            int flag = appInfo.getFlag();
             final Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.setClassName(pkgName,
                     shortCutName);
             intent.addFlags(flag);
 
             try {
-                Drawable icon=pm.getActivityIcon(intent);
+                Drawable icon = pm.getActivityIcon(intent);
                 holder.itemIvIcon.setImageDrawable(icon);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
@@ -94,7 +108,9 @@ public class AppActAdapter extends RecyclerView.Adapter<AppActAdapter.AppViewHol
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.i(TAG, "onClick: start shortcut");
                     view.getContext().startActivity(intent);
+
                 }
             });
         }
@@ -104,7 +120,7 @@ public class AppActAdapter extends RecyclerView.Adapter<AppActAdapter.AppViewHol
 
     @Override
     public int getItemCount() {
-        return mAppInfoList==null?0:mAppInfoList.size();
+        return mAppInfoList == null ? 0 : mAppInfoList.size();
     }
 
     public class AppViewHolder extends RecyclerView.ViewHolder {

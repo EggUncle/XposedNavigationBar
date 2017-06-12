@@ -20,7 +20,7 @@
 <litepal>
     <dbname value="AppShortCutDB" />
 
-    <version value="1" />
+    <version value="3" />
 
     <list>
         <mapping class="com.egguncle.xposednavigationbar.model.AppInfo" />

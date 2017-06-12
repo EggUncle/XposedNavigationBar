@@ -56,4 +56,5 @@
     <string name="ok">确定</string>
     <string name="no">取消</string>
     <string name="delete">删除</string>
+    <string name="cant_start_act">不能启动这个应用，是不是放冰箱里了(╯°Д°）╯︵ /(.□ . \)</string>
 </resources>

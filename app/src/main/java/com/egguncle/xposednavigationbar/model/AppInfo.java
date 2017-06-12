@@ -43,6 +43,7 @@ public class AppInfo extends DataSupport {
     //快捷方式启动的目标的名字
     private String shortCutName;
 
+
     public int getType() {
         return type;
     }

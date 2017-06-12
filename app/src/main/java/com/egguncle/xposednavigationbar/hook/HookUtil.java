@@ -456,6 +456,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                     lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
             Method method1 = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
             method1.setAccessible(true);
+
+
             //获取到clearAllNotifications方法
             clearAllNotificationsMethod = method1;
            //   XposedBridge.log("====hook PhoneStatusBar success====");
@@ -489,6 +491,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
 
     }
+
+
 
     public static Object getPhoneStatusBar(){
         return phoneStatusBar;

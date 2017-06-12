@@ -29,6 +29,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,6 +63,9 @@ public class AppShortCutActivity extends Activity {
     private ImageButton ivAdd;
     private ImageButton ivClose;
     private RecyclerView rcvApp;
+
+    private AppBarLayout appBar;
+    private CollapsingToolbarLayout toolbarLayout;
 
 
 
@@ -96,6 +101,9 @@ public class AppShortCutActivity extends Activity {
         ivClose = (ImageButton) findViewById(R.id.iv_close);
         rcvApp = (RecyclerView) findViewById(R.id.rcv_app);
         rcvApp.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT));
+        appBar = (AppBarLayout) findViewById(R.id.app_bar);
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+
     }
 
     private void initVar() {
@@ -106,12 +114,13 @@ public class AppShortCutActivity extends Activity {
         rcvApp.setAdapter(appActAdapter);
 
         //设置rcv可拖动
-        MyItemTouchHelper myItemTouchHelper = new MyItemTouchHelper(onItemTouchCallbackListener);
-        myItemTouchHelper.attachToRecyclerView(rcvApp);
+//        MyItemTouchHelper myItemTouchHelper = new MyItemTouchHelper(onItemTouchCallbackListener);
+//        myItemTouchHelper.attachToRecyclerView(rcvApp);
 
     }
 
     private void initAction() {
+
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,17 +140,6 @@ public class AppShortCutActivity extends Activity {
                 rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
                 final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
                 rcvDialogApps.setAdapter(adapter);
-
-                //去除已经选中的app
-                List<AppInfo> appDataWithoutSystem = loadAppWithoutSystemApp();
-                appDataWithoutSystem.removeAll(selectAppInfos);
-                appInfos.addAll(appDataWithoutSystem);
-                List<AppInfo> notSelectShort=loadAppShortCut();
-                notSelectShort.removeAll(selectAppInfos);
-                appInfos.addAll(notSelectShort);
-
-                adapter.notifyDataSetChanged();
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle(getResources().getString(R.string.select_apps))
                         .setView(dialogView)
@@ -161,6 +159,16 @@ public class AppShortCutActivity extends Activity {
                         })
                         .setNegativeButton(getResources().getString(R.string.no), null)
                         .create().show();
+
+                //去除已经选中的app
+                List<AppInfo> appDataWithoutSystem = loadAppWithoutSystemApp();
+                appDataWithoutSystem.removeAll(selectAppInfos);
+                appInfos.addAll(appDataWithoutSystem);
+                List<AppInfo> notSelectShort=loadAppShortCut();
+                notSelectShort.removeAll(selectAppInfos);
+                appInfos.addAll(notSelectShort);
+
+                adapter.notifyDataSetChanged();
                 ivAdd.setClickable(true);
             }
         });
@@ -175,9 +183,6 @@ public class AppShortCutActivity extends Activity {
                 rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
                 final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
                 rcvDialogApps.setAdapter(adapter);
-
-                appInfos.addAll(selectAppInfos);
-                adapter.notifyDataSetChanged();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle(getResources().getString(R.string.delect_apps))
@@ -197,7 +202,15 @@ public class AppShortCutActivity extends Activity {
                         })
                         .setNegativeButton(getResources().getString(R.string.no), null)
                         .create().show();
+                appInfos.addAll(selectAppInfos);
+                adapter.notifyDataSetChanged();
                 ivRemove.setClickable(true);
+            }
+        });
+        toolbarLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -213,11 +226,11 @@ public class AppShortCutActivity extends Activity {
         for (PackageInfo packageInfo : packageInfoList) {
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                 //非系统应用
-                AppInfo appInfo = new AppInfo();
-                appInfo.setLabel(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
-                appInfo.setPackgeName(packageInfo.packageName);
-                appInfo.setType(AppInfo.TYPE_APP);
-                appInfoList.add(appInfo);
+                    AppInfo appInfo = new AppInfo();
+                    appInfo.setLabel(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
+                    appInfo.setPackgeName(packageInfo.packageName);
+                    appInfo.setType(AppInfo.TYPE_APP);
+                    appInfoList.add(appInfo);
             }
         }
         return appInfoList;
