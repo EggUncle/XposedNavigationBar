@@ -33,7 +33,7 @@ android {
         release {
             zipAlignEnabled false    //Zipalign优化
             shrinkResources false   // 移除无用的resource文件
-            minifyEnabled false     //混淆
+            minifyEnabled true     //混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -41,6 +41,8 @@ public class FuncName {
     public final static String SMALL_POINT = "small_point";
     public final static String HOME = "home";
     public final static String START_ACTS="start_acts";
+    public final static String NEXT_PLAY="ic_next";
+    public final static String PLAY_MUSIC="ic_play";
 
     public final static String CLOCK = "clock";
 
@@ -54,6 +56,8 @@ public class FuncName {
     public final static String FUNC_LIGHT = "调节亮度";
     public final static String FUNC_HOME = "回到主导航栏";
     public final static String FUNC_START_ACTS="快捷启动应用菜单";
+    public final static String FUNC_NEXT_PLAY="下一曲";
+    public final static String FUNC_PLAY_MUSIC="音乐开始&暂停";
 
     public static final String HOME_POINT = "home_point";
     public static final String LEFT = "left";

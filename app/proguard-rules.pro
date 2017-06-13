@@ -24,12 +24,37 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 # removes such information by default, so configure it to keep all of it.
--keepattributes Signature
-# Gson specific classes
+-keep class com.egguncle.xposednavigationbar.model.** { *; } #实体类不参与混淆
+-keep class com.egguncle.xposednavigationbar.hook.HookUtil { *; } #Xp核心功能类不混淆
+################gson##################
+-keep class com.google.gson.** {*;}
+#-keep class com.google.**{*;}
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
-# Application classes that will be serialized/deserialized over Gson
 -keep class com.google.gson.examples.android.model.** { *; }
--keep class com.google.gson.** { *;}
-#这句非常重要，主要是滤掉 com.demo.demo.bean包下的所有.class文件不进行混淆编译,com.demo.demo是你的包名
--keep class com.egguncle.xposednavigationbar.model.** {*;}
+-keep class com.google.** {
+    <fields>;
+    <methods>;
+}
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+-dontwarn com.google.gson.**
+
+#=====================litpal框架混淆=====================
+-dontwarn org.litepal.*
+-keep class org.litepal.**{*;}
+-keep enum org.litepal.**
+-keep interface org.litepal.**{*;}
+-keep public class * extends org.litepal.**
+-keepattributes *Annotation*
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-keepclassmembers class * extends org.litepal.crud.DataSupport{*;}
