@@ -20,11 +20,14 @@ package com.egguncle.xposednavigationbar.ui.adapter;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,7 +40,12 @@ import android.widget.Toast;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.AppInfo;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
+
+import de.robv.android.xposed.XposedBridge;
 
 /**
  * Created by egguncle on 17-6-11.
@@ -76,6 +84,7 @@ public class AppActAdapter extends RecyclerView.Adapter<AppActAdapter.AppViewHol
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
+            //
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -84,8 +93,8 @@ public class AppActAdapter extends RecyclerView.Adapter<AppActAdapter.AppViewHol
                         Intent intent = pm.getLaunchIntentForPackage(pkgName);
                         view.getContext().startActivity(intent);
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(view.getContext(),view.getResources().getString(R.string.cant_start_act),Toast.LENGTH_SHORT).show();
+                        //如果无法打开，可能是被冻结在冰箱里面了
+                        requestRootToStartSc(view.getContext(), pkgName);
                     }
 
                 }
@@ -109,13 +118,85 @@ public class AppActAdapter extends RecyclerView.Adapter<AppActAdapter.AppViewHol
                 @Override
                 public void onClick(View view) {
                     Log.i(TAG, "onClick: start shortcut");
-                    view.getContext().startActivity(intent);
+                    try {
+                        view.getContext().startActivity(intent);
+                    } catch (Exception e) {
+                        //如果无法打开，可能是被冻结在冰箱里面了
+                        requestRootToStartSc(view.getContext(), pkgName);
+                    }
+
 
                 }
             });
         }
 
 
+    }
+
+    /**
+     * 当app被冻结在冰箱里时，使用root权限来解冻应用
+     *
+     * @param context
+     * @param pkgName
+     */
+    private void requestRootToStartSc(Context context, final String pkgName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.cant_start_act);
+        builder.setMessage(R.string.taps_start_apps);
+        builder.setNegativeButton(R.string.no, null);
+        builder.setPositiveButton(R.string.root_request, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                rootAction(pkgName);
+            }
+        });
+        builder.create().show();
+    }
+
+    /**
+     * root 解冻操作
+     *
+     * @param pkgName
+     */
+    private void rootAction(final String pkgName) {
+        //先申请root权限
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec("su");
+            final Process finalProcess = process;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // boolean result = false;
+                    DataOutputStream dataOutputStream = null;
+
+                    try {
+                        dataOutputStream = new DataOutputStream(finalProcess.getOutputStream());
+                        // 解冻命令为：pm enable pkgName
+                        String command = "pm enable " + pkgName + " \n";
+                        dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
+                        dataOutputStream.flush();
+                        dataOutputStream.writeBytes("exit\n");
+                        dataOutputStream.flush();
+                        finalProcess.waitFor();
+                    } catch (Exception e) {
+
+                    } finally {
+                        try {
+                            if (dataOutputStream != null) {
+                                dataOutputStream.close();
+                            }
+
+                        } catch (IOException e) {
+
+                        }
+                    }
+
+                }
+            }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

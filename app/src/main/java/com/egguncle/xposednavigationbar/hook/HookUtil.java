@@ -153,7 +153,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] smallPonit = XposedHelpers.assetAsByteArray(res, "small_point.png");
             byte[] home = XposedHelpers.assetAsByteArray(res, "ic_home.png");
             byte[] startActs = XposedHelpers.assetAsByteArray(res, "start_acts.png");
-            byte[] playMusic = XposedHelpers.assetAsByteArray(res, "ic_play.png");
+            byte[] playMusic = XposedHelpers.assetAsByteArray(res, "ic_music.png");
             byte[] pauseMusic = XposedHelpers.assetAsByteArray(res, "ic_pause.png");
             byte[] previousMusic=XposedHelpers.assetAsByteArray(res, "ic_previous.png");
             byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");

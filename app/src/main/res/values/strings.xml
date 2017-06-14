@@ -26,8 +26,8 @@
     <string name="market">
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，你的支持是我最大的动力。
     </string>
-    <string name="author">
-        版本 1.1.1\n联系作者\ncicadashadow@gmail.com
+    <string name="author" translatable="false">
+        版本 1.3.0\n联系作者\ncicadashadow@gmail.com
     </string>
     <string name="about_app">
         关于
@@ -56,5 +56,7 @@
     <string name="ok">确定</string>
     <string name="no">取消</string>
     <string name="delete">删除</string>
-    <string name="cant_start_act">不能启动这个应用，是不是放冰箱里了(╯°Д°）╯︵ /(.□ . \)</string>
+    <string name="root_request">授予root权限</string>
+    <string name="cant_start_act">无法启动这个应用</string>
+    <string name="taps_start_apps">如果该应用是被冻结在冰箱里，请授予root权限，模块会执行pm enable packageName进行解冻操作。</string>
 </resources>

@@ -32,9 +32,9 @@
         have not root notinfluences other functions
     </string>
     <string name="market"></string>
-    <string name="author">
-        version 1.1.1\ncontact me\ncicadashadow@gmail.com
-    </string>
+    <!--<string name="author">-->
+        <!--version 1.1.1\ncontact me\ncicadashadow@gmail.com-->
+    <!--</string>-->
     <string name="about_app">
         about
     </string>
@@ -62,5 +62,7 @@ Use the Add button to add new features, list items can be dragged to adjust the 
     <string name="ok">ok</string>
     <string name="no">cancel</string>
     <string name="delete">delete</string>
-    <string name="cant_start_act">could not start,maybe in icebox?(╯°Д°）╯︵ /(.□ . \)</string>
+    <string name="cant_start_act">could not start</string>
+    <string name="taps_start_apps">"if this app in the iceBox,please allow root,it would use pm enable packageName to thaw "</string>
+    <string name="root_request">allow root</string>
 </resources>
