@@ -155,6 +155,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] startActs = XposedHelpers.assetAsByteArray(res, "start_acts.png");
             byte[] playMusic = XposedHelpers.assetAsByteArray(res, "ic_play.png");
             byte[] pauseMusic = XposedHelpers.assetAsByteArray(res, "ic_pause.png");
+            byte[] previousMusic=XposedHelpers.assetAsByteArray(res, "ic_previous.png");
             byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
             mapImgRes.put(FuncName.BACK, backImg);
             mapImgRes.put(FuncName.CLEAR_MEM, clearMenImg);
@@ -170,6 +171,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             mapImgRes.put(FuncName.START_ACTS, startActs);
             mapImgRes.put(FuncName.PLAY_MUSIC, playMusic);
             mapImgRes.put(FuncName.NEXT_PLAY, nextMusic);
+            mapImgRes.put(FuncName.PLAY_PREVIOUS, previousMusic);
         }
 
 
@@ -496,6 +498,18 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //     XposedBridge.log("====hook clear notifications success====");
                         }
                     });
+
+        }else if(lpparam.packageName.equals("android.hardware.input")){
+            XposedBridge.log("hook WindowManagerService success");
+            Class<?> phoneWindowManagerClass=lpparam.classLoader.loadClass("android.hardware.input.InputManager");
+            XposedHelpers.findAndHookConstructor(phoneWindowManagerClass, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    XposedBridge.log("hook WindowManagerService constructor success");
+
+                }
+            });
 
         }
 

@@ -18,9 +18,11 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
+import android.app.Instrumentation;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.HookUtil;
@@ -32,24 +34,44 @@ import de.robv.android.xposed.XposedBridge;
  * Created by egguncle on 17-6-12.
  */
 
-public class BtnMusicStartOrStop implements MusicController,View.OnClickListener {
-    private final static String TAG="BtnMusicStartOrStop";
-
-    private MediaPlayer mediaPlayer;
+public class BtnMusicStartOrStop implements MusicController, View.OnClickListener {
+    private final static String TAG = "BtnMusicStartOrStop";
+    private static boolean isPlaying;
 
     @Override
     public void onClick(View view) {
-       // startOrPauseMusic(HookUtil.getMediaSession());
+        startOrPauseMusic();
     }
 
 
     @Override
-    public void nextMusic(MediaSession session) {
+    public void nextMusic() {
 
     }
 
     @Override
-    public void startOrPauseMusic(MediaSession session) {
+    public void startOrPauseMusic() {
+        XposedBridge.log("pauseMusic: ");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (isPlaying) {
+                    Instrumentation mInst = new Instrumentation();
+                    mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_PAUSE);
+                    XposedBridge.log("pauseMusic: success");
+                    isPlaying = false;
+                } else {
+                    Instrumentation mInst = new Instrumentation();
+                    mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_PLAY);
+                    XposedBridge.log("pauseMusic: success");
+                    isPlaying = true;
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void previousMusic() {
 
     }
 }

@@ -19,40 +19,20 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.app.Instrumentation;
-import android.media.session.MediaSession;
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.MusicController;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import de.robv.android.xposed.XposedBridge;
 
 /**
- * Created by egguncle on 17-6-12.
+ * Created by egguncle on 17-6-14.
  */
 
-public class BtnMusicNext implements MusicController, View.OnClickListener {
-    private final static String TAG = "BtnMusicNext";
-
-    @Override
-    public void onClick(View view) {
-        nextMusic();
-    }
-
+public class BtnMusicPrevious implements MusicController, View.OnClickListener {
     @Override
     public void nextMusic() {
-        XposedBridge.log("nextMusic: ");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Instrumentation mInst = new Instrumentation();
-                mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_NEXT);
-                XposedBridge.log("nextMusic: success");
-            }
-        }).start();
 
     }
 
@@ -63,6 +43,19 @@ public class BtnMusicNext implements MusicController, View.OnClickListener {
 
     @Override
     public void previousMusic() {
+        XposedBridge.log("nextMusic: ");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Instrumentation mInst = new Instrumentation();
+                mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                XposedBridge.log("nextMusic: success");
+            }
+        }).start();
+    }
 
+    @Override
+    public void onClick(View view) {
+        previousMusic();
     }
 }

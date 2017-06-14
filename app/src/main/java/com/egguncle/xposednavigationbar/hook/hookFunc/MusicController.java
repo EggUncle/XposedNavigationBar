@@ -26,6 +26,7 @@ import android.media.session.MediaSession;
  */
 
 public interface MusicController {
-    void nextMusic(MediaSession session);
-    void startOrPauseMusic(MediaSession session);
+    void nextMusic();
+    void startOrPauseMusic();
+    void previousMusic();
 }

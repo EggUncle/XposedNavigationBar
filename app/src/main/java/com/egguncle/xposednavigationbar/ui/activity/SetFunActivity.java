@@ -73,8 +73,9 @@ public class SetFunActivity extends BaseActivity {
             FuncName.FUNC_LIGHT,
             FuncName.FUNC_HOME,
             FuncName.FUNC_START_ACTS,
-          //  FuncName.FUNC_NEXT_PLAY,
-         //   FuncName.FUNC_PLAY_MUSIC,
+            FuncName.FUN_PREVIOUS_PLAY,
+            FuncName.FUNC_PLAY_MUSIC,
+            FuncName.FUNC_NEXT_PLAY,
     };
 
     @Override
@@ -226,13 +227,16 @@ public class SetFunActivity extends BaseActivity {
                     shortCutName = FuncName.HOME;
                     break;
                 case FuncName.FUNC_START_ACTS:
-                    shortCutName=FuncName.START_ACTS;
+                    shortCutName = FuncName.START_ACTS;
                     break;
                 case FuncName.FUNC_PLAY_MUSIC:
-                    shortCutName=FuncName.PLAY_MUSIC;
+                    shortCutName = FuncName.PLAY_MUSIC;
                     break;
                 case FuncName.FUNC_NEXT_PLAY:
-                    shortCutName=FuncName.NEXT_PLAY;
+                    shortCutName = FuncName.NEXT_PLAY;
+                    break;
+                case FuncName.FUN_PREVIOUS_PLAY:
+                    shortCutName=FuncName.PLAY_PREVIOUS;
                     break;
             }
             Log.i(TAG, "addToShortCutList: ");
