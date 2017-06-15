@@ -1,6 +1,7 @@
 # XposedNavigationBar
 基于Xposed框架实现的导航栏功能拓展模块
 在导航栏中实现一个左划菜单，实现多种快捷功能
+
 下载地址
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 
@@ -58,13 +59,24 @@ http://www.jianshu.com/p/d17ce2880753
 ```
 
 ## 快捷启动一些快捷方式 ✓ 
-如绿色守护休眠并关屏等等
+如绿色守护休眠并关屏等等，目前发现一个问题，如果被设置为快捷启动的app被冰箱冻结了，就无法启动并且会报错，是由于app被停用了，解决方法是root后通过pm enable packageName命令即可解冻（这个解决方案来源于一个酷安小伙伴的提示，原理应该和冰箱是一样的）
 
 ## 显示时间
 
 ## 显示电量
 
 ## 任务切换
+
+## 音乐播放控制 ✓
+关于这个功能，起初有很多想法，一开始是想hook对应的音乐软件，再hook其使用的mediaplayer类，获取到播放时长，以跳转到最后一秒的方式实现下一曲的功能。然而在hook网易云后，发现并没有获得mediaplayer类，查阅了相关资料得知有了另外一个叫mediasession的类，可以更方便的控制音乐播放，hook网易云后成功获取这个类的实例，但是在调用方法的时候就成空对象了。
+
+就这个问题发送邮件请教了其他xposed模块的作者，得出的解决方案也很简单，效果拔群：
+模拟按键来控制上一曲下一曲
+```java
+ //下一曲功能实现，上一曲暂停播放类似，这个方法不能在主线程里运行
+ Instrumentation mInst = new Instrumentation();
+ mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_NEXT);
+```
 
 ## 踩到的一些小坑
 获取上下文对象可以通过在hook资源时拿到某个view，再getContext
