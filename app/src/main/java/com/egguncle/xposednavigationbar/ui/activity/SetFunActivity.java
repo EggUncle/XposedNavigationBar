@@ -36,6 +36,7 @@ import android.widget.CheckBox;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.hook.HookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.ui.adapter.RcvHomeAdapter;
 import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelpCallBack;
@@ -293,6 +294,8 @@ public class SetFunActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_save) {
+            //创建快捷方式名字的list，发送广播便于即时更新，免于重启
+            ArrayList<String> shortCutNames=new ArrayList<>();
             for (int i = 0; i < shortCutList.size(); i++) {
                 ShortCut sc = shortCutList.get(i);
                 sc.setPostion(i);
@@ -301,7 +304,13 @@ public class SetFunActivity extends BaseActivity {
                 sc.setOpen(true);
                 Log.i(TAG, "onOptionsItemSelected: " + sc.getName() + " "
                         + sc.getShortCutName() + " " + sc.getPage() + " " + sc.getPostion());
+
+                shortCutNames.add(sc.getShortCutName());
             }
+            Intent intent=new Intent();
+            intent.putExtra("data",shortCutNames);
+            intent.setAction(HookUtil.ACT_BROADCAST);
+            sendBroadcast(intent);
 
             spUtil.saveShortCut(shortCutList);
             Snackbar.make(parentView, getResources().getString(R.string.save_success), Snackbar.LENGTH_SHORT).show();

@@ -42,10 +42,10 @@
     <string name="no_select">
     </string>
     <string name="save">save</string>
-    <string name="save_success">save success ,effective after reboot</string>
+    <string name="save_success">save success</string>
     <string name="need_reboot">effective after reboot</string>
     <string name="set_fun_dialog">
-Use the Add button to add new features, list items can be dragged to adjust the order, click the upper right corner of the Save button to save, restart after the entry into force.
+Use the Add button to add new features, list items can be dragged to adjust the order, click the upper right corner of the Save button to save.
     </string>
     <string name="i_know">Ok</string>
     <string name="taps">taps</string>

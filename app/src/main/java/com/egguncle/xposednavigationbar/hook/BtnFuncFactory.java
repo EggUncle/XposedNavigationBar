@@ -130,6 +130,10 @@ public class BtnFuncFactory {
         line.addView(btn, p);
     }
 
+    public void clearAllBtn(LinearLayout line){
+        line.removeAllViews();
+    }
+
     private  Bitmap byte2Bitmap(byte[] imgBytes) {
         return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
     }

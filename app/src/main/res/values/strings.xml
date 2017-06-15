@@ -27,7 +27,7 @@
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，你的支持是我最大的动力。
     </string>
     <string name="author" translatable="false">
-        版本 1.3.0\n联系作者\ncicadashadow@gmail.com
+        版本 1.3.1\n联系作者\ncicadashadow@gmail.com
     </string>
     <string name="about_app">
         关于
@@ -37,10 +37,10 @@
         没有快捷方式了(╯°Д°）╯︵ /(.□ . \)
     </string>
     <string name="save">保存</string>
-    <string name="save_success">已保存 重启后生效</string>
+    <string name="save_success">已保存</string>
     <string name="need_reboot">重启后生效</string>
     <string name="set_fun_dialog">
-        使用添加按钮添加新功能，列表项可以长按拖动来调整顺序，点击右上角保存按钮进行保存，重启后生效。
+        使用添加按钮添加新功能，列表项可以长按拖动来调整顺序，点击右上角保存按钮进行保存。
     </string>
     <string name="i_know">我知道了</string>
     <string name="taps">提示</string>

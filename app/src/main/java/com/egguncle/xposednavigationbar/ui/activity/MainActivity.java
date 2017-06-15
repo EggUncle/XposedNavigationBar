@@ -20,12 +20,18 @@ package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutManager;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,12 +42,11 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 
+
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.hook.HookUtil;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class MainActivity extends BaseActivity {
@@ -102,7 +107,8 @@ public class MainActivity extends BaseActivity {
         });
 
 
-       // startActivity(new Intent(MainActivity.this,AppShortCutActivity.class));
     }
+
+
 
 }
