@@ -65,4 +65,18 @@ Use the Add button to add new features, list items can be dragged to adjust the 
     <string name="cant_start_act">could not start</string>
     <string name="taps_start_apps">"if this app in the iceBox,please allow root,it would use pm enable packageName to thaw "</string>
     <string name="root_request">allow root</string>
+    <string-array name="shortcut_names">
+        <item>下拉通知</item>
+        <item>快速备忘</item>
+        <item>熄屏</item>
+        <item>清除通知</item>
+        <item>清理内存</item>
+        <item>调节声音</item>
+        <item>调节亮度</item>
+        <item>回到主导航栏</item>
+        <item>快捷启动应用菜单</item>
+        <item>上一曲</item>
+        <item>音乐开始暂停</item>
+        <item>下一曲</item>
+    </string-array>
 </resources>

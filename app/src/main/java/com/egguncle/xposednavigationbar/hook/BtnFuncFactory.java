@@ -59,12 +59,12 @@ public class BtnFuncFactory {
     private ViewGroup mRootViewGroup;
     private ViewPager mViewPager;
     //用于加载图片资源
-    private Map<String, byte[]> mMapImgRes;
+    private Map<Integer, byte[]> mMapImgRes;
 
     public BtnFuncFactory(int iconscale,
                           ViewGroup rootViewGroup,
                           ViewPager viewPager,
-                          Map<String, byte[]> mapImgRes ){
+                          Map<Integer, byte[]> mapImgRes ){
         mIconScale=iconscale;
         mRootViewGroup=rootViewGroup;
         mMapImgRes=mapImgRes;
@@ -72,33 +72,33 @@ public class BtnFuncFactory {
     }
 
 
-    public View.OnClickListener getBtnFuncOfName(String name){
-        switch (name) {
-            case FuncName.BACK:
-                break;
-            case FuncName.DOWN:
+    public View.OnClickListener getBtnFuncOfName(int code){
+        switch (code) {
+//            case FuncName.BACK:
+//                break;
+            case FuncName.FUNC_DOWN_CODE:
                 return  new BtnStatusBarController();
-            case FuncName.QUICK_NOTICE:
+            case FuncName.FUNC_QUICK_NOTICE_CODE:
                 return new BtnQuickNotice();
-            case FuncName.CLEAR_NOTIFICATION:
+            case FuncName.FUNC_CLEAR_NOTIFICATION_CODE:
                 return new BtnClearAllNotifications();
-            case FuncName.SCREEN_OFF:
+            case FuncName.FUNC_SCREEN_OFF_CODE:
                 return new BtnScreenOff();
-            case FuncName.CLEAR_MEM:
+            case FuncName.FUNC_CLEAR_MEM_CODE:
                return new BtnClearBackground();
-            case FuncName.VOLUME:
-                return new BtnVolume(mRootViewGroup,byte2Bitmap(mMapImgRes.get(FuncName.BACK)));
-            case FuncName.LIGHT:
-                return new BtnBackLight(mRootViewGroup,byte2Bitmap(mMapImgRes.get(FuncName.BACK)));
-            case FuncName.HOME:
+            case FuncName.FUNC_VOLUME_CODE:
+                return new BtnVolume(mRootViewGroup,byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
+            case FuncName.FUNC_LIGHT_CODE:
+                return new BtnBackLight(mRootViewGroup,byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
+            case FuncName.FUNC_HOME_CODE:
                return new BtnNavBarGoHome(mViewPager);
-            case FuncName.START_ACTS:
+            case FuncName.FUNC_START_ACTS_CODE:
                 return new BtnOpenActPanel();
-            case FuncName.NEXT_PLAY:
+            case FuncName.FUNC_NEXT_PLAY_CODE:
                 return new BtnMusicNext();
-            case FuncName.PLAY_MUSIC:
+            case FuncName.FUNC_PLAY_MUSIC_CODE:
                 return new BtnMusicStartOrStop();
-            case FuncName.PLAY_PREVIOUS:
+            case FuncName.FUN_PREVIOUS_PLAY_CODE:
                 return new BtnMusicPrevious();
         }
         return null;
@@ -108,9 +108,10 @@ public class BtnFuncFactory {
      * 创建按钮并且设置对应功能
      *
      * @param context
-     * @param name    按钮功能的标识名称
+     * @param line
+     * @param code
      */
-    public void createBtnAndSetFunc(final Context context, LinearLayout line, final String name) {
+    public void createBtnAndSetFunc(final Context context, LinearLayout line, final int code) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
@@ -119,14 +120,14 @@ public class BtnFuncFactory {
         //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton btn = new ImageButton(context);
         if (mIconScale != 100) {
-            btn.setImageBitmap(zoomBitmap(mMapImgRes.get(name), mIconScale));
+            btn.setImageBitmap(zoomBitmap(mMapImgRes.get(code), mIconScale));
         } else {
-            btn.setImageBitmap(byte2Bitmap(mMapImgRes.get(name)));
+            btn.setImageBitmap(byte2Bitmap(mMapImgRes.get(code)));
         }
         btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         btn.setBackgroundColor(Color.alpha(255));
-        btn.setOnClickListener(getBtnFuncOfName(name));
+        btn.setOnClickListener(getBtnFuncOfName(code));
         line.addView(btn, p);
     }
 

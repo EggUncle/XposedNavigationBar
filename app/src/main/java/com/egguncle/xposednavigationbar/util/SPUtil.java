@@ -90,51 +90,51 @@ public class SPUtil {
     }
 
 
-    /**
-     * 获取对应的shortcut
-     *
-     * @param shortCutName
-     * @return
-     */
-    public ShortCut getShortCut(String shortCutName) {
-        String status = mSharedPreferences.getString(shortCutName, "");
-        if ("".equals(status)) {
-            return null;
-        } else {
-            String[] str = status.split(" ");
-            try {
-                boolean open = str[0].equals(1);
-                int page = Integer.parseInt(str[1]);
-                int postion = Integer.parseInt(str[2]);
-                ShortCut shortCut = new ShortCut();
-                shortCut.setName(shortCutName);
-                shortCut.setOpen(open);
-                shortCut.setPage(page);
-                shortCut.setPostion(postion);
-                return shortCut;
-            } catch (ArrayIndexOutOfBoundsException e) {
-                return null;
-            }
-        }
-    }
+//    /**
+//     * 获取对应的shortcut
+//     *
+//     * @param shortCutName
+//     * @return
+//     */
+//    public ShortCut getShortCut(String shortCutName) {
+//        String status = mSharedPreferences.getString(shortCutName, "");
+//        if ("".equals(status)) {
+//            return null;
+//        } else {
+//            String[] str = status.split(" ");
+//            try {
+//                boolean open = str[0].equals(1);
+//                int page = Integer.parseInt(str[1]);
+//                int postion = Integer.parseInt(str[2]);
+//                ShortCut shortCut = new ShortCut();
+//                shortCut.setName(shortCutName);
+//                shortCut.setOpen(open);
+//                shortCut.setPage(page);
+//                shortCut.setPostion(postion);
+//                return shortCut;
+//            } catch (ArrayIndexOutOfBoundsException e) {
+//                return null;
+//            }
+//        }
+//    }
 
-    /**
-     * 存储对应shortcut的状态
-     *
-     * @param shortCut
-     */
-    public void saveShortCut(ShortCut shortCut) {
-        String shortCutName = shortCut.getShortCutName();
-        boolean open = shortCut.isOpen();
-        int page = shortCut.getPage();
-        int postion = shortCut.getPostion();
-        //open的状态在sp里用
-        int openStr = open ? 1 : 0;
-        //构造字符串保存状态
-        String status = openStr + " " + page + " " + postion;
-        mEditor.putString(shortCutName, status);
-        mEditor.commit();
-    }
+//    /**
+//     * 存储对应shortcut的状态
+//     *
+//     * @param shortCut
+//     */
+//    public void saveShortCut(ShortCut shortCut) {
+//        String shortCutName = shortCut.getShortCutName();
+//        boolean open = shortCut.isOpen();
+//        int page = shortCut.getPage();
+//        int postion = shortCut.getPostion();
+//        //open的状态在sp里用
+//        int openStr = open ? 1 : 0;
+//        //构造字符串保存状态
+//        String status = openStr + " " + page + " " + postion;
+//        mEditor.putString(shortCutName, status);
+//        mEditor.commit();
+//    }
 
     /**
      * 存储app快捷方式信息

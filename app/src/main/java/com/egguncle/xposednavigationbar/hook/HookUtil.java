@@ -67,13 +67,12 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 
+import com.egguncle.xposednavigationbar.model.AppInfo;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 import com.google.gson.Gson;
 
-import static android.R.attr.bitmap;
-import static android.view.View.VISIBLE;
 
 /**
  * Created by egguncle on 17-6-1.
@@ -94,7 +93,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     private static Method clearAllNotificationsMethod;
 
     //用于加载图片资源
-    private Map<String, byte[]> mapImgRes = new HashMap<>();
+    private Map<Integer, byte[]> mapImgRes = new HashMap<>();
     //用于获取保存的快捷按键设置
     private List<ShortCut> shortCutList;
     private int iconScale;
@@ -119,6 +118,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         if ("".equals(json)) {
             return;
         }
+        XposedBridge.log("===" + json);
+
+
         //获取主导行栏小点的位置
         homePointPosition = pre.getString(FuncName.HOME_POINT, FuncName.LEFT);
         //获取快捷按钮设置数据
@@ -149,21 +151,21 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] pauseMusic = XposedHelpers.assetAsByteArray(res, "ic_pause.png");
             byte[] previousMusic = XposedHelpers.assetAsByteArray(res, "ic_previous.png");
             byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
-            mapImgRes.put(FuncName.BACK, backImg);
-            mapImgRes.put(FuncName.CLEAR_MEM, clearMenImg);
-            mapImgRes.put(FuncName.CLEAR_NOTIFICATION, clearNotificationImg);
-            mapImgRes.put(FuncName.DOWN, downImg);
-            mapImgRes.put(FuncName.LIGHT, lightImg);
-            mapImgRes.put(FuncName.QUICK_NOTICE, quickNoticesImg);
-            mapImgRes.put(FuncName.SCREEN_OFF, screenOffImg);
+            mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
+            mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
+            mapImgRes.put(FuncName.FUNC_CLEAR_NOTIFICATION_CODE, clearNotificationImg);
+            mapImgRes.put(FuncName.FUNC_DOWN_CODE, downImg);
+            mapImgRes.put(FuncName.FUNC_LIGHT_CODE, lightImg);
+            mapImgRes.put(FuncName.FUNC_QUICK_NOTICE_CODE, quickNoticesImg);
+            mapImgRes.put(FuncName.FUNC_SCREEN_OFF_CODE, screenOffImg);
             //  mapImgRes.put(FuncName.UP, upImg);
-            mapImgRes.put(FuncName.VOLUME, volume);
-            mapImgRes.put(FuncName.SMALL_POINT, smallPonit);
-            mapImgRes.put(FuncName.HOME, home);
-            mapImgRes.put(FuncName.START_ACTS, startActs);
-            mapImgRes.put(FuncName.PLAY_MUSIC, playMusic);
-            mapImgRes.put(FuncName.NEXT_PLAY, nextMusic);
-            mapImgRes.put(FuncName.PLAY_PREVIOUS, previousMusic);
+            mapImgRes.put(FuncName.FUNC_VOLUME_CODE, volume);
+            mapImgRes.put(FuncName.FUNC_SMALL_POINT_CODE, smallPonit);
+            mapImgRes.put(FuncName.FUNC_HOME_CODE, home);
+            mapImgRes.put(FuncName.FUNC_START_ACTS_CODE, startActs);
+            mapImgRes.put(FuncName.FUNC_PLAY_MUSIC_CODE, playMusic);
+            mapImgRes.put(FuncName.FUNC_NEXT_PLAY_CODE, nextMusic);
+            mapImgRes.put(FuncName.FUN_PREVIOUS_PLAY_CODE, previousMusic);
         }
 
 
@@ -223,7 +225,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 if (!homePointPosition.equals(FuncName.DISMISS)) {
                     //用于呼出整个扩展导航栏的一个小点
                     ImageButton btnCall = new ImageButton(context);
-                    btnCall.setImageBitmap(byte2Bitmap(mapImgRes.get(FuncName.SMALL_POINT)));
+                    btnCall.setImageBitmap(byte2Bitmap(mapImgRes.get(FuncName.FUNC_SMALL_POINT_CODE)));
                     btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     btnCall.setBackgroundColor(Color.alpha(255));
                     LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
@@ -249,6 +251,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 //初始化广播接收器
                 initBroadcast(context);
 
+
                 //viewpage的第二页
                 //整个页面的基础
                 final FrameLayout framePage2 = new FrameLayout(context);
@@ -260,8 +263,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 });
                 btnFuncFactory = new BtnFuncFactory(iconScale, framePage2, vpXphook, mapImgRes);
 
-             //   LinearLayout
-                        vpLine = new LinearLayout(context);
+                //   LinearLayout
+                vpLine = new LinearLayout(context);
                 // vpLine.setPadding(0, 0, 0, 0);
                 framePage2.addView(vpLine);
                 vpLine.setOrientation(LinearLayout.HORIZONTAL);
@@ -269,7 +272,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                 for (ShortCut sc : shortCutList) {
                     // createBtnAndSetFunc(context, framePage2, vpLine, sc.getShortCutName());
-                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc.getShortCutName());
+                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc.getCode());
                 }
                 //将这些布局都添加到viewpageadapter中
                 List<View> list1 = new ArrayList<View>();
@@ -395,9 +398,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     /**
      * 初始化广播，用于进程间通信
+     *
      * @param context
      */
-    private void initBroadcast(Context context) {;
+    private void initBroadcast(Context context) {
+        ;
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACT_BROADCAST);
         MyReceiver myReceiver = new HookUtil.MyReceiver();
@@ -408,11 +413,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList<String> scNames=intent.getStringArrayListExtra("data");
+            ArrayList<Integer> scCodes = intent.getIntegerArrayListExtra("data");
             btnFuncFactory.clearAllBtn(vpLine);
-            if (scNames!=null&&scNames.size()!=0){
-                for (String scName:scNames){
-                    btnFuncFactory.createBtnAndSetFunc(context, vpLine,scName);
+            if (scCodes != null && scCodes.size() != 0) {
+                for (int code : scCodes) {
+                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, code);
                 }
             }
 

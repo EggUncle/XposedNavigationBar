@@ -24,10 +24,10 @@ package com.egguncle.xposednavigationbar.model;
  */
 
 public class ShortCut {
-    //快捷小功能的名字
-    private String name;
-    //快捷小功能的标识符
-    private String shortCutName;
+    //快捷小功能的名字对应的编码
+    private int code;
+//    //快捷小功能的标识符
+//    private String shortCutName;
     //是否开启了这个功能
     private boolean open;
     //第几页
@@ -51,13 +51,9 @@ public class ShortCut {
         this.postion = postion;
     }
 
-    public String getName() {
-        return name;
-    }
+    public int getCode() {return code;}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setCode(int code) {this.code = code;}
 
     public boolean isOpen() {
         return open;
@@ -66,12 +62,12 @@ public class ShortCut {
     public void setOpen(boolean open) {
         this.open = open;
     }
-
-    public String getShortCutName() {
-        return shortCutName;
-    }
-
-    public void setShortCutName(String shortCutName) {
-        this.shortCutName = shortCutName;
-    }
+//
+//    public String getShortCutName() {
+//        return shortCutName;
+//    }
+//
+//    public void setShortCutName(String shortCutName) {
+//        this.shortCutName = shortCutName;
+//    }
 }

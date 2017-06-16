@@ -18,6 +18,7 @@
 
 package com.egguncle.xposednavigationbar.ui.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -33,6 +34,7 @@ import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.ShortCut;
+import com.egguncle.xposednavigationbar.util.CodeToFuncName;
 
 import java.util.Iterator;
 import java.util.List;
@@ -42,11 +44,15 @@ import java.util.List;
  */
 
 public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeViewHolder> {
-    private String TAG="RcvHomeAdapter";
+    private String TAG = "RcvHomeAdapter";
     private List<ShortCut> dataList;
+    private Context mContext;
+    private CodeToFuncName mCodeToFuncName;
 
-    public RcvHomeAdapter(List<ShortCut> list) {
+    public RcvHomeAdapter(Context context, List<ShortCut> list) {
+        this.mContext = context;
         this.dataList = list;
+        this.mCodeToFuncName=CodeToFuncName.getInstance(mContext);
     }
 
     @Override
@@ -57,10 +63,10 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
     @Override
     public void onBindViewHolder(RcvHomeAdapter.HomeViewHolder holder, int position) {
         final ShortCut shortCut = dataList.get(position);
-        String shortCutName = shortCut.getShortCutName();
-        String name=shortCut.getName();
-        holder.itemTvName.setText(name);
-        final int p=position;
+       // String shortCutName = shortCut.getShortCutName();
+        int code = shortCut.getCode();
+        holder.itemTvName.setText(mCodeToFuncName.getFuncNameFromCode(code));
+        final int p = position;
         holder.itemImgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,8 +76,6 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
         });
 
     }
-
-
 
 
     @Override

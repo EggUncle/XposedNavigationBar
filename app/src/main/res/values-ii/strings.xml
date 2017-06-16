@@ -61,4 +61,18 @@
     <string name="root_request">授予root权限</string>
     <string name="cant_start_act">无法启动这个应用</string>
     <string name="taps_start_apps">如果该应用是被冻结在冰箱里，请授予root权限，模块会执行pm enable packageName进行解冻操作。</string>
+    <string-array name="shortcut_names">
+        <item>下拉通知</item>
+        <item>快速备忘</item>
+        <item>熄屏</item>
+        <item>清除通知</item>
+        <item>清理内存</item>
+        <item>调节声音</item>
+        <item>调节亮度</item>
+        <item>回到主导航栏</item>
+        <item>快捷启动应用菜单</item>
+        <item>上一曲</item>
+        <item>音乐开始暂停</item>
+        <item>下一曲</item>
+    </string-array>
 </resources>

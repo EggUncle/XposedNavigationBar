@@ -58,26 +58,27 @@ public class SetFunActivity extends BaseActivity {
     private List<ShortCut> shortCutList;
 
     //一个被设置和没被设置的处理逻辑
-    private List<String> selectList;
+    private List<Integer> selectList;
     //  private List<String> notSelectList;
 
     private SPUtil spUtil;
     private boolean tapsNotAppear;
 
-    private final String[] funcs = {
-            FuncName.FUNC_DOWN,
-            FuncName.FUNC_QUICK_NOTICE,
-            FuncName.FUNC_SCREEN_OFF,
-            FuncName.FUNC_CLEAR_NOTIFICATION,
-            FuncName.FUNC_CLEAR_MEM,
-            FuncName.FUNC_VOLUME,
-            FuncName.FUNC_LIGHT,
-            FuncName.FUNC_HOME,
-            FuncName.FUNC_START_ACTS,
-            FuncName.FUN_PREVIOUS_PLAY,
-            FuncName.FUNC_PLAY_MUSIC,
-            FuncName.FUNC_NEXT_PLAY,
-    };
+    private  String[] funcs ;
+//    {
+//            FuncName.FUNC_DOWN,
+//            FuncName.FUNC_QUICK_NOTICE,
+//            FuncName.FUNC_SCREEN_OFF,
+//            FuncName.FUNC_CLEAR_NOTIFICATION,
+//            FuncName.FUNC_CLEAR_MEM,
+//            FuncName.FUNC_VOLUME,
+//            FuncName.FUNC_LIGHT,
+//            FuncName.FUNC_HOME,
+//            FuncName.FUNC_START_ACTS,
+//            FuncName.FUN_PREVIOUS_PLAY,
+//            FuncName.FUNC_PLAY_MUSIC,
+//            FuncName.FUNC_NEXT_PLAY,
+//    };
 
     @Override
     int getLayoutId() {
@@ -100,7 +101,7 @@ public class SetFunActivity extends BaseActivity {
         selectList = new ArrayList<>();
         //notSelectList = new ArrayList<>();
         shortCutList = new ArrayList<>();
-        rcvHomeAdapter = new RcvHomeAdapter(shortCutList);
+        rcvHomeAdapter = new RcvHomeAdapter(this,shortCutList);
         rcvSetting.setAdapter(rcvHomeAdapter);
         //设置rcv可拖动
         MyItemTouchHelper myItemTouchHelper = new MyItemTouchHelper(onItemTouchCallbackListener);
@@ -121,6 +122,8 @@ public class SetFunActivity extends BaseActivity {
 //                notSelectList.add(s);
 //            }
 //        }
+
+        funcs = getResources().getStringArray(R.array.shortcut_names);
     }
 
     @Override
@@ -161,9 +164,9 @@ public class SetFunActivity extends BaseActivity {
 
                                 } else {
                                     //将设置的都加到select中，remove notselect中对应内容
-                                    for (String s : selectList) {
-                                        Log.i(TAG, "onClick: " + s);
-                                        addToShortCutList(s);
+                                    for (Integer code : selectList) {
+                                        Log.i(TAG, "onClick: " + code);
+                                        addToShortCutList(code);
                                         //   notSelectList.remove(s);
                                     }
                                     rcvHomeAdapter.notifyDataSetChanged();
@@ -174,11 +177,11 @@ public class SetFunActivity extends BaseActivity {
                         .setMultiChoiceItems(funcs, null, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                String name = funcs[which];
+                              //  String name = funcs[which];
                                 if (isChecked) {
-                                    selectList.add(name);
+                                    selectList.add(which);
                                 } else {
-                                    selectList.remove(name);
+                                    selectList.remove(which);
                                 }
                             }
                         }).create();
@@ -193,61 +196,62 @@ public class SetFunActivity extends BaseActivity {
     /**
      * 根据选择的内容，来向shortcutlist添加数据
      *
-     * @param s
+     * @param code  对应的功能码
      */
-    private void addToShortCutList(String s) {
+    private void addToShortCutList(int  code) {
         String shortCutName = "";
         if (shortCutList.size() >= 10) {
             Snackbar.make(parentView,
                     getResources().getString(R.string.taps_too_mang_sc),
                     Snackbar.LENGTH_SHORT).show();
         } else {
-            switch (s) {
-                case FuncName.FUNC_DOWN:
-                    shortCutName = FuncName.DOWN;
-                    break;
-                case FuncName.FUNC_CLEAR_NOTIFICATION:
-                    shortCutName = FuncName.CLEAR_NOTIFICATION;
-                    break;
-                case FuncName.FUNC_QUICK_NOTICE:
-                    shortCutName = FuncName.QUICK_NOTICE;
-                    break;
-                case FuncName.FUNC_CLEAR_MEM:
-                    shortCutName = FuncName.CLEAR_MEM;
-                    break;
-                case FuncName.FUNC_LIGHT:
-                    shortCutName = FuncName.LIGHT;
-                    break;
-                case FuncName.FUNC_VOLUME:
-                    shortCutName = FuncName.VOLUME;
-                    break;
-                case FuncName.FUNC_SCREEN_OFF:
-                    shortCutName = FuncName.SCREEN_OFF;
-                    break;
-                case FuncName.FUNC_HOME:
-                    shortCutName = FuncName.HOME;
-                    break;
-                case FuncName.FUNC_START_ACTS:
-                    shortCutName = FuncName.START_ACTS;
-                    break;
-                case FuncName.FUNC_PLAY_MUSIC:
-                    shortCutName = FuncName.PLAY_MUSIC;
-                    break;
-                case FuncName.FUNC_NEXT_PLAY:
-                    shortCutName = FuncName.NEXT_PLAY;
-                    break;
-                case FuncName.FUN_PREVIOUS_PLAY:
-                    shortCutName=FuncName.PLAY_PREVIOUS;
-                    break;
-            }
-            Log.i(TAG, "addToShortCutList: ");
-            if (!"".equals(shortCutName)) {
+//            switch (s) {
+//                case FuncName.FUNC_DOWN:
+//                    shortCutName = FuncName.DOWN;
+//                    break;
+//                case FuncName.FUNC_CLEAR_NOTIFICATION:
+//                    shortCutName = FuncName.CLEAR_NOTIFICATION;
+//                    break;
+//                case FuncName.FUNC_QUICK_NOTICE:
+//                    shortCutName = FuncName.QUICK_NOTICE;
+//                    break;
+//                case FuncName.FUNC_CLEAR_MEM:
+//                    shortCutName = FuncName.CLEAR_MEM;
+//                    break;
+//                case FuncName.FUNC_LIGHT:
+//                    shortCutName = FuncName.LIGHT;
+//                    break;
+//                case FuncName.FUNC_VOLUME:
+//                    shortCutName = FuncName.VOLUME;
+//                    break;
+//                case FuncName.FUNC_SCREEN_OFF:
+//                    shortCutName = FuncName.SCREEN_OFF;
+//                    break;
+//                case FuncName.FUNC_HOME:
+//                    shortCutName = FuncName.HOME;
+//                    break;
+//                case FuncName.FUNC_START_ACTS:
+//                    shortCutName = FuncName.START_ACTS;
+//                    break;
+//                case FuncName.FUNC_PLAY_MUSIC:
+//                    shortCutName = FuncName.PLAY_MUSIC;
+//                    break;
+//                case FuncName.FUNC_NEXT_PLAY:
+//                    shortCutName = FuncName.NEXT_PLAY;
+//                    break;
+//                case FuncName.FUN_PREVIOUS_PLAY:
+//                    shortCutName = FuncName.PLAY_PREVIOUS;
+//                    break;
+//            }
+
+//            Log.i(TAG, "addToShortCutList: ");
+//            if (!"".equals(shortCutName)) {
                 Log.i(TAG, "addToShortCutList: add ");
                 ShortCut sc = new ShortCut();
-                sc.setName(s);
-                sc.setShortCutName(shortCutName);
+                sc.setCode(code);
+             //   sc.setShortCutName(shortCutName);
                 shortCutList.add(sc);
-            }
+            //}
         }
     }
 
@@ -268,9 +272,9 @@ public class SetFunActivity extends BaseActivity {
                 Collections.swap(shortCutList, srcPosition, targetPosition);
                 // 更新UI中的Item的位置，主要是给用户看到交互效果
                 rcvHomeAdapter.notifyItemMoved(srcPosition, targetPosition);
-                for (ShortCut sc : shortCutList) {
-                    Log.i(TAG, "onMove: " + sc.getName());
-                }
+//                for (ShortCut sc : shortCutList) {
+//                    Log.i(TAG, "onMove: " + sc.getName());
+//                }
                 Log.i(TAG, "onMove: ---");
                 return true;
             }
@@ -295,20 +299,20 @@ public class SetFunActivity extends BaseActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_save) {
             //创建快捷方式名字的list，发送广播便于即时更新，免于重启
-            ArrayList<String> shortCutNames=new ArrayList<>();
+            ArrayList<Integer> shortCutCodes = new ArrayList<>();
             for (int i = 0; i < shortCutList.size(); i++) {
                 ShortCut sc = shortCutList.get(i);
                 sc.setPostion(i);
                 //暂时只有一页
                 sc.setPage(0);
                 sc.setOpen(true);
-                Log.i(TAG, "onOptionsItemSelected: " + sc.getName() + " "
-                        + sc.getShortCutName() + " " + sc.getPage() + " " + sc.getPostion());
+//                Log.i(TAG, "onOptionsItemSelected: " + sc.getName() + " "
+//                        + sc.getShortCutName() + " " + sc.getPage() + " " + sc.getPostion());
 
-                shortCutNames.add(sc.getShortCutName());
+                shortCutCodes.add(sc.getCode());
             }
-            Intent intent=new Intent();
-            intent.putExtra("data",shortCutNames);
+            Intent intent = new Intent();
+            intent.putExtra("data", shortCutCodes);
             intent.setAction(HookUtil.ACT_BROADCAST);
             sendBroadcast(intent);
 

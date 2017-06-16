@@ -47,19 +47,34 @@ public class FuncName {
 
     public final static String CLOCK = "clock";
 
+    public final static int FUNC_BACK_CODE=-2;
+    public final static int FUNC_SMALL_POINT_CODE=-1;
+    public final static int FUNC_DOWN_CODE = 0;
+    public final static int FUNC_QUICK_NOTICE_CODE = 1;
+    public final static int FUNC_SCREEN_OFF_CODE = 2;
+    public final static int FUNC_CLEAR_NOTIFICATION_CODE= 3;
+    public final static int FUNC_CLEAR_MEM_CODE = 4;
+    public final static int FUNC_VOLUME_CODE = 5;
+    public final static int FUNC_LIGHT_CODE = 6;
+    public final static int FUNC_HOME_CODE = 7;
+    public final static int FUNC_START_ACTS_CODE=8;
+    public final static int FUN_PREVIOUS_PLAY_CODE=9;
+    public final static int FUNC_PLAY_MUSIC_CODE=10;
+    public final static int FUNC_NEXT_PLAY_CODE=11;
 
-    public final static String FUNC_DOWN = "下拉通知栏";
-    public final static String FUNC_QUICK_NOTICE = "快速备忘";
-    public final static String FUNC_SCREEN_OFF = "息屏";
-    public final static String FUNC_CLEAR_NOTIFICATION = "清除通知";
-    public final static String FUNC_CLEAR_MEM = "清理内存";
-    public final static String FUNC_VOLUME = "调节声音";
-    public final static String FUNC_LIGHT = "调节亮度";
-    public final static String FUNC_HOME = "回到主导航栏";
-    public final static String FUNC_START_ACTS="快捷启动应用菜单";
-    public final static String FUNC_NEXT_PLAY="下一曲";
-    public final static String FUN_PREVIOUS_PLAY="上一曲";
-    public final static String FUNC_PLAY_MUSIC="音乐开始&暂停";
+
+//    public final static String FUNC_DOWN = "下拉通知栏";
+//    public final static String FUNC_QUICK_NOTICE = "快速备忘";
+//    public final static String FUNC_SCREEN_OFF = "息屏";
+//    public final static String FUNC_CLEAR_NOTIFICATION = "清除通知";
+//    public final static String FUNC_CLEAR_MEM = "清理内存";
+//    public final static String FUNC_VOLUME = "调节声音";
+//    public final static String FUNC_LIGHT = "调节亮度";
+//    public final static String FUNC_HOME = "回到主导航栏";
+//    public final static String FUNC_START_ACTS="快捷启动应用菜单";
+//    public final static String FUNC_NEXT_PLAY="下一曲";
+//    public final static String FUN_PREVIOUS_PLAY="上一曲";
+//    public final static String FUNC_PLAY_MUSIC="音乐开始&暂停";
 
     public static final String HOME_POINT = "home_point";
     public static final String LEFT = "left";
@@ -75,14 +90,14 @@ public class FuncName {
     public static final int IMPORTANCE_BACKGROUND = 400;
     public static final int IMPORTANCE_EMPTY = 500;
 
-    public static final String IMPORTANCE_PERSISTENT_NAME = "IMPORTANCE_PERSISTENT";
-    public static final String IMPORTANCE_FOREGROUND_NAME = "IMPORTANCE_FOREGROUND";
-    public static final String IMPORTANCE_VISIBLE_NAME = "IMPORTANCE_VISIBLE";
-    public static final String IMPORTANCE_PERCEPTIBLE_NAME = "IMPORTANCE_PERCEPTIBLE";
-    public static final String IMPORTANCE_CANT_SAVE_STATE_NAME = "IMPORTANCE_CANT_SAVE_STATE";
-    public static final String IMPORTANCE_SERVICE_NAME = "IMPORTANCE_SERVICE_NAME";
-    public static final String IMPORTANCE_BACKGROUND_NAME = "IMPORTANCE_BACKGROUND";
-    public static final String IMPORTANCE_EMPTY_NAME = "IMPORTANCE_EMPTY";
+//    public static final String IMPORTANCE_PERSISTENT_NAME = "IMPORTANCE_PERSISTENT";
+//    public static final String IMPORTANCE_FOREGROUND_NAME = "IMPORTANCE_FOREGROUND";
+//    public static final String IMPORTANCE_VISIBLE_NAME = "IMPORTANCE_VISIBLE";
+//    public static final String IMPORTANCE_PERCEPTIBLE_NAME = "IMPORTANCE_PERCEPTIBLE";
+//    public static final String IMPORTANCE_CANT_SAVE_STATE_NAME = "IMPORTANCE_CANT_SAVE_STATE";
+//    public static final String IMPORTANCE_SERVICE_NAME = "IMPORTANCE_SERVICE_NAME";
+//    public static final String IMPORTANCE_BACKGROUND_NAME = "IMPORTANCE_BACKGROUND";
+//    public static final String IMPORTANCE_EMPTY_NAME = "IMPORTANCE_EMPTY";
 
     public static final String ICON_SIZE = "icon_size";
 
