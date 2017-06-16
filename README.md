@@ -6,7 +6,7 @@
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 
 --开发中--
-## 支付宝&微信扫一扫
+## 支付宝&微信扫一扫 ✓
 支付宝扫一扫：
 ```java
             Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
