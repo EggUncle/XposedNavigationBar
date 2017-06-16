@@ -56,7 +56,6 @@ Use the Add button to add new features, list items can be dragged to adjust the 
     <string name="home_point">the samll point position</string>
     <string name="clear_mem_level">clear mem level</string>
     <string name="icon_size">Icon size adjustment</string>
-
     <string name="select_apps">please select shortcut add</string>
     <string name="delect_apps">please select shortcut remove</string>
     <string name="ok">ok</string>

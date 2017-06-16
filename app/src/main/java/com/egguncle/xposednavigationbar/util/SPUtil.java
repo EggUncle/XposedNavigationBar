@@ -44,6 +44,9 @@ public class SPUtil {
     private static final String TAPS_APPEAR = "taps_appear";
     //在原导航键上添加一个小点，点击后出现扩展的部分
     private static final String HOME_POINT = "home_point";
+    private static final String LANGUAGE="LANGUAGE";
+    public static final String LANGUAGE_CHINESE="zh_simple";
+    public static final String LANGUAGE_ENGLICH="en";
     private static final String LEFT = "left";
     private static final String RIGHT = "right";
     private static final String DISMISS = "notShow";
@@ -89,52 +92,6 @@ public class SPUtil {
         return mSharedPreferences.getBoolean(ACTIVATION, false);
     }
 
-
-//    /**
-//     * 获取对应的shortcut
-//     *
-//     * @param shortCutName
-//     * @return
-//     */
-//    public ShortCut getShortCut(String shortCutName) {
-//        String status = mSharedPreferences.getString(shortCutName, "");
-//        if ("".equals(status)) {
-//            return null;
-//        } else {
-//            String[] str = status.split(" ");
-//            try {
-//                boolean open = str[0].equals(1);
-//                int page = Integer.parseInt(str[1]);
-//                int postion = Integer.parseInt(str[2]);
-//                ShortCut shortCut = new ShortCut();
-//                shortCut.setName(shortCutName);
-//                shortCut.setOpen(open);
-//                shortCut.setPage(page);
-//                shortCut.setPostion(postion);
-//                return shortCut;
-//            } catch (ArrayIndexOutOfBoundsException e) {
-//                return null;
-//            }
-//        }
-//    }
-
-//    /**
-//     * 存储对应shortcut的状态
-//     *
-//     * @param shortCut
-//     */
-//    public void saveShortCut(ShortCut shortCut) {
-//        String shortCutName = shortCut.getShortCutName();
-//        boolean open = shortCut.isOpen();
-//        int page = shortCut.getPage();
-//        int postion = shortCut.getPostion();
-//        //open的状态在sp里用
-//        int openStr = open ? 1 : 0;
-//        //构造字符串保存状态
-//        String status = openStr + " " + page + " " + postion;
-//        mEditor.putString(shortCutName, status);
-//        mEditor.commit();
-//    }
 
     /**
      * 存储app快捷方式信息
@@ -218,5 +175,13 @@ public class SPUtil {
 
     public int getIconSize(){
         return mSharedPreferences.getInt(ICON_SIZE, 100);
+    }
+
+    public void setLanguage(String language){
+        mEditor.putString(LANGUAGE,language);
+        mEditor.commit();
+    }
+    public String getLanguage(){
+        return mSharedPreferences.getString(LANGUAGE,LANGUAGE_CHINESE);
     }
 }

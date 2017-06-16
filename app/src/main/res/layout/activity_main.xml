@@ -111,5 +111,25 @@
             android:layout_height="2dp"
             android:background="@color/colorGrey" />
 
+        <LinearLayout
+            android:id="@+id/btn_language"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_language"
+                android:textSize="@dimen/txt_m" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorGrey" />
+
     </LinearLayout>
 </ScrollView>
