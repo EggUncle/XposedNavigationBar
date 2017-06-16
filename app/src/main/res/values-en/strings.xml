@@ -58,6 +58,7 @@
     <string name="no">cancel</string>
     <string name="delete">delete</string>
     <string name="quick_notice">memo</string>
+    <string name="select_shortcut">add shortcut</string>
     <string name="root_request">grant root permission</string>
     <string name="cant_start_act">can\'t start the apps</string>
     <string name="taps_start_apps">If the apps was frozen in the icebox，please grant root permission，and the module will run pm enable packageName to thaw the operation。</string>

@@ -84,20 +84,7 @@ public class MainActivity extends BaseActivity {
         btnAbout = (LinearLayout) findViewById(R.id.btn_about);
         btnLanguage = (LinearLayout) findViewById(R.id.btn_language);
 
-        Resources resources = getResources();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        Configuration config = resources.getConfiguration();
-        // 应用用户选择语言
-        String language = SPUtil.getInstance(this).getLanguage();
-        Log.i(TAG, "initVar: "+language);
-        if (language.equals(SPUtil.LANGUAGE_CHINESE)) {
-            config.setLocale(Locale.SIMPLIFIED_CHINESE);
-        } else if (language.equals(SPUtil.LANGUAGE_ENGLICH)) {
-            config.setLocale(Locale.ENGLISH);
-        } else {
-            config.setLocale(Locale.getDefault());
-        }
-        resources.updateConfiguration(config, dm);
+
     }
 
     @Override
