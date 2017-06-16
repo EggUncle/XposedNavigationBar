@@ -154,9 +154,9 @@ public class SetFunActivity extends BaseActivity {
                 selectList.clear();
                 //   if (notSelectList.size() != 0) {
                 AlertDialog dialog = new AlertDialog.Builder(SetFunActivity.this)
-                        .setTitle("添加快捷按钮")
-                        .setNegativeButton("取消", null)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        .setTitle(getResources().getString(R.string.select_shortcut))
+                        .setNegativeButton(getResources().getString(R.string.no), null)
+                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //限制最大按钮数

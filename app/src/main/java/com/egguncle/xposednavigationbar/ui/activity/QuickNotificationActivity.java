@@ -53,9 +53,9 @@ public class QuickNotificationActivity extends Activity {
         final EditText ed = (EditText) view.findViewById(R.id.ed_dialog);
         final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("快速备忘")
+        builder.setTitle(getResources().getString(R.string.quick_notice))
                // .setIcon(R.drawable.notice)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String noticeStr = ed.getText().toString();
@@ -77,7 +77,7 @@ public class QuickNotificationActivity extends Activity {
                 })
                 .setView(view)
                 //当对话框关闭后，就finish整个activity
-                .setNegativeButton("取消",
+                .setNegativeButton(getResources().getString(R.string.no),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

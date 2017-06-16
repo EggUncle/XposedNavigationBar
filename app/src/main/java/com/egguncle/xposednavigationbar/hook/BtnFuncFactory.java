@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnAlipayScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnBackLight;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearAllNotifications;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearBackground;
@@ -45,6 +46,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnQuickNotice;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenOff;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -100,6 +102,10 @@ public class BtnFuncFactory {
                 return new BtnMusicStartOrStop();
             case FuncName.FUN_PREVIOUS_PLAY_CODE:
                 return new BtnMusicPrevious();
+            case FuncName.FUNC_WECHAT_SACNNER_CODE:
+                return new BtnWeChatScanner();
+            case FuncName.FUNC_ALIPAY_SACNNER_CODE:
+                return new BtnAlipayScanner();
         }
         return null;
     }

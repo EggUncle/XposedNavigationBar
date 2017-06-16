@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~     Navigation bar function expansion module
   ~     Copyright (C) 2017 egguncle
@@ -18,64 +17,65 @@
   -->
 
 <resources>
-    <string name="app_name">NavBar extension module</string>
-    <string name="switch_app">Global Switch(need reboot)</string>
+    <string name="app_name">navigation bar extension module</string>
+    <string name="switch_app">the module master switch(takes effect after rebooted)</string>
     <string name="about">
-        when you activation this module,you can see a small point on your NavBar,click it or swipe left,
-        then you can see extension func
-        \n\nthis module can use on some phone with NavBar,now only test on Cyanogenmod and Android,
-        maybe there are some functions could not run.
-        when you reboot phone and there are a dialog show "systemui has stoped"
-        ,you can use “adb uninstall com.egguncle.xposednavigationbar” to unstall it
-        \n\nwhen android 6.0 use expandSettingsPanel，the anim is slow，
-        give systemuiApplication root permission，this can solve it use a other ways，
-        have not root notinfluences other functions
+        After the module was started,click the dot on the left side of the navbar or slide the left navbar，then you can call the shortcut menu。
+        \n\nIt can be used by the model with  navbar，and the module was just be tested in the android and CM ROM，part of functions may not work in other ROMs，If the“system interface stops running” recurred after the module was activated that makes the phone doesn\'t work，please connect your phone to the computer and use the adb instructions“adb uninstall com.egguncle.xposednavigationbar”and then uninstall it。
+        \n\nwhen the android6.0 use expandSettingsPanel to drop-down the notification，it can be very slow to expand the animation，granting the system interface with root permission can solve this problem，conversely, it will not affect other functions。
     </string>
-    <string name="market"></string>
-    <!--<string name="author">-->
-        <!--version 1.1.1\ncontact me\ncicadashadow@gmail.com-->
-    <!--</string>-->
+    <string name="market">
+        Please click the word to leave a message in the review area or mark the module if you have any suggestions and comments。Your support is the biggest drive for me.
+    </string>
+    <string name="author">
+        version 1.4.0\n contact author\ncicadashadow@gmail.com
+    </string>
     <string name="about_app">
         about
     </string>
 
     <string name="no_select">
+        no shortcuts(╯°Д°）╯︵ /(.□ . \)
     </string>
     <string name="save">save</string>
     <string name="save_success">save success</string>
-    <string name="need_reboot">effective after reboot</string>
+    <string name="need_reboot">take effect after reboot</string>
     <string name="set_fun_dialog">
-Use the Add button to add new features, list items can be dragged to adjust the order, click the upper right corner of the Save button to save.
+        choose "add" button to add new functions，long press and drag the list to adjust order，click the "save" button in the upper right corner to save it。
     </string>
-    <string name="i_know">Ok</string>
+    <string name="i_know">i know</string>
     <string name="taps">taps</string>
-    <string name="nolonger_apper">now longer show</string>
-    <string name="taps_too_mang_sc">could not add so much item(╯°Д°）╯︵ /(.□ . \)</string>
-    <string name="setting_btn">short cut setting</string>
-    <string name="setting_other">other setting</string>
-    <string name="home_point">the samll point position</string>
-    <string name="clear_mem_level">clear mem level</string>
-    <string name="icon_size">Icon size adjustment</string>
-    <string name="select_apps">please select shortcut add</string>
-    <string name="delect_apps">please select shortcut remove</string>
+    <string name="nolonger_apper">nolonger appear</string>
+    <string name="taps_too_mang_sc">ten shortcuts at most on one page (╯°Д°）╯︵ /(.□ . \)</string>
+    <string name="setting_btn">shortcut setting</string>
+    <string name="setting_other">other settings</string>
+    <string name="home_point">the dot in the main navbar</string>
+    <string name="clear_mem_level">memory cleaning intensity</string>
+    <string name="icon_size">adjust the icon size</string>
+    <string name="select_apps">please choose the shortcut which needs add</string>
+    <string name="delect_apps">please choose the shortcut which needs delete</string>
     <string name="ok">ok</string>
     <string name="no">cancel</string>
     <string name="delete">delete</string>
-    <string name="cant_start_act">could not start</string>
-    <string name="taps_start_apps">"if this app in the iceBox,please allow root,it would use pm enable packageName to thaw "</string>
-    <string name="root_request">allow root</string>
+    <string name="quick_notice">memo</string>
+    <string name="root_request">grant root permission</string>
+    <string name="cant_start_act">can\'t start the apps</string>
+    <string name="taps_start_apps">If the apps was frozen in the icebox，please grant root permission，and the module will run pm enable packageName to thaw the operation。</string>
+    <string name="about_language">Language</string>
     <string-array name="shortcut_names">
-        <item>下拉通知</item>
-        <item>快速备忘</item>
-        <item>熄屏</item>
-        <item>清除通知</item>
-        <item>清理内存</item>
-        <item>调节声音</item>
-        <item>调节亮度</item>
-        <item>回到主导航栏</item>
-        <item>快捷启动应用菜单</item>
-        <item>上一曲</item>
-        <item>音乐开始暂停</item>
-        <item>下一曲</item>
+        <item>drop-down notification</item>
+        <item>quick memo</item>
+        <item>screen off</item>
+        <item>clear notification</item>
+        <item>clean up memory</item>
+        <item>adjust volume</item>
+        <item>adjust luminance</item>
+        <item>back to the main navbar</item>
+        <item>short cut</item>
+        <item>previous track</item>
+        <item>pause</item>
+        <item>next track</item>
+        <item>Wechat scanQR</item>
+        <item>Alipay scanQR</item>
     </string-array>
 </resources>

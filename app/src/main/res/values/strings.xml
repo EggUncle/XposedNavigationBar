@@ -26,8 +26,8 @@
     <string name="market">
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，你的支持是我最大的动力。
     </string>
-    <string name="author" translatable="false">
-        版本 1.3.1\n联系作者\ncicadashadow@gmail.com
+    <string name="author">
+        版本 1.4.0\n联系作者\ncicadashadow@gmail.com
     </string>
     <string name="about_app">
         关于
@@ -50,6 +50,8 @@
     <string name="setting_other">其他设置</string>
     <string name="home_point">主导航栏的小点位置</string>
     <string name="clear_mem_level">内存清理强度</string>
+    <string name="select_shortcut">添加快捷按钮</string>
+    <string name="quick_notice">快速备忘</string>
     <string name="icon_size">图标大小调整</string>
     <string name="select_apps">请选择要添加的快捷方式</string>
     <string name="delect_apps">请选择要删除的快捷方式</string>
@@ -73,5 +75,7 @@
         <item>上一曲</item>
         <item>音乐开始暂停</item>
         <item>下一曲</item>
+        <item>微信扫码</item>
+        <item>支付宝扫码</item>
     </string-array>
 </resources>
