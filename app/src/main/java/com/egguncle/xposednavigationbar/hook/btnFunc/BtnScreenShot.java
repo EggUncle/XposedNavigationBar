@@ -18,54 +18,46 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
-import android.app.Instrumentation;
-import android.media.session.MediaSession;
-import android.view.KeyEvent;
+import android.content.Context;
 import android.view.View;
+import android.widget.Toast;
 
-import com.egguncle.xposednavigationbar.hook.hookFunc.MusicController;
+import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenShot;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedBridge;
 
 /**
- * Created by egguncle on 17-6-12.
+ * Created by egguncle on 17-6-18.
  */
 
-public class BtnMusicNext implements MusicController, View.OnClickListener {
-    private final static String TAG = "BtnMusicNext";
-
+public class BtnScreenShot implements ScreenShot,View.OnClickListener {
     @Override
     public void onClick(View view) {
-        nextMusic();
+        try {
+            screenshot(view.getContext());
+        }catch (Exception e){
+            XposedBridge.log(e.getMessage());
+        }
     }
 
     @Override
-    public void nextMusic() {
-        XposedBridge.log("nextMusic: ");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Instrumentation mInst = new Instrumentation();
-                mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_NEXT);
-                XposedBridge.log("nextMusic: success");
-            }
-        }).start();
-
-
-    }
-
-    @Override
-    public void startOrPauseMusic() {
-
-    }
-
-    @Override
-    public void previousMusic() {
-
+    public void screenshot(Context context) {
+        String screenShotPath="/sdcard/Pictures/Screenshots";
+        File file=new File(screenShotPath);
+        //如果截图文件夹不存在则创建
+        if (!file.exists()){
+            file.mkdirs();
+        }
+        long timecurrentTimeMillis = System.currentTimeMillis();
+        String cmd="screencap -p /sdcard/Pictures/Screenshots/"+timecurrentTimeMillis+".png";
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

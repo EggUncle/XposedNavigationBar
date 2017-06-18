@@ -44,6 +44,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnNavBarGoHome;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnOpenActPanel;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnQuickNotice;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenOff;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenShot;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
@@ -106,6 +107,8 @@ public class BtnFuncFactory {
                 return new BtnWeChatScanner();
             case FuncName.FUNC_ALIPAY_SACNNER_CODE:
                 return new BtnAlipayScanner();
+            case FuncName.FUNC_SCREEN_SHOT_CODE:
+                return new BtnScreenShot();
         }
         return null;
     }

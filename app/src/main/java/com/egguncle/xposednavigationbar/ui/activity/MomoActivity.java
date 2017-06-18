@@ -50,7 +50,6 @@ public class MomoActivity extends BaseActivity {
         parentView = (CoordinatorLayout) findViewById(R.id.parent_view);
         rcvMomo = (RecyclerView) findViewById(R.id.rcv_momo);
         rcvMomo.setLayoutManager(new LinearLayoutManager(this));
-        rcvMomo.setHasFixedSize(true);
         momoList=new ArrayList<>();
         adapter=new MomoAdapter(momoList);
         rcvMomo.setAdapter(adapter);

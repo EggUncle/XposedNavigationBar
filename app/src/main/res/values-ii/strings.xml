@@ -63,6 +63,8 @@
     <string name="taps_start_apps">如果该应用是被冻结在冰箱里，请授予root权限，模块会执行pm enable packageName进行解冻操作。</string>
     <string name="about_language">Language</string>
     <string name="momo_history">备忘记录</string>
+    <string name="screen_shot_success">截图成功</string>
+    <string name="screen_shot_failed">截图失败</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>
@@ -78,5 +80,6 @@
         <item>下一曲</item>
         <item>微信扫码</item>
         <item>支付宝扫码</item>
+        <item>截图</item>
     </string-array>
 </resources>

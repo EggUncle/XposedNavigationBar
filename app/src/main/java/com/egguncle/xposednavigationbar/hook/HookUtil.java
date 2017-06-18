@@ -152,6 +152,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] previousMusic = XposedHelpers.assetAsByteArray(res, "ic_previous.png");
             byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
             byte[] scanWeChat=XposedHelpers.assetAsByteArray(res, "ic_scan.png");
+            byte[] screenshot=XposedHelpers.assetAsByteArray(res,"ic_image.png");
             mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
             mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
             mapImgRes.put(FuncName.FUNC_CLEAR_NOTIFICATION_CODE, clearNotificationImg);
@@ -169,6 +170,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             mapImgRes.put(FuncName.FUN_PREVIOUS_PLAY_CODE, previousMusic);
             mapImgRes.put(FuncName.FUNC_WECHAT_SACNNER_CODE, scanWeChat);
             mapImgRes.put(FuncName.FUNC_ALIPAY_SACNNER_CODE, scanWeChat);
+            mapImgRes.put(FuncName.FUNC_SCREEN_SHOT_CODE, screenshot);
         }
 
 

@@ -63,6 +63,7 @@ public class FuncName {
     public final static int FUNC_NEXT_PLAY_CODE=11;
     public final static int FUNC_WECHAT_SACNNER_CODE=12;
     public final static int FUNC_ALIPAY_SACNNER_CODE=13;
+    public final static int FUNC_SCREEN_SHOT_CODE=14;
 
 //    public final static String FUNC_DOWN = "下拉通知栏";
 //    public final static String FUNC_QUICK_NOTICE = "快速备忘";
