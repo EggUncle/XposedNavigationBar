@@ -49,8 +49,14 @@ import android.widget.Switch;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.HookUtil;
+import com.egguncle.xposednavigationbar.model.Momo;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
+import org.litepal.crud.DataSupport;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -61,6 +67,10 @@ public class MainActivity extends BaseActivity {
     private LinearLayout btnSettingOther;
     private LinearLayout btnAbout;
     private LinearLayout btnLanguage;
+    private LinearLayout btnMomo;
+
+
+
 
     private String[] languages={"简体中文", "English"};
 
@@ -83,8 +93,7 @@ public class MainActivity extends BaseActivity {
         btnSettingOther = (LinearLayout) findViewById(R.id.btn_setting_other);
         btnAbout = (LinearLayout) findViewById(R.id.btn_about);
         btnLanguage = (LinearLayout) findViewById(R.id.btn_language);
-
-
+        btnMomo = (LinearLayout) findViewById(R.id.btn_momo);
     }
 
     @Override
@@ -146,6 +155,12 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        btnMomo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,MomoActivity.class));
+            }
+        });
     }
 
 

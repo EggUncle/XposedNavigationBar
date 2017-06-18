@@ -62,6 +62,7 @@
     <string name="cant_start_act">无法启动这个应用</string>
     <string name="taps_start_apps">如果该应用是被冻结在冰箱里，请授予root权限，模块会执行pm enable packageName进行解冻操作。</string>
     <string name="about_language">Language</string>
+    <string name="momo_history">备忘记录</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>

@@ -31,6 +31,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.model.Momo;
+
+import java.util.Date;
 
 /**
  * 用作快速备忘的activity，由于dialog的出现需要一个activity对象，所以无法通过systemuiapplication启动
@@ -72,6 +75,11 @@ public class QuickNotificationActivity extends Activity {
                         // 也给了不同的通知不同的ID，以显示多个通知
                         int notifyId=noticeStr.hashCode();
                         nm.notify(notifyId, notice);
+                        //将momo保存到数据库中
+                        Momo m=new Momo();
+                        m.setContent(noticeStr);
+                        m.setDate(new Date());
+                        m.save();
                         Log.i(TAG, "onClick: "+notifyId);
                     }
                 })

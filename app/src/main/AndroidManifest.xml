@@ -74,7 +74,8 @@
         <activity
             android:name=".ui.activity.OtherSettingActivity"
             android:parentActivityName=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.AppShortCutActivity"
+        <activity
+            android:name=".ui.activity.AppShortCutActivity"
             android:theme="@style/myTransparentTheme">
             <intent-filter>
                 <action android:name="com.egguncle.xposednavigationbar.ui.activity.AppShortCutActivity" />
@@ -82,6 +83,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.MomoActivity"
+            android:parentActivityName=".ui.activity.MainActivity" />
     </application>
 
 </manifest>

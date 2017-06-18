@@ -190,11 +190,14 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         if (!activation) {
             return;
         }
+
+
         //过滤包名
         if (!resparam.packageName.equals("com.android.systemui"))
             return;
 
         XposedBridge.log("hook resource ");
+
 
 
         resparam.res.hookLayout(resparam.packageName, "layout", "navigation_bar", new XC_LayoutInflated() {
@@ -350,8 +353,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
-
-
             XposedBridge.log("filter package");
             //获取清除通知的方法
             Class<?> phoneStatusBarClass =
@@ -374,17 +375,26 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                         }
                     });
 
-        } else if (lpparam.packageName.equals("android.hardware.input")) {
-            XposedBridge.log("hook WindowManagerService success");
-            Class<?> phoneWindowManagerClass = lpparam.classLoader.loadClass("android.hardware.input.InputManager");
-            XposedHelpers.findAndHookConstructor(phoneWindowManagerClass, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    super.afterHookedMethod(param);
-                    XposedBridge.log("hook WindowManagerService constructor success");
+//            Class<?> navigationbarClass=lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
+//            XposedHelpers.findAndHookConstructor(navigationbarClass, Context.class, AttributeSet.class, new XC_MethodHook() {
+//                @Override
+//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                    super.afterHookedMethod(param);
+//                    XposedBridge.log("hook navigationbarClass success");
+//                }
+//            });
 
-                }
-            });
+        } else if (lpparam.packageName.equals("android.hardware.input")) {
+//            XposedBridge.log("hook WindowManagerService success");
+//            Class<?> phoneWindowManagerClass = lpparam.classLoader.loadClass("android.hardware.input.InputManager");
+//            XposedHelpers.findAndHookConstructor(phoneWindowManagerClass, new XC_MethodHook() {
+//                @Override
+//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                    super.afterHookedMethod(param);
+//                    XposedBridge.log("hook WindowManagerService constructor success");
+//
+//                }
+//            });
 
         }
 
