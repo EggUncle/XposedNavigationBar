@@ -31,6 +31,8 @@ http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
             e.printStackTrace();
         }
 ```
+## 截图 ✓
+这个实现比较粗暴，使用的shell指令。
 
 ## 音量调整 ✓
 
