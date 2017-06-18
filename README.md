@@ -6,6 +6,31 @@
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 
 --开发中--
+## 支付宝&微信扫一扫 ✓
+支付宝扫一扫：
+```java
+            Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
+```
+微信原来的扫一扫打开是这样的，不过目前的版本已经失效了
+```java
+        Uri uri = Uri.parse("weixin://dl/scan");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+```
+所以只能使用am命令来控制二维码界面的activity打开
+
+使用开发者工具调试后发现微信二维码的activity是这个com.tencent.mm.plugin.scanner.ui.BaseScanUI
+```java
+        String cmd="am start -n com.tencent.mm/com.tencent.mm.plugin.scanner.ui.BaseScanUI";
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+```
 
 ## 音量调整 ✓
 
