@@ -139,7 +139,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] pauseMusic = XposedHelpers.assetAsByteArray(res, "ic_pause.png");
             byte[] previousMusic = XposedHelpers.assetAsByteArray(res, "ic_previous.png");
             byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
-            byte[] scanWeChat = XposedHelpers.assetAsByteArray(res, "ic_scan.png");
+            byte[] scanWeChat = XposedHelpers.assetAsByteArray(res, "wechat_qr.png");
+            byte[] scanAlipay=XposedHelpers.assetAsByteArray(res,"alipay_qr.png");
             byte[] screenshot = XposedHelpers.assetAsByteArray(res, "ic_image.png");
             byte[] navBack=XposedHelpers.assetAsByteArray(res,"ic_nav_back.png");
             byte[] navHome=XposedHelpers.assetAsByteArray(res,"ic_nav_home.png");
@@ -161,7 +162,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             mapImgRes.put(FuncName.FUNC_NEXT_PLAY_CODE, nextMusic);
             mapImgRes.put(FuncName.FUNC_PREVIOUS_PLAY_CODE, previousMusic);
             mapImgRes.put(FuncName.FUNC_WECHAT_SACNNER_CODE, scanWeChat);
-            mapImgRes.put(FuncName.FUNC_ALIPAY_SACNNER_CODE, scanWeChat);
+            mapImgRes.put(FuncName.FUNC_ALIPAY_SACNNER_CODE, scanAlipay);
             mapImgRes.put(FuncName.FUNC_SCREEN_SHOT_CODE, screenshot);
             mapImgRes.put(FuncName.FUNC_NAV_BACK_CODE, navBack);
             mapImgRes.put(FuncName.FUNC_NAV_HOME_CODE, navHome);
