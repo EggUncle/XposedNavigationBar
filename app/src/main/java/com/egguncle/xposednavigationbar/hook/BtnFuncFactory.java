@@ -48,6 +48,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenShot;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
+import com.egguncle.xposednavigationbar.util.ImageUtil;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -90,9 +91,9 @@ public class BtnFuncFactory {
             case FuncName.FUNC_CLEAR_MEM_CODE:
                return new BtnClearBackground();
             case FuncName.FUNC_VOLUME_CODE:
-                return new BtnVolume(mRootViewGroup,byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
+                return new BtnVolume(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
             case FuncName.FUNC_LIGHT_CODE:
-                return new BtnBackLight(mRootViewGroup,byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
+                return new BtnBackLight(mRootViewGroup,ImageUtil.byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
             case FuncName.FUNC_HOME_CODE:
                return new BtnNavBarGoHome(mViewPager);
             case FuncName.FUNC_START_ACTS_CODE:
@@ -114,6 +115,21 @@ public class BtnFuncFactory {
     }
 
     /**
+     * 设置某些按钮的长按事件
+     * @param code
+     * @return
+     */
+    public View.OnLongClickListener getBtnLongFuncOfName(int code){
+        switch (code) {
+//            case FuncName.BACK:
+//                break;
+            case FuncName.FUNC_SCREEN_OFF_CODE:
+                return new BtnScreenOff();
+        }
+        return null;
+    }
+
+    /**
      * 创建按钮并且设置对应功能
      *
      * @param context
@@ -129,14 +145,15 @@ public class BtnFuncFactory {
         //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton btn = new ImageButton(context);
         if (mIconScale != 100) {
-            btn.setImageBitmap(zoomBitmap(mMapImgRes.get(code), mIconScale));
+            btn.setImageBitmap(ImageUtil.zoomBitmap(mMapImgRes.get(code), mIconScale));
         } else {
-            btn.setImageBitmap(byte2Bitmap(mMapImgRes.get(code)));
+            btn.setImageBitmap(ImageUtil.byte2Bitmap(mMapImgRes.get(code)));
         }
         btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         btn.setBackgroundColor(Color.alpha(255));
         btn.setOnClickListener(getBtnFuncOfName(code));
+        btn.setOnLongClickListener(getBtnLongFuncOfName(code));
         line.addView(btn, p);
     }
 
@@ -144,27 +161,7 @@ public class BtnFuncFactory {
         line.removeAllViews();
     }
 
-    private  Bitmap byte2Bitmap(byte[] imgBytes) {
-        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-    }
 
-    /**
-     * 缩放图片
-     *
-     * @param bmByte
-     * @param scale
-     * @return
-     */
-    private  Bitmap zoomBitmap(byte[] bmByte, int scale) {
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = false;
-        Bitmap bm = BitmapFactory.decodeByteArray(bmByte, 0, bmByte.length, opts);
-
-        Matrix matrix = new Matrix();
-        matrix.postScale((float) (scale / 100.0), (float) (scale / 100.0));
-        Bitmap bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-        return bitmap;
-    }
 
 
 }

@@ -18,9 +18,11 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenOff;
@@ -32,7 +34,8 @@ import java.lang.reflect.Method;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnScreenOff implements ScreenOff, View.OnClickListener {
+public class BtnScreenOff implements ScreenOff, View.OnClickListener,View.OnLongClickListener {
+
     @Override
     public void onClick(View view) {
         try {
@@ -44,6 +47,7 @@ public class BtnScreenOff implements ScreenOff, View.OnClickListener {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        view.setOnLongClickListener(this);
     }
 
     @Override
@@ -51,6 +55,19 @@ public class BtnScreenOff implements ScreenOff, View.OnClickListener {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         Method goToSleep = pm.getClass().getMethod("goToSleep", long.class);
         goToSleep.invoke(pm, SystemClock.uptimeMillis());
+    }
 
+    @Override
+    public boolean onLongClick(View view) {
+        //长按呼出关机菜单
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Instrumentation mInst = new Instrumentation();
+                KeyEvent keyEvent=new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER);
+                mInst.sendKeySync(keyEvent);
+            }
+        }).start();
+        return true;
     }
 }

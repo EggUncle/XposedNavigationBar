@@ -67,10 +67,12 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 
+import com.egguncle.xposednavigationbar.hook.btnFunc.MusicControllerPanel;
 import com.egguncle.xposednavigationbar.model.AppInfo;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
+import com.egguncle.xposednavigationbar.util.ImageUtil;
 import com.google.gson.Gson;
 
 
@@ -97,9 +99,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     //用于获取保存的快捷按键设置
     private List<ShortCut> shortCutList;
     private int iconScale;
-
-    //hook获得的mediaplayer的实例
-    //   private static MediaSession mediaSession;
 
     //   private static Object mcb;
     //扩展出来的主界面
@@ -151,8 +150,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] pauseMusic = XposedHelpers.assetAsByteArray(res, "ic_pause.png");
             byte[] previousMusic = XposedHelpers.assetAsByteArray(res, "ic_previous.png");
             byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
-            byte[] scanWeChat=XposedHelpers.assetAsByteArray(res, "ic_scan.png");
-            byte[] screenshot=XposedHelpers.assetAsByteArray(res,"ic_image.png");
+            byte[] scanWeChat = XposedHelpers.assetAsByteArray(res, "ic_scan.png");
+            byte[] screenshot = XposedHelpers.assetAsByteArray(res, "ic_image.png");
             mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
             mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
             mapImgRes.put(FuncName.FUNC_CLEAR_NOTIFICATION_CODE, clearNotificationImg);
@@ -181,9 +180,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         initHook(startupParam);
     }
 
-    private Bitmap byte2Bitmap(byte[] imgBytes) {
-        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-    }
+//    private Bitmap byte2Bitmap(byte[] imgBytes) {
+//        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+//    }
 
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
@@ -193,14 +192,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             return;
         }
 
-
         //过滤包名
         if (!resparam.packageName.equals("com.android.systemui"))
             return;
 
         XposedBridge.log("hook resource ");
-
-
 
         resparam.res.hookLayout(resparam.packageName, "layout", "navigation_bar", new XC_LayoutInflated() {
 
@@ -221,19 +217,38 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 //垂直状态下的导航栏三大按钮布局
                 final LinearLayout lineBtn = (LinearLayout) rootView.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
 
+
+                //获取home back recent按钮 都是KeyButtonView
+//                View btnBack = rootView.findViewById(liparam.res.getIdentifier("back", "id", "com.android.systemui"));
+//                View btnHome = rootView.findViewById(liparam.res.getIdentifier("home", "id", "com.android.systemui"));
+//                View btnRecent = rootView.findViewById(liparam.res.getIdentifier("recent_apps", "id", "com.android.systemui"));
+//
+//                lineBtn.getChildAt(1);
+//                lineBtn.
+//              //  lineBtn.removeAllViews();
+//                lineBtn.addView(btnRecent);
+//                lineBtn.addView(btnHome);
+//                lineBtn.addView(btnBack);
+
+
                 final Context context = navBarBg.getContext();
                 LinearLayout parentView = new LinearLayout(context);
                 //加入一个viewpager，第一页为空，是导航栏本身的功能
                 final ViewPager vpXphook = new ViewPager(context);
 
                 parentView.addView(vpXphook);
+
+                MusicControllerPanel musicPanel = new MusicControllerPanel(context);
+                musicPanel.setData(mapImgRes, iconScale);
+                musicPanel.initPanel();
+
                 //   TextView textView1 = new TextView(context);
                 //第一个界面，与原本的导航栏重合，实际在导航栏的下层
                 LinearLayout linepage1 = new LinearLayout(context);
                 if (!homePointPosition.equals(FuncName.DISMISS)) {
                     //用于呼出整个扩展导航栏的一个小点
                     ImageButton btnCall = new ImageButton(context);
-                    btnCall.setImageBitmap(byte2Bitmap(mapImgRes.get(FuncName.FUNC_SMALL_POINT_CODE)));
+                    btnCall.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_SMALL_POINT_CODE)));
                     btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     btnCall.setBackgroundColor(Color.alpha(255));
                     LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
@@ -246,12 +261,13 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                         //  line1Params.gravity = Gravity.RIGHT;
                         linepage1.setGravity(Gravity.RIGHT);
                     }
+                    //     lineBtn.addView(btnCall,6,line1Params);
                     linepage1.addView(btnCall, line1Params);
                     //点击这个按钮，跳转到扩展部分
                     btnCall.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            vpXphook.setCurrentItem(1);
+                            vpXphook.setCurrentItem(2);
                         }
                     });
                 }
@@ -283,11 +299,13 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                     btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc.getCode());
                 }
                 //将这些布局都添加到viewpageadapter中
-                List<View> list1 = new ArrayList<View>();
-                list1.add(linepage1);
-                list1.add(framePage2);
+                List<View> list = new ArrayList<View>();
+                list.add(musicPanel);
+                list.add(linepage1);
+                list.add(framePage2);
 
-                MyViewPagerAdapter pagerAdapter = new MyViewPagerAdapter(list1);
+
+                MyViewPagerAdapter pagerAdapter = new MyViewPagerAdapter(list);
 
                 vpXphook.setAdapter(pagerAdapter);
                 vpXphook.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -299,7 +317,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                     @Override
                     public void onPageSelected(int position) {
-                        if (position == 0) {
+                        if (position == 1) {
                             //当移动到第一页的时候，显示出导航栏，上升动画
                             XposedBridge.log("apper NavigationBar");
                             lineBtn.setVisibility(View.VISIBLE);
@@ -331,7 +349,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                     }
                 });
-
+                vpXphook.setCurrentItem(1);
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                         ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
                 navBarBg.addView(parentView, 0, params);

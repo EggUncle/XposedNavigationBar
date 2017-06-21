@@ -52,10 +52,12 @@ public class BtnMusicNext implements MusicController, View.OnClickListener {
             public void run() {
                 Instrumentation mInst = new Instrumentation();
                 mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_NEXT);
+//                KeyEvent keyEvent=new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_POWER);
+//                mInst.sendKeySync(keyEvent);
                 XposedBridge.log("nextMusic: success");
             }
         }).start();
-
+     //   sendEvent();
 
     }
 
