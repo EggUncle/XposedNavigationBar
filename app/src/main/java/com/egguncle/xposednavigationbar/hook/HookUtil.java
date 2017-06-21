@@ -26,29 +26,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.XModuleResources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
-import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Scroller;
 
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +58,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 
 import com.egguncle.xposednavigationbar.hook.btnFunc.MusicControllerPanel;
-import com.egguncle.xposednavigationbar.model.AppInfo;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
@@ -90,7 +79,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     private static final String SHORT_CUT_DATA = "short_cut_data";
 
-    //用于获取phonestatusbar对象和clearAllNotifications方法
+    //用于获取phonestatusbar对象和clearAllNotifications方法等
     private static Object phoneStatusBar;
     private static Method clearAllNotificationsMethod;
 
@@ -152,6 +141,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
             byte[] scanWeChat = XposedHelpers.assetAsByteArray(res, "ic_scan.png");
             byte[] screenshot = XposedHelpers.assetAsByteArray(res, "ic_image.png");
+            byte[] navBack=XposedHelpers.assetAsByteArray(res,"ic_nav_back.png");
+            byte[] navHome=XposedHelpers.assetAsByteArray(res,"ic_nav_home.png");
+            byte[] navRecent=XposedHelpers.assetAsByteArray(res,"ic_nav_recent.png");
+
             mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
             mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
             mapImgRes.put(FuncName.FUNC_CLEAR_NOTIFICATION_CODE, clearNotificationImg);
@@ -166,10 +159,13 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             mapImgRes.put(FuncName.FUNC_START_ACTS_CODE, startActs);
             mapImgRes.put(FuncName.FUNC_PLAY_MUSIC_CODE, playMusic);
             mapImgRes.put(FuncName.FUNC_NEXT_PLAY_CODE, nextMusic);
-            mapImgRes.put(FuncName.FUN_PREVIOUS_PLAY_CODE, previousMusic);
+            mapImgRes.put(FuncName.FUNC_PREVIOUS_PLAY_CODE, previousMusic);
             mapImgRes.put(FuncName.FUNC_WECHAT_SACNNER_CODE, scanWeChat);
             mapImgRes.put(FuncName.FUNC_ALIPAY_SACNNER_CODE, scanWeChat);
             mapImgRes.put(FuncName.FUNC_SCREEN_SHOT_CODE, screenshot);
+            mapImgRes.put(FuncName.FUNC_NAV_BACK_CODE, navBack);
+            mapImgRes.put(FuncName.FUNC_NAV_HOME_CODE, navHome);
+            mapImgRes.put(FuncName.FUNC_NAV_RECENT_CODE, navRecent);
         }
 
 
@@ -378,13 +374,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             Class<?> phoneStatusBarClass =
                     lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
             Method method1 = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
+            Method method2=phoneStatusBarClass.getDeclaredMethod("toggleRecentApps");
             method1.setAccessible(true);
 
-            //获取到clearAllNotifications方法
+            //获取到clearAllNotifications和toggleRecentApps方法
             clearAllNotificationsMethod = method1;
-            //   XposedBridge.log("====hook PhoneStatusBar success====");
-            //       phoneStatusBar=XposedHelpers.findClass("com.android.systemui.statusbar.phone.PhoneStatusBar",lpparam.classLoader);
-            XposedHelpers.findAndHookMethod(phoneStatusBarClass,
+                  XposedHelpers.findAndHookMethod(phoneStatusBarClass,
                     "start", new XC_MethodHook() {
                         @Override
                         protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -394,27 +389,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //     XposedBridge.log("====hook clear notifications success====");
                         }
                     });
-
-//            Class<?> navigationbarClass=lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
-//            XposedHelpers.findAndHookConstructor(navigationbarClass, Context.class, AttributeSet.class, new XC_MethodHook() {
-//                @Override
-//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                    super.afterHookedMethod(param);
-//                    XposedBridge.log("hook navigationbarClass success");
-//                }
-//            });
-
-        } else if (lpparam.packageName.equals("android.hardware.input")) {
-//            XposedBridge.log("hook WindowManagerService success");
-//            Class<?> phoneWindowManagerClass = lpparam.classLoader.loadClass("android.hardware.input.InputManager");
-//            XposedHelpers.findAndHookConstructor(phoneWindowManagerClass, new XC_MethodHook() {
-//                @Override
-//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                    super.afterHookedMethod(param);
-//                    XposedBridge.log("hook WindowManagerService constructor success");
-//
-//                }
-//            });
 
         }
 
@@ -429,13 +403,14 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         return clearAllNotificationsMethod;
     }
 
+
     /**
      * 初始化广播，用于进程间通信
      *
      * @param context
      */
     private void initBroadcast(Context context) {
-        ;
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACT_BROADCAST);
         MyReceiver myReceiver = new HookUtil.MyReceiver();

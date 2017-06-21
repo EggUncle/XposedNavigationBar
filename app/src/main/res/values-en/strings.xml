@@ -63,7 +63,7 @@
     <string name="cant_start_act">can\'t start the apps</string>
     <string name="taps_start_apps">If the apps was frozen in the icebox，please grant root permission，and the module will run pm enable packageName to thaw the operation。</string>
     <string name="about_language">Language</string>
-    <string name="momo_history">history momo</string>
+    <string name="momo_history">momo history</string>
     <string name="screen_shot_success">sceenShot success</string>
     <string name="screen_shot_failed">sceenShot failed</string>
     <string-array name="shortcut_names">
@@ -82,5 +82,8 @@
         <item>Wechat scanQR</item>
         <item>Alipay scanQR</item>
         <item>screenShot</item>
+        <item>back</item>
+        <item>home</item>
+        <item>recent</item>
     </string-array>
 </resources>

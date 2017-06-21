@@ -29,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
-import com.egguncle.xposednavigationbar.hook.hookFunc.MusicController;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
 import java.util.Map;
@@ -83,11 +82,11 @@ public class MusicControllerPanel extends LinearLayout {
         ImageButton playBtn = new ImageButton(context);
         ImageButton nextBtn = new ImageButton(context);
         if (iconScale != 100) {
-            previousBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(FuncName.FUN_PREVIOUS_PLAY_CODE), iconScale));
+            previousBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(FuncName.FUNC_PREVIOUS_PLAY_CODE), iconScale));
             playBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(FuncName.FUNC_PLAY_MUSIC_CODE), iconScale));
             nextBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(FuncName.FUNC_NEXT_PLAY_CODE), iconScale));
         } else {
-            previousBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUN_PREVIOUS_PLAY_CODE)));
+            previousBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_PREVIOUS_PLAY_CODE)));
             playBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_PLAY_MUSIC_CODE)));
             nextBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_NEXT_PLAY_CODE)));
         }
@@ -99,9 +98,9 @@ public class MusicControllerPanel extends LinearLayout {
         playBtn.setBackgroundColor(Color.alpha(255));
         nextBtn.setBackgroundColor(Color.alpha(255));
 
-        previousBtn.setOnClickListener(new BtnMusicPrevious());
-        playBtn.setOnClickListener(new BtnMusicStartOrStop());
-        nextBtn.setOnClickListener(new BtnMusicNext());
+        previousBtn.setOnClickListener(new BtnMusicController(BtnMusicController.PREVIOUS));
+        playBtn.setOnClickListener(new BtnMusicController(BtnMusicController.START_OR_STOP));
+        nextBtn.setOnClickListener(new BtnMusicController(BtnMusicController.NEXT));
 
         this.addView(previousBtn, p);
         this.addView(playBtn, p);

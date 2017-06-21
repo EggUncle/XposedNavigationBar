@@ -81,5 +81,8 @@
         <item>微信扫码</item>
         <item>支付宝扫码</item>
         <item>截图</item>
+        <item>返回键</item>
+        <item>主页键</item>
+        <item>最近任务键</item>
     </string-array>
 </resources>

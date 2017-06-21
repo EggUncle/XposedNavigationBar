@@ -24,6 +24,7 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenOff;
 
@@ -70,4 +71,6 @@ public class BtnScreenOff implements ScreenOff, View.OnClickListener,View.OnLong
         }).start();
         return true;
     }
+
+
 }

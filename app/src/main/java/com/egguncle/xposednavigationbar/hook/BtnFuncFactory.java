@@ -19,15 +19,11 @@
 package com.egguncle.xposednavigationbar.hook;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,9 +33,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnAlipayScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnBackLight;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearAllNotifications;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearBackground;
-import com.egguncle.xposednavigationbar.hook.btnFunc.BtnMusicNext;
-import com.egguncle.xposednavigationbar.hook.btnFunc.BtnMusicPrevious;
-import com.egguncle.xposednavigationbar.hook.btnFunc.BtnMusicStartOrStop;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnMusicController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnNavBarGoHome;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnOpenActPanel;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnQuickNotice;
@@ -48,11 +42,12 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenShot;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnsNavbar;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+
+import de.robv.android.xposed.XposedBridge;
 
 /**
  * Created by egguncle on 17-6-10.
@@ -68,20 +63,20 @@ public class BtnFuncFactory {
     public BtnFuncFactory(int iconscale,
                           ViewGroup rootViewGroup,
                           ViewPager viewPager,
-                          Map<Integer, byte[]> mapImgRes ){
-        mIconScale=iconscale;
-        mRootViewGroup=rootViewGroup;
-        mMapImgRes=mapImgRes;
-        mViewPager=viewPager;
+                          Map<Integer, byte[]> mapImgRes) {
+        mIconScale = iconscale;
+        mRootViewGroup = rootViewGroup;
+        mMapImgRes = mapImgRes;
+        mViewPager = viewPager;
     }
 
 
-    public View.OnClickListener getBtnFuncOfName(int code){
+    public View.OnClickListener getBtnFuncOfName(int code) {
         switch (code) {
 //            case FuncName.BACK:
 //                break;
             case FuncName.FUNC_DOWN_CODE:
-                return  new BtnStatusBarController();
+                return new BtnStatusBarController();
             case FuncName.FUNC_QUICK_NOTICE_CODE:
                 return new BtnQuickNotice();
             case FuncName.FUNC_CLEAR_NOTIFICATION_CODE:
@@ -89,37 +84,44 @@ public class BtnFuncFactory {
             case FuncName.FUNC_SCREEN_OFF_CODE:
                 return new BtnScreenOff();
             case FuncName.FUNC_CLEAR_MEM_CODE:
-               return new BtnClearBackground();
+                return new BtnClearBackground();
             case FuncName.FUNC_VOLUME_CODE:
                 return new BtnVolume(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
             case FuncName.FUNC_LIGHT_CODE:
-                return new BtnBackLight(mRootViewGroup,ImageUtil.byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
+                return new BtnBackLight(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
             case FuncName.FUNC_HOME_CODE:
-               return new BtnNavBarGoHome(mViewPager);
+                return new BtnNavBarGoHome(mViewPager);
             case FuncName.FUNC_START_ACTS_CODE:
                 return new BtnOpenActPanel();
             case FuncName.FUNC_NEXT_PLAY_CODE:
-                return new BtnMusicNext();
+                return new BtnMusicController(BtnMusicController.NEXT);
             case FuncName.FUNC_PLAY_MUSIC_CODE:
-                return new BtnMusicStartOrStop();
-            case FuncName.FUN_PREVIOUS_PLAY_CODE:
-                return new BtnMusicPrevious();
+                return new BtnMusicController(BtnMusicController.START_OR_STOP);
+            case FuncName.FUNC_PREVIOUS_PLAY_CODE:
+                return new BtnMusicController(BtnMusicController.PREVIOUS);
             case FuncName.FUNC_WECHAT_SACNNER_CODE:
                 return new BtnWeChatScanner();
             case FuncName.FUNC_ALIPAY_SACNNER_CODE:
                 return new BtnAlipayScanner();
             case FuncName.FUNC_SCREEN_SHOT_CODE:
                 return new BtnScreenShot();
+            case FuncName.FUNC_NAV_BACK_CODE:
+                return new BtnsNavbar(BtnsNavbar.BTN_BACK);
+            case FuncName.FUNC_NAV_HOME_CODE:
+                return new BtnsNavbar(BtnsNavbar.BTN_HOME);
+            case FuncName.FUNC_NAV_RECENT_CODE:
+                return new BtnsNavbar(BtnsNavbar.BTN_RECENT);
         }
         return null;
     }
 
     /**
      * 设置某些按钮的长按事件
+     *
      * @param code
      * @return
      */
-    public View.OnLongClickListener getBtnLongFuncOfName(int code){
+    public View.OnLongClickListener getBtnLongFuncOfName(int code) {
         switch (code) {
 //            case FuncName.BACK:
 //                break;
@@ -157,11 +159,9 @@ public class BtnFuncFactory {
         line.addView(btn, p);
     }
 
-    public void clearAllBtn(LinearLayout line){
+    public void clearAllBtn(LinearLayout line) {
         line.removeAllViews();
     }
-
-
 
 
 }

@@ -58,12 +58,16 @@ public class FuncName {
     public final static int FUNC_LIGHT_CODE = 6;
     public final static int FUNC_HOME_CODE = 7;
     public final static int FUNC_START_ACTS_CODE=8;
-    public final static int FUN_PREVIOUS_PLAY_CODE=9;
+    public final static int FUNC_PREVIOUS_PLAY_CODE =9;
     public final static int FUNC_PLAY_MUSIC_CODE=10;
     public final static int FUNC_NEXT_PLAY_CODE=11;
     public final static int FUNC_WECHAT_SACNNER_CODE=12;
     public final static int FUNC_ALIPAY_SACNNER_CODE=13;
     public final static int FUNC_SCREEN_SHOT_CODE=14;
+    //Android自带的三个按钮
+    public final static int FUNC_NAV_BACK_CODE=15;
+    public final static int FUNC_NAV_HOME_CODE=16;
+    public final static int FUNC_NAV_RECENT_CODE=17;
 
 //    public final static String FUNC_DOWN = "下拉通知栏";
 //    public final static String FUNC_QUICK_NOTICE = "快速备忘";
