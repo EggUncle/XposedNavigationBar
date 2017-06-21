@@ -81,7 +81,40 @@ http://www.jianshu.com/p/d17ce2880753
 
 ## 手电筒
 
-## 三个本来的按钮
+## 三个本来的按钮 ✓ 
+back和home键使用按键模拟，都很简单的实现了，但是recent键没有对应的模拟code，所以使用了反射实现。
+```java
+ public void showRecentlyApp() {
+        Class serviceManagerClass;
+        try {
+            serviceManagerClass = Class.forName("android.os.ServiceManager");
+            Method getService = serviceManagerClass.getMethod("getService",
+                    String.class);
+            IBinder retbinder = (IBinder) getService.invoke(
+                    serviceManagerClass, "statusbar");
+            Class statusBarClass = Class.forName(retbinder
+                    .getInterfaceDescriptor());
+            Object statusBarObject = statusBarClass.getClasses()[0].getMethod(
+                    "asInterface", IBinder.class).invoke(null,
+                    new Object[]{retbinder});
+            Method clearAll = statusBarClass.getMethod("toggleRecentApps");
+            clearAll.setAccessible(true);
+            clearAll.invoke(statusBarObject);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+```
 
 ## 快捷启动应用 ✓ 
 输入一个包名启动应用
