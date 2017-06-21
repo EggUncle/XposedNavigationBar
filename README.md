@@ -1,6 +1,7 @@
 # XposedNavigationBar
 基于Xposed框架实现的导航栏功能拓展模块
 在导航栏中实现一个左划菜单，实现多种快捷功能
+代码基于GPL3.0协议开源
 
 下载地址
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
@@ -67,6 +68,13 @@ http://www.jianshu.com/p/d17ce2880753
 ## 息屏 ✓ 
 这个功能的实现比较简单，阅读源码后发现gotosleep这个方法被hide了，解决方法也很简单，直接通过反射去调用即可。
 有朋友说需要长按电源键呼出关机等功能，先记下来。
+
+长按呼出关机菜单功能的实现也比较简单，直接模拟的电源按键的长按事件
+```java
+ Instrumentation mInst = new Instrumentation();
+ KeyEvent keyEvent=new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER);
+ mInst.sendKeySync(keyEvent);
+```
 
 ## 后台清理 ✓
 待改进，清理效果不是很理想。
