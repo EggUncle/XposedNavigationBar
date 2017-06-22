@@ -1,6 +1,6 @@
 /*
  *     Navigation bar function expansion module
- *     Copyright (C) 2017 egguncle
+ *     Copyright (C) 2017 egguncle cicadashadow@gmail.com
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,14 @@
 package com.egguncle.xposednavigationbar.hook;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
@@ -157,6 +164,7 @@ public class BtnFuncFactory {
         btn.setOnClickListener(getBtnFuncOfName(code));
         btn.setOnLongClickListener(getBtnLongFuncOfName(code));
         line.addView(btn, p);
+
     }
 
     public void clearAllBtn(LinearLayout line) {

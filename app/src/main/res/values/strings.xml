@@ -1,6 +1,6 @@
 <!--
   ~     Navigation bar function expansion module
-  ~     Copyright (C) 2017 egguncle
+  ~     Copyright (C) 2017 egguncle cicadashadow@gmail.com
   ~
   ~     This program is free software: you can redistribute it and/or modify
   ~     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
     <string name="app_name">导航栏扩展模块</string>
     <string name="switch_app">模块总开关(重启后生效)</string>
     <string name="about">
-        启动该模块后，点击导航栏左侧的小点，或者左划导航栏即可呼出快捷菜单。
+        启动该模块后，点击导航栏左侧的小点，或者左划导航栏即可呼出快捷菜单，右划呼出音乐控制面板。
         \n\n该模块供有虚拟导航栏的机型使用，目前仅在原生和CM ROM上进行过测试，部分功能可能在其他ROM上无法正常使用，如果激活模块以后反复出现“系统界面停止运行”导致手机无法正常使用，连接电脑使用adb指令“adb uninstall com.egguncle.xposednavigationbar”卸载该模块即可。
         \n\nandroid6.0在使用expandSettingsPanel方法来下拉通知栏的时候，展开动画会变得十分缓慢，授予系统界面root权限，能够变通的解决这个问题，不授予root权限不会影响别的功能的使用。
     </string>
@@ -27,7 +27,7 @@
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，你的支持是我最大的动力。
     </string>
     <string name="author">
-        版本 1.5.0\n联系作者\ncicadashadow@gmail.com \n最近想找一份Android开发的实习工作，目前大三，软件工程专业，现在人在北京，如果有需要请通过邮箱联系我(2017-6-18)。
+        版本 1.6.0\n联系作者\ncicadashadow@gmail.com \n最近想找一份Android开发的实习工作，目前大三，软件工程专业，现在人在北京，如果有需要请通过邮箱联系我(2017-6-18)。
     </string>
     <string name="about_app">
         关于

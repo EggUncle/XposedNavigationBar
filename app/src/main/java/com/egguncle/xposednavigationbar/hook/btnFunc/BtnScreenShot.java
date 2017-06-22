@@ -1,6 +1,6 @@
 /*
  *     Navigation bar function expansion module
- *     Copyright (C) 2017 egguncle
+ *     Copyright (C) 2017 egguncle cicadashadow@gmail.com
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -18,46 +18,54 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Toast;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenShot;
+import com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity;
 
 import java.io.File;
 import java.io.IOException;
 
 import de.robv.android.xposed.XposedBridge;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 /**
  * Created by egguncle on 17-6-18.
  */
 
-public class BtnScreenShot implements ScreenShot,View.OnClickListener {
+public class BtnScreenShot implements ScreenShot, View.OnClickListener {
     @Override
     public void onClick(View view) {
         try {
             screenshot(view.getContext());
-        }catch (Exception e){
+        } catch (Exception e) {
             XposedBridge.log(e.getMessage());
         }
     }
 
     @Override
     public void screenshot(Context context) {
-        String screenShotPath="/sdcard/Pictures/Screenshots";
-        File file=new File(screenShotPath);
+        String screenShotPath = "/sdcard/Pictures/Screenshots";
+        File file = new File(screenShotPath);
         //如果截图文件夹不存在则创建
-        if (!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
         long timecurrentTimeMillis = System.currentTimeMillis();
-        String cmd="screencap -p /sdcard/Pictures/Screenshots/"+timecurrentTimeMillis+".png";
+        String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
         try {
             Process p = Runtime.getRuntime().exec(cmd);
+            Toast.makeText(context,"截图成功",Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Toast.makeText(context,"截图失败",Toast.LENGTH_SHORT).show();
+            XposedBridge.log(e.getMessage());
         }
     }
 }

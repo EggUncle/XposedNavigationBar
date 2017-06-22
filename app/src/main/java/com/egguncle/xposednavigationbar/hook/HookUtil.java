@@ -1,6 +1,6 @@
 /*
  *     Navigation bar function expansion module
- *     Copyright (C) 2017 egguncle
+ *     Copyright (C) 2017 egguncle cicadashadow@gmail.com
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -375,7 +375,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             Class<?> phoneStatusBarClass =
                     lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
             Method method1 = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
-            Method method2=phoneStatusBarClass.getDeclaredMethod("toggleRecentApps");
             method1.setAccessible(true);
 
             //获取到clearAllNotifications和toggleRecentApps方法
