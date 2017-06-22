@@ -40,6 +40,6 @@ public class BtnNavBarGoHome implements GoHomeNavBar,View.OnClickListener {
 
     @Override
     public void goHomeNavBar(ViewPager viewPager) {
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(1);
     }
 }

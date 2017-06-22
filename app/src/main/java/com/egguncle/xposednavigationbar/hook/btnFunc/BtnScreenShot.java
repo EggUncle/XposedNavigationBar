@@ -62,9 +62,9 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
         String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
         try {
             Process p = Runtime.getRuntime().exec(cmd);
-            Toast.makeText(context,"截图成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            Toast.makeText(context,"截图失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"screenShot failed",Toast.LENGTH_SHORT).show();
             XposedBridge.log(e.getMessage());
         }
     }
