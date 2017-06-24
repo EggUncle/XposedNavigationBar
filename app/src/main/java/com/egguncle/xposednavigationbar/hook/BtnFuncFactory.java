@@ -42,6 +42,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearAllNotifications;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearBackground;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnMusicController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnNavBarGoHome;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnNavClipboard;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnOpenActPanel;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnQuickNotice;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenOff;
@@ -118,6 +119,8 @@ public class BtnFuncFactory {
                 return new BtnsNavbar(BtnsNavbar.BTN_HOME);
             case FuncName.FUNC_NAV_RECENT_CODE:
                 return new BtnsNavbar(BtnsNavbar.BTN_RECENT);
+            case FuncName.FUNC_CLIPBOARD_CODE:
+                return new BtnNavClipboard();
         }
         return null;
     }

@@ -25,13 +25,13 @@
         \n\nwhen the android6.0 use expandSettingsPanel to drop-down the notification，it can be very slow to expand the animation，granting the system interface with root permission can solve this problem，conversely, it will not affect other functions。
     </string>
     <string name="market">
-        Please click the word to leave a message in the review area or mark the module if you have any suggestions and comments。Your support is the biggest drive for me.
+        Please click the word to leave a message in the review area or mark the module if you have any suggestions and comments,also can click button to donate,your support is the biggest drive for me.
     </string>
     <string name="author">
-        version 1.6.0\n contact author\ncicadashadow@gmail.com
+        version 1.7.0\n contact author\ncicadashadow@gmail.com
     </string>
     <string name="about_app">
-        about
+        about&amp;donate
     </string>
 
     <string name="no_select">
@@ -66,6 +66,10 @@
     <string name="momo_history">momo history</string>
     <string name="screen_shot_success">screenShot success</string>
     <string name="screen_shot_failed">screenShot failed</string>
+    <string name="clipboard">clipboard</string>
+    <string name="clip_success">copy success</string>
+    <string name="alipay_donate">alipay donate</string>
+    <string name="wechat_donate">wechat donate</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>
@@ -85,5 +89,6 @@
         <item>back</item>
         <item>home</item>
         <item>recent</item>
+        <item>clipboard(beta)</item>
     </string-array>
 </resources>

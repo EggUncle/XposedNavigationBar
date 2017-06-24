@@ -17,15 +17,11 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <dimen name="space_xs">4dp</dimen>
-    <dimen name="space_s">8dp</dimen>
-    <dimen name="space_m">16dp</dimen>
-    <dimen name="img_size">20dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="txt_m">16sp</dimen>
-    <dimen name="app_icon_size">40dp</dimen>
-    <dimen name="icon_size_m">20dp</dimen>
-    <dimen name="app_bar_height">400dp</dimen>
-    <dimen name="dialog_item_height">50dp</dimen>
-</resources>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.egguncle.xposednavigationbar.ui.activity.ClipboardActivity">
+
+</android.support.constraint.ConstraintLayout>

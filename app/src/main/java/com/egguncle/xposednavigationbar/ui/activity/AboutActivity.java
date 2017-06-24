@@ -21,7 +21,11 @@ package com.egguncle.xposednavigationbar.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +33,11 @@ import com.egguncle.xposednavigationbar.R;
 
 public class AboutActivity extends BaseActivity {
     private TextView tvMarket;
+    private Button btnAlipayDonate;
+    private Button btnWechatDonate;
+
+
+
 
     @Override
     int getLayoutId() {
@@ -42,10 +51,17 @@ public class AboutActivity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         tvMarket = (TextView) findViewById(R.id.tv_market);
+        btnAlipayDonate = (Button) findViewById(R.id.btn_alipay_donate);
+        btnWechatDonate = (Button) findViewById(R.id.btn_wechat_donate);
     }
 
     @Override
     void initVar() {
+
+    }
+
+    @Override
+    void initAction() {
         tvMarket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,10 +76,28 @@ public class AboutActivity extends BaseActivity {
                 }
             }
         });
-    }
 
-    @Override
-    void initAction() {
-
+        btnAlipayDonate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 View dialogView= LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr,null);
+                 ImageView imgQr= (ImageView) dialogView.findViewById(R.id.iv_qr);
+                AlertDialog.Builder builder=new AlertDialog.Builder(AboutActivity.this);
+                builder.setView(dialogView).setNegativeButton(R.string.no,null);
+                builder.create().show();
+                imgQr.setImageResource(R.drawable.alipay_qr);
+            }
+        });
+        btnWechatDonate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View dialogView= LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr,null);
+                ImageView imgQr= (ImageView) dialogView.findViewById(R.id.iv_qr);
+                AlertDialog.Builder builder=new AlertDialog.Builder(AboutActivity.this);
+                builder.setView(dialogView).setNegativeButton(R.string.no,null);
+                builder.create().show();
+                imgQr.setImageResource(R.drawable.wechat_qr);
+            }
+        });
     }
 }

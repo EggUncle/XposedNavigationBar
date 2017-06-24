@@ -67,9 +67,6 @@ public class AppShortCutActivity extends Activity {
     private AppBarLayout appBar;
     private CollapsingToolbarLayout toolbarLayout;
 
-
-
-
     private final static String TAG = "AppShortCutActivity";
 
     //显示被选择的快捷方式

@@ -20,6 +20,9 @@ package com.egguncle.xposednavigationbar.hook;
 
 
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 
 import android.content.Intent;
@@ -28,6 +31,7 @@ import android.content.res.Resources;
 import android.content.res.XModuleResources;
 import android.graphics.Color;
 
+import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -79,6 +83,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     private static final String SHORT_CUT_DATA = "short_cut_data";
 
+    //剪贴板内容
+    private static ArrayList<String> clipboardData;
+
     //用于获取phonestatusbar对象和clearAllNotifications方法等
     private static Object phoneStatusBar;
     private static Method clearAllNotificationsMethod;
@@ -86,8 +93,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     //用于加载图片资源
     private Map<Integer, byte[]> mapImgRes = new HashMap<>();
     //用于获取保存的快捷按键设置
-    private List<ShortCut> shortCutList;
+    private static List<ShortCut> shortCutList;
     private int iconScale;
+    private static List<Integer> scCodes;
 
     //   private static Object mcb;
     //扩展出来的主界面
@@ -102,10 +110,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         //读取sp，查看程序是否被允许激活
         XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
         boolean activation = pre.getBoolean("activation", false);
-        String json = pre.getString(SHORT_CUT_DATA, "");
-        if ("".equals(json)) {
+        if (!activation) {
             return;
         }
+
+        String json = pre.getString(SHORT_CUT_DATA, "");
         XposedBridge.log("===" + json);
 
 
@@ -114,61 +123,60 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         //获取快捷按钮设置数据
         Gson gson = new Gson();
         shortCutList = gson.fromJson(json, ShortCutData.class).getData();
-//        for (ShortCut sc : shortCutList) {
-//            XposedBridge.log(sc.getName() + " " + sc.getShortCutName() + " " + sc.getPage() + " " + sc.getPostion());
-//        }
         //获取图片缩放大小
         iconScale = pre.getInt(FuncName.ICON_SIZE, 100);
+        //初始化剪贴板内容集合
+        clipboardData = new ArrayList<>();
 
-        if (activation) {
-            //加载图片资源文件
-            Resources res = XModuleResources.createInstance(startupParam.modulePath, null);
-            byte[] backImg = XposedHelpers.assetAsByteArray(res, "back.png");
-            byte[] clearMenImg = XposedHelpers.assetAsByteArray(res, "clear_mem.png");
-            byte[] clearNotificationImg = XposedHelpers.assetAsByteArray(res, "clear_notification.png");
-            byte[] downImg = XposedHelpers.assetAsByteArray(res, "down.png");
-            byte[] lightImg = XposedHelpers.assetAsByteArray(res, "light.png");
-            byte[] quickNoticesImg = XposedHelpers.assetAsByteArray(res, "quick_notices.png");
-            byte[] screenOffImg = XposedHelpers.assetAsByteArray(res, "screenoff.png");
-            //  byte[] upImg = XposedHelpers.assetAsByteArray(res, "up.png");
-            byte[] volume = XposedHelpers.assetAsByteArray(res, "volume.png");
-            byte[] smallPonit = XposedHelpers.assetAsByteArray(res, "small_point.png");
-            byte[] home = XposedHelpers.assetAsByteArray(res, "ic_home.png");
-            byte[] startActs = XposedHelpers.assetAsByteArray(res, "start_acts.png");
-            byte[] playMusic = XposedHelpers.assetAsByteArray(res, "ic_music.png");
-            byte[] pauseMusic = XposedHelpers.assetAsByteArray(res, "ic_pause.png");
-            byte[] previousMusic = XposedHelpers.assetAsByteArray(res, "ic_previous.png");
-            byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
-            byte[] scanWeChat = XposedHelpers.assetAsByteArray(res, "wechat_qr.png");
-            byte[] scanAlipay=XposedHelpers.assetAsByteArray(res,"alipay_qr.png");
-            byte[] screenshot = XposedHelpers.assetAsByteArray(res, "ic_image.png");
-            byte[] navBack=XposedHelpers.assetAsByteArray(res,"ic_nav_back.png");
-            byte[] navHome=XposedHelpers.assetAsByteArray(res,"ic_nav_home.png");
-            byte[] navRecent=XposedHelpers.assetAsByteArray(res,"ic_nav_recent.png");
 
-            mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
-            mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
-            mapImgRes.put(FuncName.FUNC_CLEAR_NOTIFICATION_CODE, clearNotificationImg);
-            mapImgRes.put(FuncName.FUNC_DOWN_CODE, downImg);
-            mapImgRes.put(FuncName.FUNC_LIGHT_CODE, lightImg);
-            mapImgRes.put(FuncName.FUNC_QUICK_NOTICE_CODE, quickNoticesImg);
-            mapImgRes.put(FuncName.FUNC_SCREEN_OFF_CODE, screenOffImg);
-            //  mapImgRes.put(FuncName.UP, upImg);
-            mapImgRes.put(FuncName.FUNC_VOLUME_CODE, volume);
-            mapImgRes.put(FuncName.FUNC_SMALL_POINT_CODE, smallPonit);
-            mapImgRes.put(FuncName.FUNC_HOME_CODE, home);
-            mapImgRes.put(FuncName.FUNC_START_ACTS_CODE, startActs);
-            mapImgRes.put(FuncName.FUNC_PLAY_MUSIC_CODE, playMusic);
-            mapImgRes.put(FuncName.FUNC_NEXT_PLAY_CODE, nextMusic);
-            mapImgRes.put(FuncName.FUNC_PREVIOUS_PLAY_CODE, previousMusic);
-            mapImgRes.put(FuncName.FUNC_WECHAT_SACNNER_CODE, scanWeChat);
-            mapImgRes.put(FuncName.FUNC_ALIPAY_SACNNER_CODE, scanAlipay);
-            mapImgRes.put(FuncName.FUNC_SCREEN_SHOT_CODE, screenshot);
-            mapImgRes.put(FuncName.FUNC_NAV_BACK_CODE, navBack);
-            mapImgRes.put(FuncName.FUNC_NAV_HOME_CODE, navHome);
-            mapImgRes.put(FuncName.FUNC_NAV_RECENT_CODE, navRecent);
-        }
+        //加载图片资源文件
+        Resources res = XModuleResources.createInstance(startupParam.modulePath, null);
+        byte[] backImg = XposedHelpers.assetAsByteArray(res, "back.png");
+        byte[] clearMenImg = XposedHelpers.assetAsByteArray(res, "clear_mem.png");
+        byte[] clearNotificationImg = XposedHelpers.assetAsByteArray(res, "clear_notification.png");
+        byte[] downImg = XposedHelpers.assetAsByteArray(res, "down.png");
+        byte[] lightImg = XposedHelpers.assetAsByteArray(res, "light.png");
+        byte[] quickNoticesImg = XposedHelpers.assetAsByteArray(res, "quick_notices.png");
+        byte[] screenOffImg = XposedHelpers.assetAsByteArray(res, "screenoff.png");
+        //  byte[] upImg = XposedHelpers.assetAsByteArray(res, "up.png");
+        byte[] volume = XposedHelpers.assetAsByteArray(res, "volume.png");
+        byte[] smallPonit = XposedHelpers.assetAsByteArray(res, "small_point.png");
+        byte[] home = XposedHelpers.assetAsByteArray(res, "ic_home.png");
+        byte[] startActs = XposedHelpers.assetAsByteArray(res, "start_acts.png");
+        byte[] playMusic = XposedHelpers.assetAsByteArray(res, "ic_music.png");
+        byte[] pauseMusic = XposedHelpers.assetAsByteArray(res, "ic_pause.png");
+        byte[] previousMusic = XposedHelpers.assetAsByteArray(res, "ic_previous.png");
+        byte[] nextMusic = XposedHelpers.assetAsByteArray(res, "ic_next.png");
+        byte[] scanWeChat = XposedHelpers.assetAsByteArray(res, "wechat_qr.png");
+        byte[] scanAlipay = XposedHelpers.assetAsByteArray(res, "alipay_qr.png");
+        byte[] screenshot = XposedHelpers.assetAsByteArray(res, "ic_image.png");
+        byte[] navBack = XposedHelpers.assetAsByteArray(res, "ic_nav_back.png");
+        byte[] navHome = XposedHelpers.assetAsByteArray(res, "ic_nav_home.png");
+        byte[] navRecent = XposedHelpers.assetAsByteArray(res, "ic_nav_recent.png");
+        byte[] clipBoard = XposedHelpers.assetAsByteArray(res, "ic_clipboard.png");
 
+        mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
+        mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
+        mapImgRes.put(FuncName.FUNC_CLEAR_NOTIFICATION_CODE, clearNotificationImg);
+        mapImgRes.put(FuncName.FUNC_DOWN_CODE, downImg);
+        mapImgRes.put(FuncName.FUNC_LIGHT_CODE, lightImg);
+        mapImgRes.put(FuncName.FUNC_QUICK_NOTICE_CODE, quickNoticesImg);
+        mapImgRes.put(FuncName.FUNC_SCREEN_OFF_CODE, screenOffImg);
+        //  mapImgRes.put(FuncName.UP, upImg);
+        mapImgRes.put(FuncName.FUNC_VOLUME_CODE, volume);
+        mapImgRes.put(FuncName.FUNC_SMALL_POINT_CODE, smallPonit);
+        mapImgRes.put(FuncName.FUNC_HOME_CODE, home);
+        mapImgRes.put(FuncName.FUNC_START_ACTS_CODE, startActs);
+        mapImgRes.put(FuncName.FUNC_PLAY_MUSIC_CODE, playMusic);
+        mapImgRes.put(FuncName.FUNC_NEXT_PLAY_CODE, nextMusic);
+        mapImgRes.put(FuncName.FUNC_PREVIOUS_PLAY_CODE, previousMusic);
+        mapImgRes.put(FuncName.FUNC_WECHAT_SACNNER_CODE, scanWeChat);
+        mapImgRes.put(FuncName.FUNC_ALIPAY_SACNNER_CODE, scanAlipay);
+        mapImgRes.put(FuncName.FUNC_SCREEN_SHOT_CODE, screenshot);
+        mapImgRes.put(FuncName.FUNC_NAV_BACK_CODE, navBack);
+        mapImgRes.put(FuncName.FUNC_NAV_HOME_CODE, navHome);
+        mapImgRes.put(FuncName.FUNC_NAV_RECENT_CODE, navRecent);
+        mapImgRes.put(FuncName.FUNC_CLIPBOARD_CODE, clipBoard);
 
     }
 
@@ -219,14 +227,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 //                View btnBack = rootView.findViewById(liparam.res.getIdentifier("back", "id", "com.android.systemui"));
 //                View btnHome = rootView.findViewById(liparam.res.getIdentifier("home", "id", "com.android.systemui"));
 //                View btnRecent = rootView.findViewById(liparam.res.getIdentifier("recent_apps", "id", "com.android.systemui"));
-//
-//                lineBtn.getChildAt(1);
-//                lineBtn.
-//              //  lineBtn.removeAllViews();
-//                lineBtn.addView(btnRecent);
-//                lineBtn.addView(btnHome);
-//                lineBtn.addView(btnBack);
-
 
                 final Context context = navBarBg.getContext();
                 LinearLayout parentView = new LinearLayout(context);
@@ -271,6 +271,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                 //初始化广播接收器
                 initBroadcast(context);
+                //初始化剪贴板监听
+                startListenClipboard(context);
 
 
                 //viewpage的第二页
@@ -327,6 +329,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //当移动到非第一页的时候，隐藏导航栏本身的功能，来实现自己的一些功能。
                             XposedBridge.log("hide NavigationBar");
                             lineBtn.setVisibility(View.GONE);
+                            if (vpLine.getChildCount() == 0) {
+                                vpXphook.setCurrentItem(1);
+                            }
 //                            int navBarHeight = lineBtn.getHeight();
 //                            TranslateAnimation animDown = new TranslateAnimation(0, 0, 0, navBarHeight);
 //                            animDown.setDuration(300);
@@ -362,7 +367,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
         boolean activation = pre.getBoolean("activation", false);
-        // XposedBridge.log(lpparam.packageName);
+        //   XposedBridge.log(lpparam.packageName);
         if (!activation) {
             return;
         }
@@ -370,7 +375,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
-            XposedBridge.log("filter package");
+            XposedBridge.log("filter package systemui");
             //获取清除通知的方法
             Class<?> phoneStatusBarClass =
                     lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
@@ -379,7 +384,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
             //获取到clearAllNotifications和toggleRecentApps方法
             clearAllNotificationsMethod = method1;
-                  XposedHelpers.findAndHookMethod(phoneStatusBarClass,
+            XposedHelpers.findAndHookMethod(phoneStatusBarClass,
                     "start", new XC_MethodHook() {
                         @Override
                         protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -389,7 +394,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //     XposedBridge.log("====hook clear notifications success====");
                         }
                     });
-
         }
 
     }
@@ -417,11 +421,44 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         context.registerReceiver(myReceiver, intentFilter);
     }
 
+    /**
+     * 开始监听剪贴板
+     */
+    private void startListenClipboard(final Context context) {
+        final ClipboardManager clipboard = (ClipboardManager) context.
+                getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
+            @Override
+            public void onPrimaryClipChanged() {
+                //  XposedBridge.log("onPrimaryClipChanged");
+                //获取剪贴板内容，先判断该内容是否为空
+                if (clipboard.hasPrimaryClip()) {
+                    ClipData clipData = clipboard.getPrimaryClip();
+                    int count = clipData.getItemCount();
+                    for (int i = 0; i < count; ++i) {
+
+                        ClipData.Item item = clipData.getItemAt(i);
+                        CharSequence str = item
+                                .coerceToText(context);
+                        //因为复制历史记录里面某一条文字到剪贴板的时候，也会导致剪贴板内容变动，此处避免 添加重复内容到剪贴板历史
+                        if (!clipboardData.contains(str.toString())) {
+                            clipboardData.add(str.toString());
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public static ArrayList<String> getClipdata() {
+        return clipboardData;
+    }
+
     private class MyReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList<Integer> scCodes = intent.getIntegerArrayListExtra("data");
+            scCodes = intent.getIntegerArrayListExtra("data");
             btnFuncFactory.clearAllBtn(vpLine);
             if (scCodes != null && scCodes.size() != 0) {
                 for (int code : scCodes) {
