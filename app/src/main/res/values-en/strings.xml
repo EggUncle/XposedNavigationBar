@@ -57,7 +57,7 @@
     <string name="ok">ok</string>
     <string name="no">cancel</string>
     <string name="delete">delete</string>
-    <string name="quick_notice">memo</string>
+    <string name="quick_notice">momo</string>
     <string name="select_shortcut">add shortcut</string>
     <string name="root_request">grant root permission</string>
     <string name="cant_start_act">can\'t start the apps</string>
@@ -70,7 +70,8 @@
     <string name="clip_success">copy success</string>
     <string name="alipay_donate">alipay donate</string>
     <string name="wechat_donate">wechat donate</string>
-    <string name="custom_icon">custom icon</string>
+    <string name="custom_icon">custom</string>
+    <string name="command_taps">custom adb shell is not safe，if you do not know how to use adb shell，please do not use this function.</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>
@@ -91,6 +92,6 @@
         <item>home</item>
         <item>recent</item>
         <item>clipboard(beta)</item>
-        <item>command</item>
+        <item>command(beta)</item>
     </string-array>
 </resources>

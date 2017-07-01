@@ -18,6 +18,7 @@
 
 package com.egguncle.xposednavigationbar.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,13 +26,13 @@ import java.util.List;
  */
 
 public class ShortCutData {
-   private List<ShortCut> data;
+   private ArrayList<ShortCut> data;
 
-    public List<ShortCut> getData() {
+    public ArrayList<ShortCut> getData() {
         return data;
     }
 
-    public void setData(List<ShortCut> data) {
+    public void setData(ArrayList<ShortCut> data) {
         this.data = data;
     }
 }

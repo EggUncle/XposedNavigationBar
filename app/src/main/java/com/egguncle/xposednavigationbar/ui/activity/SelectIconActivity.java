@@ -34,7 +34,9 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
@@ -42,9 +44,12 @@ import com.egguncle.xposednavigationbar.util.ImageUtil;
 public class SelectIconActivity extends Activity {
     private static final int SELECT_PHOTO = 0;//调用相册照片
     private ImageView imgIcon;
+    private EditText edDialog;
+    private TextView tvDialog;
     private final static String TAG = "SelectIconActivity";
     private String imagePath;
     private int position;
+    private String command;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +57,8 @@ public class SelectIconActivity extends Activity {
         setContentView(R.layout.activity_select_icon);
         //状态栏透明
         getWindow().setStatusBarColor(Color.TRANSPARENT);
-        initView();
         initVar();
+        initView();
         initAction();
     }
 
@@ -61,6 +66,13 @@ public class SelectIconActivity extends Activity {
     private void initView() {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_custom_icon, null);
         imgIcon = (ImageView) dialogView.findViewById(R.id.iv_item_icon);
+        edDialog= (EditText) dialogView.findViewById(R.id.ed_dialog);
+        tvDialog= (TextView) dialogView.findViewById(R.id.tv_dialog);
+        if (!"".equals(command)){
+            edDialog.setVisibility(View.VISIBLE);
+            edDialog.setText(command);
+            tvDialog.setVisibility(View.VISIBLE);
+        }
         imgIcon.setImageResource(R.mipmap.ic_launcher);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.custom_icon)
@@ -77,6 +89,9 @@ public class SelectIconActivity extends Activity {
                         Intent intent=new Intent();
                         intent.putExtra("position",position);
                         intent.putExtra("imagepath",imagePath);
+                        if (!"".equals(command)){
+                            intent.putExtra("command",edDialog.getText().toString());
+                        }
                         setResult(SetFunActivity.RESULT_OK,intent);
                         finish();
                     }
@@ -110,6 +125,7 @@ public class SelectIconActivity extends Activity {
 
     private void initVar() {
         position=getIntent().getIntExtra("position",0);
+        command=getIntent().getStringExtra("command");
     }
 
 

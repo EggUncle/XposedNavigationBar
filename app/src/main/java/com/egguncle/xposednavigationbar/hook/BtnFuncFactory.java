@@ -82,8 +82,8 @@ public class BtnFuncFactory {
     }
 
 
-    public View.OnClickListener getBtnFuncOfName(int code) {
-        switch (code) {
+    public View.OnClickListener getBtnFuncOfName(ShortCut sc) {
+        switch (sc.getCode()) {
 //            case FuncName.BACK:
 //                break;
             case FuncName.FUNC_DOWN_CODE:
@@ -125,7 +125,7 @@ public class BtnFuncFactory {
             case FuncName.FUNC_CLIPBOARD_CODE:
                 return new BtnNavClipboard();
             case FuncName.FUNC_COMMAND_CODE:
-                //return new BtnStartCommand();
+                return new BtnStartCommand(sc.getShellStr());
         }
         return null;
     }
@@ -176,7 +176,7 @@ public class BtnFuncFactory {
         btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         btn.setBackgroundColor(Color.alpha(255));
-        btn.setOnClickListener(getBtnFuncOfName(sc.getCode()));
+        btn.setOnClickListener(getBtnFuncOfName(sc));
         btn.setOnLongClickListener(getBtnLongFuncOfName(sc.getCode()));
         line.addView(btn, p);
 

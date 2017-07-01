@@ -18,12 +18,17 @@
 
 package com.egguncle.xposednavigationbar.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
+
 /**
  * Created by egguncle on 17-6-7.
  * 快捷小功能的定义类
  */
 
-public class ShortCut {
+public class ShortCut implements Parcelable{
     //快捷小功能的名字对应的编码
     private int code;
 //    //快捷小功能的标识符
@@ -40,6 +45,29 @@ public class ShortCut {
 
     //如果是shell快捷指令，则应该还有一个指令内容
     private String shellStr;
+
+    public ShortCut(){};
+
+    protected ShortCut(Parcel in) {
+        code = in.readInt();
+        open = in.readByte() != 0;
+        page = in.readInt();
+        postion = in.readInt();
+        iconPath = in.readString();
+        shellStr = in.readString();
+    }
+
+    public static final Creator<ShortCut> CREATOR = new Creator<ShortCut>() {
+        @Override
+        public ShortCut createFromParcel(Parcel in) {
+            return new ShortCut(in);
+        }
+
+        @Override
+        public ShortCut[] newArray(int size) {
+            return new ShortCut[size];
+        }
+    };
 
     public int getPage() {
         return page;
@@ -82,5 +110,20 @@ public class ShortCut {
 
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(code);
+        parcel.writeByte((byte) (open ? 1 : 0));
+        parcel.writeInt(page);
+        parcel.writeInt(postion);
+        parcel.writeString(iconPath);
+        parcel.writeString(shellStr);
     }
 }

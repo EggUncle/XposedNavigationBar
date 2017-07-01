@@ -56,7 +56,7 @@ public class SetFunActivity extends BaseActivity {
     private CoordinatorLayout parentView;
 
     private RcvHomeAdapter rcvHomeAdapter;
-    private List<ShortCut> shortCutList;
+    private ArrayList<ShortCut> shortCutList;
 
     //一个被设置和没被设置的处理逻辑
     private List<Integer> selectList;
@@ -258,7 +258,7 @@ public class SetFunActivity extends BaseActivity {
                 shortCutCodes.add(sc.getCode());
             }
             Intent intent = new Intent();
-            intent.putExtra("data", shortCutCodes);
+            intent.putParcelableArrayListExtra("data", shortCutList);
             intent.setAction(HookUtil.ACT_BROADCAST);
             sendBroadcast(intent);
 
@@ -274,10 +274,16 @@ public class SetFunActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode){
             case SetFunActivity.RESULT_OK:
+
                 int position=data.getIntExtra("position",0);
                 String imgPath=data.getStringExtra("imagepath");
-                Log.i(TAG, "onActivityResult: "+position+" "+imgPath);
+                String command=data.getStringExtra("command");
                 ShortCut sc=shortCutList.get(position);
+                if (command!=null){
+                    sc.setShellStr(command);
+                }
+                Log.i(TAG, "onActivityResult: "+position+" "+imgPath);
+
                 sc.setIconPath(imgPath);
                 break;
         }

@@ -93,9 +93,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     //用于加载图片资源
     private Map<Integer, byte[]> mapImgRes = new HashMap<>();
     //用于获取保存的快捷按键设置
-    private static List<ShortCut> shortCutList;
+    private static ArrayList<ShortCut> shortCutList;
     private int iconScale;
-    private static List<Integer> scCodes;
+   // private static List<Integer> scCodes;
 
     //   private static Object mcb;
     //扩展出来的主界面
@@ -463,11 +463,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            scCodes = intent.getIntegerArrayListExtra("data");
+            shortCutList = intent.getParcelableArrayListExtra("data");
             btnFuncFactory.clearAllBtn(vpLine);
-            if (scCodes != null && scCodes.size() != 0) {
-                for (int code : scCodes) {
-                   // btnFuncFactory.createBtnAndSetFunc(context, vpLine, code);
+            if (shortCutList != null && shortCutList.size() != 0) {
+                for (ShortCut sc: shortCutList) {
+                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
                 }
             }
 

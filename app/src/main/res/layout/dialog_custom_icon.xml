@@ -16,16 +16,30 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <ImageView
+        android:layout_gravity="center"
         android:scaleType="fitCenter"
         android:layout_width="@dimen/icon_size_h"
         android:layout_height="@dimen/icon_size_h"
-        android:layout_centerInParent="true"
         android:id="@+id/iv_item_icon"
         />
+    <TextView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_dialog"
+        android:text="@string/command_taps"
+        />
+    <EditText
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ed_dialog"
+        />
 
-</RelativeLayout>
+</LinearLayout>

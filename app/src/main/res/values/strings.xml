@@ -69,7 +69,8 @@
     <string name="clip_success">已复制到剪贴板</string>
     <string name="alipay_donate">支付宝捐赠</string>
     <string name="wechat_donate">微信捐赠</string>
-    <string name="custom_icon">自定义图标</string>
+    <string name="custom_icon">自定义</string>
+    <string name="command_taps">自定义指令可能造成程序或系统崩溃，如果你不会使用命令行，请不要使用这个功能。</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>
@@ -90,6 +91,6 @@
         <item>主页键</item>
         <item>最近任务键</item>
         <item>剪贴板(测试)</item>
-        <item>shell指令</item>
+        <item>shell指令(测试)</item>
     </string-array>
 </resources>

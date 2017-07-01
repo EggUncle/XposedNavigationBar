@@ -98,7 +98,7 @@ public class SPUtil {
      *
      * @param list
      */
-    public void saveShortCut(List<ShortCut> list) {
+    public void saveShortCut(ArrayList<ShortCut> list) {
         ShortCutData data = new ShortCutData();
         data.setData(list);
         Gson gson = new Gson();

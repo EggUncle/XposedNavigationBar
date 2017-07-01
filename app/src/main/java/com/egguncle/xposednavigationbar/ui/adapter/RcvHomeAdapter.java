@@ -32,6 +32,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 
@@ -87,6 +88,9 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
                 Intent intent=new Intent(view.getContext(), SelectIconActivity.class);
                 intent.putExtra("position",position);
                 if (view.getContext() instanceof Activity){
+                    if (shortCut.getCode()==FuncName.FUNC_COMMAND_CODE){
+                       intent.putExtra("command",shortCut.getShellStr());
+                    }
                     ((Activity) view.getContext()).startActivityForResult(intent,1);
                 }
 
