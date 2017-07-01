@@ -146,6 +146,9 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
  mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_NEXT);
 ```
 
+## 剪贴板 ✓
+实现一个获取剪贴板记录的功能，这个功能的实现比较简单，获取ClipboardManager再对其使用变化监听即可。
+
 ## 踩到的一些小坑
 获取上下文对象可以通过在hook资源时拿到某个view，再getContext
 
