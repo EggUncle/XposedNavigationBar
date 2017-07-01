@@ -18,7 +18,10 @@
 
 package com.egguncle.xposednavigationbar.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -34,6 +37,7 @@ import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.ShortCut;
+import com.egguncle.xposednavigationbar.ui.activity.SelectIconActivity;
 import com.egguncle.xposednavigationbar.util.CodeToFuncName;
 
 import java.util.Iterator;
@@ -49,10 +53,12 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
     private Context mContext;
     private CodeToFuncName mCodeToFuncName;
 
+
+
     public RcvHomeAdapter(Context context, List<ShortCut> list) {
         this.mContext = context;
         this.dataList = list;
-        this.mCodeToFuncName=CodeToFuncName.getInstance(mContext);
+        this.mCodeToFuncName = CodeToFuncName.getInstance(mContext);
     }
 
     @Override
@@ -61,9 +67,9 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
     }
 
     @Override
-    public void onBindViewHolder(RcvHomeAdapter.HomeViewHolder holder, int position) {
+    public void onBindViewHolder(RcvHomeAdapter.HomeViewHolder holder, final int position) {
         final ShortCut shortCut = dataList.get(position);
-       // String shortCutName = shortCut.getShortCutName();
+        // String shortCutName = shortCut.getShortCutName();
         int code = shortCut.getCode();
         holder.itemTvName.setText(mCodeToFuncName.getFuncNameFromCode(code));
         final int p = position;
@@ -75,13 +81,26 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
             }
         });
 
-    }
+        holder.itemTvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(view.getContext(), SelectIconActivity.class);
+                intent.putExtra("position",position);
+                if (view.getContext() instanceof Activity){
+                    ((Activity) view.getContext()).startActivityForResult(intent,1);
+                }
 
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {
         return dataList == null ? 0 : dataList.size();
     }
+
+
+
 
     public class HomeViewHolder extends RecyclerView.ViewHolder {
         private TextView itemTvName;
@@ -91,33 +110,7 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
             super(itemView);
             itemTvName = (TextView) itemView.findViewById(R.id.item_tv_name);
             itemImgDelete = (ImageView) itemView.findViewById(R.id.item_img_delete);
-
         }
     }
 
-//    public void setImgIcon(String name, ImageView img) {
-//        switch (name) {
-//            case FuncName.DOWN:
-//                img.setImageResource(R.drawable.down);
-//                break;
-//            case FuncName.QUICK_NOTICE:
-//                img.setImageResource(R.drawable.quick_notices);
-//                break;
-//            case FuncName.CLEAR_NOTIFICATION:
-//                img.setImageResource(R.drawable.clear_notification);
-//                break;
-//            case FuncName.CLEAR_MEM:
-//                img.setImageResource(R.drawable.clear_mem);
-//                break;
-//            case FuncName.SCREEN_OFF:
-//                img.setImageResource(R.drawable.screenoff);
-//                break;
-//            case FuncName.VOLUME:
-//                img.setImageResource(R.drawable.volume);
-//                break;
-//            case FuncName.LIGHT:
-//                img.setImageResource(R.drawable.light);
-//                break;
-//        }
-//    }
 }

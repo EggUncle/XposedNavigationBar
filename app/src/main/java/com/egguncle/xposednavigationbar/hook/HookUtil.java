@@ -115,7 +115,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         }
 
         String json = pre.getString(SHORT_CUT_DATA, "");
-        XposedBridge.log("===" + json);
 
 
         //获取主导行栏小点的位置
@@ -123,6 +122,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         //获取快捷按钮设置数据
         Gson gson = new Gson();
         shortCutList = gson.fromJson(json, ShortCutData.class).getData();
+        for (ShortCut sc:shortCutList){
+            if (sc.getIconPath()!=null)
+            XposedBridge.log(sc.getIconPath());
+        }
+
         //获取图片缩放大小
         iconScale = pre.getInt(FuncName.ICON_SIZE, 100);
         //初始化剪贴板内容集合
@@ -154,6 +158,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         byte[] navHome = XposedHelpers.assetAsByteArray(res, "ic_nav_home.png");
         byte[] navRecent = XposedHelpers.assetAsByteArray(res, "ic_nav_recent.png");
         byte[] clipBoard = XposedHelpers.assetAsByteArray(res, "ic_clipboard.png");
+        byte[] command=XposedHelpers.assetAsByteArray(res,"ic_command.png");
 
         mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
         mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
@@ -177,7 +182,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         mapImgRes.put(FuncName.FUNC_NAV_HOME_CODE, navHome);
         mapImgRes.put(FuncName.FUNC_NAV_RECENT_CODE, navRecent);
         mapImgRes.put(FuncName.FUNC_CLIPBOARD_CODE, clipBoard);
-
+        mapImgRes.put(FuncName.FUNC_COMMAND_CODE, command);
     }
 
     @Override
@@ -295,7 +300,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                 for (ShortCut sc : shortCutList) {
                     // createBtnAndSetFunc(context, framePage2, vpLine, sc.getShortCutName());
-                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc.getCode());
+                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
                 }
                 //将这些布局都添加到viewpageadapter中
                 List<View> list = new ArrayList<View>();
@@ -462,7 +467,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             btnFuncFactory.clearAllBtn(vpLine);
             if (scCodes != null && scCodes.size() != 0) {
                 for (int code : scCodes) {
-                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, code);
+                   // btnFuncFactory.createBtnAndSetFunc(context, vpLine, code);
                 }
             }
 

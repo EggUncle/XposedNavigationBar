@@ -18,6 +18,7 @@
 
 package com.egguncle.xposednavigationbar;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
@@ -34,6 +35,8 @@ import java.util.Locale;
  */
 
 public class MyApplication extends LitePalApplication {
+    private static Context mContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -48,5 +51,11 @@ public class MyApplication extends LitePalApplication {
             config.setLocale(Locale.ENGLISH);
         }
         resources.updateConfiguration(config, dm);
+
+        mContext=getApplicationContext();
+    }
+
+    public static Context getContext(){
+        return mContext;
     }
 }

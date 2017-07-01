@@ -70,6 +70,7 @@
     <string name="clip_success">copy success</string>
     <string name="alipay_donate">alipay donate</string>
     <string name="wechat_donate">wechat donate</string>
+    <string name="custom_icon">custom icon</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>
@@ -90,5 +91,6 @@
         <item>home</item>
         <item>recent</item>
         <item>clipboard(beta)</item>
+        <item>command</item>
     </string-array>
 </resources>

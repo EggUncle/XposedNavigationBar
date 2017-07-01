@@ -50,6 +50,7 @@ import java.util.Map;
 
 public class SetFunActivity extends BaseActivity {
     private final static String TAG = "SetFunActivity";
+
     private RecyclerView rcvSetting;
     private FloatingActionButton fabSetting;
     private CoordinatorLayout parentView;
@@ -65,20 +66,6 @@ public class SetFunActivity extends BaseActivity {
     private boolean tapsNotAppear;
 
     private  String[] funcs ;
-//    {
-//            FuncName.FUNC_DOWN,
-//            FuncName.FUNC_QUICK_NOTICE,
-//            FuncName.FUNC_SCREEN_OFF,
-//            FuncName.FUNC_CLEAR_NOTIFICATION,
-//            FuncName.FUNC_CLEAR_MEM,
-//            FuncName.FUNC_VOLUME,
-//            FuncName.FUNC_LIGHT,
-//            FuncName.FUNC_HOME,
-//            FuncName.FUNC_START_ACTS,
-//            FuncName.FUN_PREVIOUS_PLAY,
-//            FuncName.FUNC_PLAY_MUSIC,
-//            FuncName.FUNC_NEXT_PLAY,
-//    };
 
     @Override
     int getLayoutId() {
@@ -199,50 +186,11 @@ public class SetFunActivity extends BaseActivity {
      * @param code  对应的功能码
      */
     private void addToShortCutList(int  code) {
-        String shortCutName = "";
         if (shortCutList.size() >= 10) {
             Snackbar.make(parentView,
                     getResources().getString(R.string.taps_too_mang_sc),
                     Snackbar.LENGTH_SHORT).show();
         } else {
-//            switch (s) {
-//                case FuncName.FUNC_DOWN:
-//                    shortCutName = FuncName.DOWN;
-//                    break;
-//                case FuncName.FUNC_CLEAR_NOTIFICATION:
-//                    shortCutName = FuncName.CLEAR_NOTIFICATION;
-//                    break;
-//                case FuncName.FUNC_QUICK_NOTICE:
-//                    shortCutName = FuncName.QUICK_NOTICE;
-//                    break;
-//                case FuncName.FUNC_CLEAR_MEM:
-//                    shortCutName = FuncName.CLEAR_MEM;
-//                    break;
-//                case FuncName.FUNC_LIGHT:
-//                    shortCutName = FuncName.LIGHT;
-//                    break;
-//                case FuncName.FUNC_VOLUME:
-//                    shortCutName = FuncName.VOLUME;
-//                    break;
-//                case FuncName.FUNC_SCREEN_OFF:
-//                    shortCutName = FuncName.SCREEN_OFF;
-//                    break;
-//                case FuncName.FUNC_HOME:
-//                    shortCutName = FuncName.HOME;
-//                    break;
-//                case FuncName.FUNC_START_ACTS:
-//                    shortCutName = FuncName.START_ACTS;
-//                    break;
-//                case FuncName.FUNC_PLAY_MUSIC:
-//                    shortCutName = FuncName.PLAY_MUSIC;
-//                    break;
-//                case FuncName.FUNC_NEXT_PLAY:
-//                    shortCutName = FuncName.NEXT_PLAY;
-//                    break;
-//                case FuncName.FUN_PREVIOUS_PLAY:
-//                    shortCutName = FuncName.PLAY_PREVIOUS;
-//                    break;
-//            }
 
 //            Log.i(TAG, "addToShortCutList: ");
 //            if (!"".equals(shortCutName)) {
@@ -306,8 +254,6 @@ public class SetFunActivity extends BaseActivity {
                 //暂时只有一页
                 sc.setPage(0);
                 sc.setOpen(true);
-//                Log.i(TAG, "onOptionsItemSelected: " + sc.getName() + " "
-//                        + sc.getShortCutName() + " " + sc.getPage() + " " + sc.getPostion());
 
                 shortCutCodes.add(sc.getCode());
             }
@@ -322,5 +268,18 @@ public class SetFunActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode){
+            case SetFunActivity.RESULT_OK:
+                int position=data.getIntExtra("position",0);
+                String imgPath=data.getStringExtra("imagepath");
+                Log.i(TAG, "onActivityResult: "+position+" "+imgPath);
+                ShortCut sc=shortCutList.get(position);
+                sc.setIconPath(imgPath);
+                break;
+        }
     }
 }

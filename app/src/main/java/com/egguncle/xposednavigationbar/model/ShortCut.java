@@ -35,6 +35,12 @@ public class ShortCut {
     //该页的第几个位置
     private int postion;
 
+    //自定义图标路径
+    private String iconPath;
+
+    //如果是shell快捷指令，则应该还有一个指令内容
+    private String shellStr;
+
     public int getPage() {
         return page;
     }
@@ -62,12 +68,19 @@ public class ShortCut {
     public void setOpen(boolean open) {
         this.open = open;
     }
-//
-//    public String getShortCutName() {
-//        return shortCutName;
-//    }
-//
-//    public void setShortCutName(String shortCutName) {
-//        this.shortCutName = shortCutName;
-//    }
+
+    public String getShellStr() {
+        return shellStr;
+    }
+
+    public void setShellStr(String shellStr) {
+        this.shellStr = shellStr;
+    }
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
 }

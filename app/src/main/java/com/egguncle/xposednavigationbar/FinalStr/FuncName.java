@@ -68,7 +68,9 @@ public class FuncName {
     public final static int FUNC_NAV_BACK_CODE=15;
     public final static int FUNC_NAV_HOME_CODE=16;
     public final static int FUNC_NAV_RECENT_CODE=17;
+
     public final static int FUNC_CLIPBOARD_CODE=18;
+    public final static int FUNC_COMMAND_CODE=19;
 
 //    public final static String FUNC_DOWN = "下拉通知栏";
 //    public final static String FUNC_QUICK_NOTICE = "快速备忘";

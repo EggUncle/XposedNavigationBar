@@ -19,6 +19,7 @@
     package="com.egguncle.xposednavigationbar">
 
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".MyApplication"
@@ -86,12 +87,18 @@
         <activity
             android:name=".ui.activity.MomoActivity"
             android:parentActivityName=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.ClipboardActivity" android:theme="@style/myTransparentTheme">
+        <activity
+            android:name=".ui.activity.ClipboardActivity"
+            android:theme="@style/myTransparentTheme">
             <intent-filter>
                 <action android:name="com.egguncle.xposednavigationbar.ui.activity.ClipboardActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter></activity>
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.SelectIconActivity"
+            android:theme="@style/myTransparentTheme"
+           ></activity>
     </application>
 
 </manifest>

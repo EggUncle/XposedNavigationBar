@@ -19,6 +19,7 @@
 package com.egguncle.xposednavigationbar.hook;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -47,10 +48,12 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnOpenActPanel;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnQuickNotice;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenOff;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnScreenShot;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStartCommand;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnsNavbar;
+import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
 import java.util.Map;
@@ -121,6 +124,8 @@ public class BtnFuncFactory {
                 return new BtnsNavbar(BtnsNavbar.BTN_RECENT);
             case FuncName.FUNC_CLIPBOARD_CODE:
                 return new BtnNavClipboard();
+            case FuncName.FUNC_COMMAND_CODE:
+                //return new BtnStartCommand();
         }
         return null;
     }
@@ -146,9 +151,9 @@ public class BtnFuncFactory {
      *
      * @param context
      * @param line
-     * @param code
+     * @param sc
      */
-    public void createBtnAndSetFunc(final Context context, LinearLayout line, final int code) {
+    public void createBtnAndSetFunc(Context context, LinearLayout line,ShortCut sc) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
@@ -156,16 +161,23 @@ public class BtnFuncFactory {
         //   XposedBridge.log("====" + iconScale);
         //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton btn = new ImageButton(context);
-        if (mIconScale != 100) {
-            btn.setImageBitmap(ImageUtil.zoomBitmap(mMapImgRes.get(code), mIconScale));
-        } else {
-            btn.setImageBitmap(ImageUtil.byte2Bitmap(mMapImgRes.get(code)));
+        String iconPath=sc.getIconPath();
+        Bitmap iconBitmap=null;
+        if (iconPath!=null){
+            iconBitmap=ImageUtil.zoomBitmap(iconPath, mIconScale);
         }
+        if (iconBitmap==null){
+            iconBitmap=ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
+        }
+        if (mIconScale!=100) {
+            iconBitmap = ImageUtil.zommBitmap(iconBitmap, mIconScale);
+        }
+        btn.setImageBitmap(iconBitmap);
         btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         btn.setBackgroundColor(Color.alpha(255));
-        btn.setOnClickListener(getBtnFuncOfName(code));
-        btn.setOnLongClickListener(getBtnLongFuncOfName(code));
+        btn.setOnClickListener(getBtnFuncOfName(sc.getCode()));
+        btn.setOnLongClickListener(getBtnLongFuncOfName(sc.getCode()));
         line.addView(btn, p);
 
     }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Navigation bar function expansion module
   ~     Copyright (C) 2017 egguncle cicadashadow@gmail.com
   ~
@@ -17,16 +16,16 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <dimen name="space_xs">4dp</dimen>
-    <dimen name="space_s">8dp</dimen>
-    <dimen name="space_m">16dp</dimen>
-    <dimen name="img_size">20dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="txt_m">16sp</dimen>
-    <dimen name="app_icon_size">40dp</dimen>
-    <dimen name="icon_size_m">20dp</dimen>
-    <dimen name="icon_size_h">60dp</dimen>
-    <dimen name="app_bar_height">400dp</dimen>
-    <dimen name="dialog_item_height">50dp</dimen>
-</resources>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:scaleType="fitCenter"
+        android:layout_width="@dimen/icon_size_h"
+        android:layout_height="@dimen/icon_size_h"
+        android:layout_centerInParent="true"
+        android:id="@+id/iv_item_icon"
+        />
+
+</RelativeLayout>

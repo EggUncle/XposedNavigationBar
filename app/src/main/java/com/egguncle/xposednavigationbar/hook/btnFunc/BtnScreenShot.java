@@ -51,7 +51,7 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
     }
 
     @Override
-    public void screenshot(Context context) {
+    public void screenshot(final Context context) {
         String screenShotPath = "/sdcard/Pictures/Screenshots";
         File file = new File(screenShotPath);
         //如果截图文件夹不存在则创建
@@ -62,7 +62,17 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
         String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
         try {
             Process p = Runtime.getRuntime().exec(cmd);
-            Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                        Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         } catch (IOException e) {
             Toast.makeText(context,"screenShot failed",Toast.LENGTH_SHORT).show();
             XposedBridge.log(e.getMessage());

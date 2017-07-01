@@ -57,7 +57,6 @@
     <string name="delect_apps">请选择要删除的快捷方式</string>
     <string name="ok">确定</string>
     <string name="no">取消</string>
-    <string name="cancel">关闭</string>
     <string name="delete">删除</string>
     <string name="root_request">授予root权限</string>
     <string name="cant_start_act">无法启动这个应用</string>
@@ -70,6 +69,7 @@
     <string name="clip_success">已复制到剪贴板</string>
     <string name="alipay_donate">支付宝捐赠</string>
     <string name="wechat_donate">微信捐赠</string>
+    <string name="custom_icon">自定义图标</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>
@@ -90,5 +90,6 @@
         <item>主页键</item>
         <item>最近任务键</item>
         <item>剪贴板(测试)</item>
+        <item>shell指令</item>
     </string-array>
 </resources>
