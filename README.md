@@ -10,10 +10,10 @@ http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 ## 支付宝&微信扫一扫 ✓
 支付宝扫一扫：
 ```java
-            Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
+        Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
 ```
 微信原来的扫一扫打开是这样的，不过目前的版本已经失效了
 ```java
@@ -157,3 +157,5 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
 当应用被放在冰箱里时，无法正常打开app
 
 起初的版本在设置完以后需要重启才能让设置好的快捷方式生效，修改后使用广播进行进程间通信解决了这个问题。
+
+Toast不能直接在子线程中使用，因为在其内部实现中使用了Handler，需要 Looper.prepare();和Looper.loop();才能正常使用
