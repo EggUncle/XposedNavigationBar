@@ -164,11 +164,11 @@ public class SetFunActivity extends BaseActivity {
                         .setMultiChoiceItems(funcs, null, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                              //  String name = funcs[which];
+                                //String name = funcs[which];
                                 if (isChecked) {
                                     selectList.add(which);
                                 } else {
-                                    selectList.remove(which);
+                                    selectList.remove((Integer)which);
                                 }
                             }
                         }).create();

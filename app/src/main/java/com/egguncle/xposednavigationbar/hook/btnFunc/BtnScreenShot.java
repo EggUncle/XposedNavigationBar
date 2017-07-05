@@ -22,6 +22,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Toast;
@@ -70,7 +71,9 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
 //                public void run() {
 //                    try {
 //                        Thread.sleep(1000);
-//
+//                        Looper.prepare();
+//                        Looper.loop();
+//                        Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
 //                    } catch (InterruptedException e) {
 //                        e.printStackTrace();
 //                    }
