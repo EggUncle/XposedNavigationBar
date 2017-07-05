@@ -35,6 +35,7 @@ import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -376,8 +377,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         if (!activation) {
             return;
         }
-
-
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
             XposedBridge.log("filter package systemui");
@@ -399,6 +398,19 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //     XposedBridge.log("====hook clear notifications success====");
                         }
                     });
+            Class<?> navigationBarViewClass=lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
+            XposedHelpers.findAndHookMethod(navigationBarViewClass, "onFinishInflate", new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    View navbar= (View) param.thisObject;
+                    Resources res=navbar.getResources();
+                    View[] mRotatedViews=(View[])XposedHelpers.getObjectField(navbar,"mRotatedViews");
+                    ViewGroup navbarRot0= (ViewGroup) mRotatedViews[Surface.ROTATION_90].findViewById(res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
+                    navbarRot0.setBackgroundColor(Color.BLUE);
+                    XposedBridge.log("fdasfdsafdsfdsafdasfdas");
+                }
+            });
         }
 
     }

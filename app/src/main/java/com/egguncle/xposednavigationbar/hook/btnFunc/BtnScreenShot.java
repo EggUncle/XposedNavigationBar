@@ -21,6 +21,7 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Toast;
@@ -58,21 +59,29 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
         if (!file.exists()) {
             file.mkdirs();
         }
+
+        final Handler handler =new Handler();
         long timecurrentTimeMillis = System.currentTimeMillis();
         String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
         try {
             Process p = Runtime.getRuntime().exec(cmd);
-            new Thread(new Runnable() {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        Thread.sleep(1000);
+//
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }).start();
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        Thread.sleep(1000);
-                        Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
                 }
-            }).start();
+            },1000);
         } catch (IOException e) {
             Toast.makeText(context,"screenShot failed",Toast.LENGTH_SHORT).show();
             XposedBridge.log(e.getMessage());

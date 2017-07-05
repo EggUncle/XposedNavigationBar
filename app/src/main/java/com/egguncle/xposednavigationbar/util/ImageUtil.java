@@ -39,6 +39,7 @@ import com.egguncle.xposednavigationbar.MyApplication;
 public class ImageUtil {
     private final static String TAG = "ImageUtil";
 
+
     public static Bitmap byte2Bitmap(byte[] imgBytes) {
         return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
     }
@@ -60,6 +61,7 @@ public class ImageUtil {
         Bitmap bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
         return bitmap;
     }
+
 
     public static Bitmap zoomBitmap(String imgPath, int scale) {
         try {
