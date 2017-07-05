@@ -31,12 +31,10 @@ import android.widget.Toast;
 
 import com.egguncle.xposednavigationbar.R;
 
-public class AboutActivity extends BaseActivity {
+public class AboutActivity extends BaseActivity implements View.OnClickListener{
     private TextView tvMarket;
     private Button btnAlipayDonate;
     private Button btnWechatDonate;
-
-
 
 
     @Override
@@ -62,9 +60,15 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     void initAction() {
-        tvMarket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        tvMarket.setOnClickListener(this);
+        btnAlipayDonate.setOnClickListener(this);
+        btnWechatDonate.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.tv_market:{
                 try{
                     Uri uri = Uri.parse("market://details?id="+getPackageName());
                     Intent intent = new Intent(Intent.ACTION_VIEW,uri);
@@ -74,30 +78,23 @@ public class AboutActivity extends BaseActivity {
                     Toast.makeText(AboutActivity.this, "您的手机没有安装Android应用市场", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }
-        });
-
-        btnAlipayDonate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                 View dialogView= LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr,null);
-                 ImageView imgQr= (ImageView) dialogView.findViewById(R.id.iv_qr);
+            }break;
+            case R.id.btn_alipay_donate:{
+                View dialogView= LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr,null);
+                ImageView imgQr= (ImageView) dialogView.findViewById(R.id.iv_qr);
                 AlertDialog.Builder builder=new AlertDialog.Builder(AboutActivity.this);
                 builder.setView(dialogView).setNegativeButton(R.string.no,null);
                 builder.create().show();
                 imgQr.setImageResource(R.drawable.alipay_qr);
-            }
-        });
-        btnWechatDonate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            }break;
+            case R.id.btn_wechat_donate:{
                 View dialogView= LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr,null);
                 ImageView imgQr= (ImageView) dialogView.findViewById(R.id.iv_qr);
                 AlertDialog.Builder builder=new AlertDialog.Builder(AboutActivity.this);
                 builder.setView(dialogView).setNegativeButton(R.string.no,null);
                 builder.create().show();
                 imgQr.setImageResource(R.drawable.wechat_qr);
-            }
-        });
+            }break;
+        }
     }
 }

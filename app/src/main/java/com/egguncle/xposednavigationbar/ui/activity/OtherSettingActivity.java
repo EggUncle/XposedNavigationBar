@@ -34,7 +34,7 @@ import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
-public class OtherSettingActivity extends BaseActivity {
+public class OtherSettingActivity extends BaseActivity implements View.OnClickListener {
     private final static String TAG = "OtherSettingActivity";
 
     private LinearLayout btnHomePoint;
@@ -80,14 +80,20 @@ public class OtherSettingActivity extends BaseActivity {
         int clearMemLevel = spUtil.getClearMemLevel();
         tvClearMemLevel.setText(clearMemLevel + "");
         int iconSize = spUtil.getIconSize();
-        tvIconSize.setText(iconSize+"");
+        tvIconSize.setText(iconSize + "");
     }
 
     @Override
     void initAction() {
-        btnHomePoint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnHomePoint.setOnClickListener(this);
+        btnClearMemLevel.setOnClickListener(this);
+        btnIconSize.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_home_point: {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(OtherSettingActivity.this);
                 builder.setTitle(getResources().getString(R.string.need_reboot))
                         .setSingleChoiceItems(homePointStr, 0, new DialogInterface.OnClickListener() {
@@ -96,13 +102,11 @@ public class OtherSettingActivity extends BaseActivity {
                                 spUtil.setHomePointPosition(homePointStr[i]);
                                 tvHomePosition.setText(homePointStr[i]);
                             }
-                        }).setPositiveButton("确定", null);
+                        }).setPositiveButton(R.string.ok, null);
                 builder.create().show();
             }
-        });
-        btnClearMemLevel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            break;
+            case R.id.btn_clear_mem_level: {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(OtherSettingActivity.this);
                 builder
                         //.setTitle(getResources().getString(R.string.need_reboot))
@@ -113,25 +117,23 @@ public class OtherSettingActivity extends BaseActivity {
                                 Log.i(TAG, "onClick: " + clearMemLevels[i]);
                                 tvClearMemLevel.setText(clearMemLevels[i]);
                             }
-                        }).setPositiveButton("确定", null);
+                        }).setPositiveButton(R.string.ok, null);
                 builder.create().show();
             }
-        });
-        btnIconSize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            break;
+            case R.id.btn_icon_size: {
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_icon_size, null);
                 final TextView tvImgSize = (TextView) dialogView.findViewById(R.id.tv_img_size);
                 final SeekBar skImgSize = (SeekBar) dialogView.findViewById(R.id.sk_img_size);
                 //设置范围30～100
                 skImgSize.setMax(70);
                 int nowSize = Integer.parseInt(tvIconSize.getText().toString());
-                skImgSize.setProgress(nowSize-30);
-                tvImgSize.setText(nowSize+" %");
+                skImgSize.setProgress(nowSize - 30);
+                tvImgSize.setText(nowSize + " %");
                 skImgSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                        tvImgSize.setText(30 + i+" %");
+                        tvImgSize.setText(30 + i + " %");
                     }
 
                     @Override
@@ -147,17 +149,17 @@ public class OtherSettingActivity extends BaseActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(OtherSettingActivity.this);
                 builder.setTitle(getResources().getString(R.string.need_reboot))
                         .setView(dialogView)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                int imgSize = skImgSize.getProgress()+30;
-                                tvIconSize.setText(imgSize+"");
+                                int imgSize = skImgSize.getProgress() + 30;
+                                tvIconSize.setText(imgSize + "");
                                 spUtil.setIconSize(imgSize);
                             }
                         }).create().show();
-
             }
-        });
+            break;
+        }
     }
 
 //    private String getClearMemLevelName(int level) {

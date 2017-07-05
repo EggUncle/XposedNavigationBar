@@ -60,7 +60,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements View.OnClickListener{
     private final static String TAG = "MainActivity";
     private Switch swApp;
     private LinearLayout btnSettingBtns;
@@ -104,28 +104,27 @@ public class MainActivity extends BaseActivity {
                 SPUtil.getInstance(MainActivity.this).setActivation(b);
             }
         });
-        btnSettingBtns.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SetFunActivity.class);
-                startActivity(intent);
-            }
-        });
-        btnSettingOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnSettingBtns.setOnClickListener(this);
+        btnSettingOther.setOnClickListener(this);
+        btnAbout.setOnClickListener(this);
+        btnLanguage.setOnClickListener(this);
+        btnMomo.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_setting_btns:{
+                startActivity(new Intent(MainActivity.this, SetFunActivity.class));
+            }break;
+            case R.id.btn_setting_other:{
                 startActivity(new Intent(MainActivity.this, OtherSettingActivity.class));
-            }
-        });
-        btnAbout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            }break;
+            case R.id.btn_about:{
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
-            }
-        });
-        btnLanguage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            }break;
+            case R.id.btn_language:{
                 AlertDialog dialog = new AlertDialog.Builder(view.getContext()).setTitle(getString(R.string.about_language))
                         .setSingleChoiceItems(languages, -1, new DialogInterface.OnClickListener() {
 
@@ -152,16 +151,10 @@ public class MainActivity extends BaseActivity {
                             }
                         }).create();
                 dialog.show();
-            }
-        });
-
-        btnMomo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            }break;
+            case R.id.btn_momo:{
                 startActivity(new Intent(MainActivity.this,MomoActivity.class));
-            }
-        });
+            }break;
+        }
     }
-
-
 }

@@ -58,7 +58,7 @@ import java.util.List;
 /**
  * 这个activity用来当作快速启动app或者app快捷阿方式的按钮
  */
-public class AppShortCutActivity extends Activity {
+public class AppShortCutActivity extends Activity implements View.OnClickListener {
     private ImageButton ivRemove;
     private ImageButton ivAdd;
     private ImageButton ivClose;
@@ -117,99 +117,11 @@ public class AppShortCutActivity extends Activity {
     }
 
     private void initAction() {
-
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
+        ivClose.setOnClickListener(this);
         //添加新的快捷方式
-        ivAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ivAdd.setClickable(false);
-                //快捷方式列表
-                List<AppInfo> appInfos = new ArrayList<>();
-                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
-                RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
-                rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
-                rcvDialogApps.setAdapter(adapter);
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle(getResources().getString(R.string.select_apps))
-                        .setView(dialogView)
-                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //不添加重复的
-                                for (AppInfo appInfo : adapter.getSelectedData()) {
-                                    if (!selectAppInfos.contains(appInfo)) {
-                                        //    selectAppInfos.addAll(adapter.getSelectedData());
-                                        selectAppInfos.add(appInfo);
-                                    }
-                                }
-
-                                appActAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton(getResources().getString(R.string.no), null)
-                        .create().show();
-
-                //去除已经选中的app
-                List<AppInfo> appDataWithoutSystem = loadAppWithoutSystemApp();
-                appDataWithoutSystem.removeAll(selectAppInfos);
-                appInfos.addAll(appDataWithoutSystem);
-                List<AppInfo> notSelectShort=loadAppShortCut();
-                notSelectShort.removeAll(selectAppInfos);
-                appInfos.addAll(notSelectShort);
-
-                adapter.notifyDataSetChanged();
-                ivAdd.setClickable(true);
-            }
-        });
-        ivRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ivRemove.setClickable(false);
-                //快捷方式列表
-                List<AppInfo> appInfos = new ArrayList<>();
-                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
-                RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
-                rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
-                rcvDialogApps.setAdapter(adapter);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle(getResources().getString(R.string.delect_apps))
-                        .setView(dialogView)
-                        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //不添加重复的
-                                for (AppInfo appInfo : adapter.getSelectedData()) {
-                                    Log.i(TAG, "onClick: " + appInfo.getLabel());
-                                    deleteAppInfos.add(appInfo);
-                                    selectAppInfos.remove(appInfo);
-
-                                }
-                                appActAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton(getResources().getString(R.string.no), null)
-                        .create().show();
-                appInfos.addAll(selectAppInfos);
-                adapter.notifyDataSetChanged();
-                ivRemove.setClickable(true);
-            }
-        });
-        toolbarLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        ivAdd.setOnClickListener(this);
+        ivRemove.setOnClickListener(this);
+        toolbarLayout.setOnClickListener(this);
     }
 
     /**
@@ -223,11 +135,11 @@ public class AppShortCutActivity extends Activity {
         for (PackageInfo packageInfo : packageInfoList) {
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                 //非系统应用
-                    AppInfo appInfo = new AppInfo();
-                    appInfo.setLabel(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
-                    appInfo.setPackgeName(packageInfo.packageName);
-                    appInfo.setType(AppInfo.TYPE_APP);
-                    appInfoList.add(appInfo);
+                AppInfo appInfo = new AppInfo();
+                appInfo.setLabel(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
+                appInfo.setPackgeName(packageInfo.packageName);
+                appInfo.setType(AppInfo.TYPE_APP);
+                appInfoList.add(appInfo);
             }
         }
         return appInfoList;
@@ -294,11 +206,99 @@ public class AppShortCutActivity extends Activity {
         Log.i(TAG, "onDestroy: update all");
         for (AppInfo appInfo : selectAppInfos) {
             appInfo.save();
-            Log.i(TAG, "onDestroy: update"+appInfo.getLabel());
+            Log.i(TAG, "onDestroy: update" + appInfo.getLabel());
         }
         for (AppInfo appInfo : deleteAppInfos) {
             appInfo.delete();
-            Log.i(TAG, "onDestroy: delete"+appInfo.getLabel());
+            Log.i(TAG, "onDestroy: delete" + appInfo.getLabel());
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_close: {
+                finish();
+            }
+            break;
+            case R.id.iv_add: {
+                ivAdd.setClickable(false);
+                //快捷方式列表
+                List<AppInfo> appInfos = new ArrayList<>();
+                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
+                RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
+                rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
+                rcvDialogApps.setAdapter(adapter);
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(getResources().getString(R.string.select_apps))
+                        .setView(dialogView)
+                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //不添加重复的
+                                for (AppInfo appInfo : adapter.getSelectedData()) {
+                                    if (!selectAppInfos.contains(appInfo)) {
+                                        //    selectAppInfos.addAll(adapter.getSelectedData());
+                                        selectAppInfos.add(appInfo);
+                                    }
+                                }
+
+                                appActAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.no), null)
+                        .create().show();
+
+                //去除已经选中的app
+                List<AppInfo> appDataWithoutSystem = loadAppWithoutSystemApp();
+                appDataWithoutSystem.removeAll(selectAppInfos);
+                appInfos.addAll(appDataWithoutSystem);
+                List<AppInfo> notSelectShort = loadAppShortCut();
+                notSelectShort.removeAll(selectAppInfos);
+                appInfos.addAll(notSelectShort);
+
+                adapter.notifyDataSetChanged();
+                ivAdd.setClickable(true);
+            }
+            break;
+            case R.id.iv_remove: {
+                ivRemove.setClickable(false);
+                //快捷方式列表
+                List<AppInfo> appInfos = new ArrayList<>();
+                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
+                RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
+                rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
+                rcvDialogApps.setAdapter(adapter);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(getResources().getString(R.string.delect_apps))
+                        .setView(dialogView)
+                        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //不添加重复的
+                                for (AppInfo appInfo : adapter.getSelectedData()) {
+                                    Log.i(TAG, "onClick: " + appInfo.getLabel());
+                                    deleteAppInfos.add(appInfo);
+                                    selectAppInfos.remove(appInfo);
+
+                                }
+                                appActAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.no), null)
+                        .create().show();
+                appInfos.addAll(selectAppInfos);
+                adapter.notifyDataSetChanged();
+                ivRemove.setClickable(true);
+            }
+            break;
+            case R.id.toolbar_layout: {
+                finish();
+            }
+            break;
         }
     }
 }
