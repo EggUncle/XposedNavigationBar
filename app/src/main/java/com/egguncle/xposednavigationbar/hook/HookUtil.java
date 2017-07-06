@@ -227,8 +227,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 FrameLayout navBarBg = (FrameLayout) rootView.findViewById(liparam.res.getIdentifier("rot0", "id", "com.android.systemui"));
                 //垂直状态下的导航栏三大按钮布局
                 final LinearLayout lineBtn = (LinearLayout) rootView.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-
-
                 //获取home back recent按钮 都是KeyButtonView
 //                View btnBack = rootView.findViewById(liparam.res.getIdentifier("back", "id", "com.android.systemui"));
 //                View btnHome = rootView.findViewById(liparam.res.getIdentifier("home", "id", "com.android.systemui"));
@@ -398,19 +396,19 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //     XposedBridge.log("====hook clear notifications success====");
                         }
                     });
-            Class<?> navigationBarViewClass=lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
-            XposedHelpers.findAndHookMethod(navigationBarViewClass, "onFinishInflate", new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                    super.afterHookedMethod(param);
-                    View navbar= (View) param.thisObject;
-                    Resources res=navbar.getResources();
-                    View[] mRotatedViews=(View[])XposedHelpers.getObjectField(navbar,"mRotatedViews");
-                    ViewGroup navbarRot0= (ViewGroup) mRotatedViews[Surface.ROTATION_90].findViewById(res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-                    navbarRot0.setBackgroundColor(Color.BLUE);
-                    XposedBridge.log("fdasfdsafdsfdsafdasfdas");
-                }
-            });
+//            Class<?> navigationBarViewClass=lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
+//            XposedHelpers.findAndHookMethod(navigationBarViewClass, "onFinishInflate", new XC_MethodHook() {
+//                @Override
+//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                    super.afterHookedMethod(param);
+//                    View navbar= (View) param.thisObject;
+//                    Resources res=navbar.getResources();
+//                    View[] mRotatedViews=(View[])XposedHelpers.getObjectField(navbar,"mRotatedViews");
+//                    ViewGroup navbarRot0= (ViewGroup) mRotatedViews[Surface.ROTATION_90].findViewById(res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
+//                    navbarRot0.setBackgroundColor(Color.BLUE);
+//                    XposedBridge.log("fdasfdsafdsfdsafdasfdas");
+//                }
+//            });
         }
 
     }

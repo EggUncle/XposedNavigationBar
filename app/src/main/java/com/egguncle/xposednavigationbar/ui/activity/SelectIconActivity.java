@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
@@ -31,6 +32,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,8 @@ public class SelectIconActivity extends Activity {
     private String imagePath;
     private int position;
     private String command;
+    private boolean isCommand;
+    private String iconPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +70,23 @@ public class SelectIconActivity extends Activity {
     private void initView() {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_custom_icon, null);
         imgIcon = (ImageView) dialogView.findViewById(R.id.iv_item_icon);
-        edDialog= (EditText) dialogView.findViewById(R.id.ed_dialog);
-        tvDialog= (TextView) dialogView.findViewById(R.id.tv_dialog);
-        if (!"".equals(command)){
+        edDialog = (EditText) dialogView.findViewById(R.id.ed_dialog);
+        tvDialog = (TextView) dialogView.findViewById(R.id.tv_dialog);
+        if (isCommand) {
             edDialog.setVisibility(View.VISIBLE);
             edDialog.setText(command);
             tvDialog.setVisibility(View.VISIBLE);
         }
-        imgIcon.setImageResource(R.mipmap.ic_launcher);
+
+        if (!TextUtils.isEmpty(iconPath)) {
+            try{
+                imgIcon.setImageBitmap(BitmapFactory.decodeFile(iconPath));
+            }catch (Exception e){
+                imgIcon.setImageResource(R.mipmap.ic_launcher);
+            }
+        } else {
+            imgIcon.setImageResource(R.mipmap.ic_launcher);
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.custom_icon)
                 .setView(dialogView)
@@ -86,27 +99,28 @@ public class SelectIconActivity extends Activity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent=new Intent();
-                        intent.putExtra("position",position);
-                        intent.putExtra("imagepath",imagePath);
-                        if (!"".equals(command)){
-                            intent.putExtra("command",edDialog.getText().toString());
+                        Intent intent = new Intent();
+                        intent.putExtra("position", position);
+                        intent.putExtra("imagepath", iconPath);
+                        if (TextUtils.isEmpty(command)) {
+                            intent.putExtra("command", edDialog.getText().toString());
                         }
-                        setResult(SetFunActivity.RESULT_OK,intent);
+                        setResult(SetFunActivity.RESULT_OK, intent);
+                        finish();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
                         finish();
                     }
                 })
                 .create().show();
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                finish();
-            }
-        });
+
         imgIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     //申请读取SD卡权限
                     if (ContextCompat.checkSelfPermission(SelectIconActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                             ) {
@@ -115,7 +129,7 @@ public class SelectIconActivity extends Activity {
                     } else {
                         getImage();
                     }
-                }else{
+                } else {
                     getImage();
                 }
             }
@@ -124,8 +138,10 @@ public class SelectIconActivity extends Activity {
 
 
     private void initVar() {
-        position=getIntent().getIntExtra("position",0);
-        command=getIntent().getStringExtra("command");
+        position = getIntent().getIntExtra("position", 0);
+        command = getIntent().getStringExtra("command");
+        isCommand = getIntent().getBooleanExtra("isCommand", false);
+        iconPath = getIntent().getStringExtra("iconpath");
     }
 
 
@@ -167,9 +183,8 @@ public class SelectIconActivity extends Activity {
         switch (requestCode) {
             case SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
-                    imagePath = ImageUtil.handleImageOnKitKat(data);
-                    Log.i(TAG, "onActivityResult: " + imagePath);
-                    imgIcon.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+                    iconPath = ImageUtil.handleImageOnKitKat(data);
+                    imgIcon.setImageBitmap(BitmapFactory.decodeFile(iconPath));
                 }
 
                 break;

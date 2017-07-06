@@ -18,6 +18,7 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
+import android.util.Log;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.StartCommand;
@@ -44,8 +45,9 @@ public class BtnStartCommand implements StartCommand,View.OnClickListener{
     @Override
     public void startCommand(String command) {
         try {
+            Log.i("testTag", "startCommand: "+command);
             Process p = Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

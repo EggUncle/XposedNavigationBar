@@ -87,8 +87,11 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
             public void onClick(View view) {
                 Intent intent=new Intent(view.getContext(), SelectIconActivity.class);
                 intent.putExtra("position",position);
+                String iconPath=shortCut.getIconPath();
+                intent.putExtra("iconpath",iconPath);
                 if (view.getContext() instanceof Activity){
                     if (shortCut.getCode()==FuncName.FUNC_COMMAND_CODE){
+                        intent.putExtra("isCommand",true);
                        intent.putExtra("command",shortCut.getShellStr());
                     }
                     ((Activity) view.getContext()).startActivityForResult(intent,1);
