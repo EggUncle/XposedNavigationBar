@@ -33,12 +33,22 @@
         android:text="@string/market" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_version_code"
+        />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="email"
         android:paddingTop="@dimen/space_m"
         android:text="@string/author" />
-
     <Button
         android:id="@+id/btn_alipay_donate"
         android:text="@string/alipay_donate"

@@ -19,6 +19,7 @@
 package com.egguncle.xposednavigationbar.hook;
 
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -32,17 +33,22 @@ import android.content.res.XModuleResources;
 import android.graphics.Color;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +73,7 @@ import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
+import com.egguncle.xposednavigationbar.util.SPUtil;
 import com.google.gson.Gson;
 
 
@@ -91,12 +98,15 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     private static Object phoneStatusBar;
     private static Method clearAllNotificationsMethod;
 
+    //获取当前的activity对象
+    private static Activity nowActivity;
+
     //用于加载图片资源
     private Map<Integer, byte[]> mapImgRes = new HashMap<>();
     //用于获取保存的快捷按键设置
     private static ArrayList<ShortCut> shortCutList;
     private int iconScale;
-   // private static List<Integer> scCodes;
+    // private static List<Integer> scCodes;
 
     //   private static Object mcb;
     //扩展出来的主界面
@@ -107,9 +117,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     private BtnFuncFactory btnFuncFactory;
 
+    private XSharedPreferences pre;
+
     private void initHook(StartupParam startupParam) throws Throwable {
         //读取sp，查看程序是否被允许激活
-        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
         boolean activation = pre.getBoolean("activation", false);
         if (!activation) {
             return;
@@ -123,9 +135,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         //获取快捷按钮设置数据
         Gson gson = new Gson();
         shortCutList = gson.fromJson(json, ShortCutData.class).getData();
-        for (ShortCut sc:shortCutList){
-            if (sc.getIconPath()!=null)
-            XposedBridge.log(sc.getIconPath());
+        for (ShortCut sc : shortCutList) {
+            if (sc.getIconPath() != null)
+                XposedBridge.log(sc.getIconPath());
         }
 
         //获取图片缩放大小
@@ -159,7 +171,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         byte[] navHome = XposedHelpers.assetAsByteArray(res, "ic_nav_home.png");
         byte[] navRecent = XposedHelpers.assetAsByteArray(res, "ic_nav_recent.png");
         byte[] clipBoard = XposedHelpers.assetAsByteArray(res, "ic_clipboard.png");
-        byte[] command=XposedHelpers.assetAsByteArray(res,"ic_command.png");
+        byte[] command = XposedHelpers.assetAsByteArray(res, "ic_command.png");
 
         mapImgRes.put(FuncName.FUNC_BACK_CODE, backImg);
         mapImgRes.put(FuncName.FUNC_CLEAR_MEM_CODE, clearMenImg);
@@ -191,13 +203,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         initHook(startupParam);
     }
 
-//    private Bitmap byte2Bitmap(byte[] imgBytes) {
-//        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-//    }
-
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
-        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        //  XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
         boolean activation = pre.getBoolean("activation", false);
         if (!activation) {
             return;
@@ -215,151 +223,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             @Override
             public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
                 XposedBridge.log("hook layout");
-
-                LinearLayout rootView = (LinearLayout) liparam.view;
-                //  FrameLayout navBarBg = new FrameLayout(rootView.getContext());
-                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                //    rootView.addView(navBarBg,params1);
-
-                //垂直状态下的导航栏整体布局
-                XposedBridge.log("hook navBarBg success");
-                FrameLayout navBarBg = (FrameLayout) rootView.findViewById(liparam.res.getIdentifier("rot0", "id", "com.android.systemui"));
-                //垂直状态下的导航栏三大按钮布局
-                final LinearLayout lineBtn = (LinearLayout) rootView.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-                //获取home back recent按钮 都是KeyButtonView
-//                View btnBack = rootView.findViewById(liparam.res.getIdentifier("back", "id", "com.android.systemui"));
-//                View btnHome = rootView.findViewById(liparam.res.getIdentifier("home", "id", "com.android.systemui"));
-//                View btnRecent = rootView.findViewById(liparam.res.getIdentifier("recent_apps", "id", "com.android.systemui"));
-
-                final Context context = navBarBg.getContext();
-                LinearLayout parentView = new LinearLayout(context);
-                //加入一个viewpager，第一页为空，是导航栏本身的功能
-                final ViewPager vpXphook = new ViewPager(context);
-
-                parentView.addView(vpXphook);
-
-                MusicControllerPanel musicPanel = new MusicControllerPanel(context);
-                musicPanel.setData(mapImgRes, iconScale);
-                musicPanel.initPanel();
-
-                //   TextView textView1 = new TextView(context);
-                //第一个界面，与原本的导航栏重合，实际在导航栏的下层
-                LinearLayout linepage1 = new LinearLayout(context);
-                if (!homePointPosition.equals(FuncName.DISMISS)) {
-                    //用于呼出整个扩展导航栏的一个小点
-                    ImageButton btnCall = new ImageButton(context);
-                    btnCall.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_SMALL_POINT_CODE)));
-                    btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    btnCall.setBackgroundColor(Color.alpha(255));
-                    LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                    if (homePointPosition.equals(FuncName.LEFT)) {
-                        //line1Params.gravity = Gravity.LEFT;
-                        linepage1.setGravity(Gravity.LEFT);
-                    } else if (homePointPosition.equals(FuncName.RIGHT)) {
-                        //  line1Params.gravity = Gravity.RIGHT;
-                        linepage1.setGravity(Gravity.RIGHT);
-                    }
-                    //     lineBtn.addView(btnCall,6,line1Params);
-                    linepage1.addView(btnCall, line1Params);
-                    //点击这个按钮，跳转到扩展部分
-                    btnCall.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            vpXphook.setCurrentItem(2);
-                        }
-                    });
-                }
-
-                //初始化广播接收器
-                initBroadcast(context);
-                //初始化剪贴板监听
-                startListenClipboard(context);
-
-
-                //viewpage的第二页
-                //整个页面的基础
-                final FrameLayout framePage2 = new FrameLayout(context);
-                framePage2.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        return true;
-                    }
-                });
-                btnFuncFactory = new BtnFuncFactory(iconScale, framePage2, vpXphook, mapImgRes);
-
-                //   LinearLayout
-                vpLine = new LinearLayout(context);
-                // vpLine.setPadding(0, 0, 0, 0);
-                framePage2.addView(vpLine);
-                vpLine.setOrientation(LinearLayout.HORIZONTAL);
-                vpLine.setGravity(Gravity.CENTER_VERTICAL);
-
-                for (ShortCut sc : shortCutList) {
-                    // createBtnAndSetFunc(context, framePage2, vpLine, sc.getShortCutName());
-                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
-                }
-                //将这些布局都添加到viewpageadapter中
-                List<View> list = new ArrayList<View>();
-                list.add(musicPanel);
-                list.add(linepage1);
-                list.add(framePage2);
-
-
-                MyViewPagerAdapter pagerAdapter = new MyViewPagerAdapter(list);
-
-                vpXphook.setAdapter(pagerAdapter);
-                vpXphook.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        if (position == 1) {
-                            //当移动到第一页的时候，显示出导航栏，上升动画
-                            XposedBridge.log("apper NavigationBar");
-                            lineBtn.setVisibility(View.VISIBLE);
-//                            int navBarHeight = lineBtn.getHeight();
-//                            TranslateAnimation animaUp = new TranslateAnimation(0, 0, navBarHeight, 0);
-//                            animaUp.setDuration(300);
-//                            animaUp.setFillAfter(true);
-//                            lineBtn.startAnimation(animaUp);
-                        } else {
-                            //当移动到非第一页的时候，隐藏导航栏本身的功能，来实现自己的一些功能。
-                            XposedBridge.log("hide NavigationBar");
-                            lineBtn.setVisibility(View.GONE);
-                            if (vpLine.getChildCount() == 0) {
-                                vpXphook.setCurrentItem(1);
-                            }
-//                            int navBarHeight = lineBtn.getHeight();
-//                            TranslateAnimation animDown = new TranslateAnimation(0, 0, 0, navBarHeight);
-//                            animDown.setDuration(300);
-//                            animDown.setFillAfter(true);
-//                            lineBtn.startAnimation(animDown);
-//                            new Handler().postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                        lineBtn.setVisibility(View.GONE);
-//                                }
-//                            },300);
-                        }
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-
-                    }
-                });
-                vpXphook.setCurrentItem(1);
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                        ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
-                navBarBg.addView(parentView, 0, params);
-
+                hook0NavBar(liparam);
             }
 
 
@@ -369,7 +233,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        //  XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
         boolean activation = pre.getBoolean("activation", false);
         //   XposedBridge.log(lpparam.packageName);
         if (!activation) {
@@ -381,6 +245,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             //获取清除通知的方法
             Class<?> phoneStatusBarClass =
                     lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
+
             Method method1 = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
             method1.setAccessible(true);
 
@@ -396,23 +261,192 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //     XposedBridge.log("====hook clear notifications success====");
                         }
                     });
-//            Class<?> navigationBarViewClass=lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
-//            XposedHelpers.findAndHookMethod(navigationBarViewClass, "onFinishInflate", new XC_MethodHook() {
-//                @Override
-//                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                    super.afterHookedMethod(param);
-//                    View navbar= (View) param.thisObject;
-//                    Resources res=navbar.getResources();
-//                    View[] mRotatedViews=(View[])XposedHelpers.getObjectField(navbar,"mRotatedViews");
-//                    ViewGroup navbarRot0= (ViewGroup) mRotatedViews[Surface.ROTATION_90].findViewById(res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-//                    navbarRot0.setBackgroundColor(Color.BLUE);
-//                    XposedBridge.log("fdasfdsafdsfdsafdasfdas");
-//                }
-//            });
+            Class<?> activityClass = lpparam.classLoader.loadClass("android.app.Activity");
+            XposedHelpers.findAndHookMethod(activityClass, "onCreate", Bundle.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    XposedBridge.log("hook activity");
+                    nowActivity = (Activity) param.thisObject;
+                    //隐藏导航栏
+                    View decorView = nowActivity.getWindow().getDecorView();
+                    decorView .setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                    );
+                }
+            });
+        } else if (lpparam.packageName.equals("android.app")) {
+            Class<?> activityClass = lpparam.classLoader.loadClass("android.app.activity");
+            XposedBridge.log("12334324312432");
+            XposedHelpers.findAndHookMethod(activityClass, "onCreate", Bundle.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    Activity activity = (Activity) param.thisObject;
+                    View decorView = activity.getWindow().getDecorView();
+                    decorView .setSystemUiVisibility(
+
+                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+
+                                    | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+
+                                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                    XposedBridge.log("12334324-------312432");
+                }
+            });
         }
 
     }
 
+
+    /**
+     * hook 水平状态下的导航栏
+     */
+    public void hook0NavBar(XC_LayoutInflated.LayoutInflatedParam liparam) {
+        LinearLayout rootView = (LinearLayout) liparam.view;
+        //垂直状态下的导航栏整体布局
+        XposedBridge.log("hook navBarBg success");
+        FrameLayout navBarBg0 = (FrameLayout) rootView.findViewById(liparam.res.getIdentifier("rot0", "id", "com.android.systemui"));
+
+        //垂直状态下的导航栏三大按钮布局
+        final LinearLayout lineBtn = (LinearLayout) navBarBg0.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
+        final Context context = navBarBg0.getContext();
+
+
+        LinearLayout parentView = new LinearLayout(context);
+        //加入一个viewpager，第一页为空，是导航栏本身的功能
+        final ViewPager vpXphook = new ViewPager(context);
+
+        parentView.addView(vpXphook);
+
+        MusicControllerPanel musicPanel = new MusicControllerPanel(context);
+        musicPanel.setData(mapImgRes, iconScale);
+        musicPanel.initPanel();
+
+        //第一个界面，与原本的导航栏重合，实际在导航栏的下层
+        LinearLayout linepage1 = new LinearLayout(context);
+        if (!homePointPosition.equals(FuncName.DISMISS)) {
+            //用于呼出整个扩展导航栏的一个小点
+            ImageButton btnCall = new ImageButton(context);
+            btnCall.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_SMALL_POINT_CODE)));
+            btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            btnCall.setBackgroundColor(Color.alpha(255));
+            LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            if (homePointPosition.equals(FuncName.LEFT)) {
+                //line1Params.gravity = Gravity.LEFT;
+                linepage1.setGravity(Gravity.LEFT);
+            } else if (homePointPosition.equals(FuncName.RIGHT)) {
+                //  line1Params.gravity = Gravity.RIGHT;
+                linepage1.setGravity(Gravity.RIGHT);
+            }
+            linepage1.addView(btnCall, line1Params);
+            //点击这个按钮，跳转到扩展部分
+            btnCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    vpXphook.setCurrentItem(2);
+
+                }
+            });
+        }
+
+        //初始化广播接收器
+        initBroadcast(context);
+        //初始化剪贴板监听
+        startListenClipboard(context);
+
+
+        //viewpage的第二页
+        //整个页面的基础
+        final FrameLayout framePage2 = new FrameLayout(context);
+        framePage2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+        btnFuncFactory = new BtnFuncFactory(iconScale, framePage2, vpXphook, mapImgRes);
+
+        //   LinearLayout
+        vpLine = new LinearLayout(context);
+        // vpLine.setPadding(0, 0, 0, 0);
+        framePage2.addView(vpLine);
+        vpLine.setOrientation(LinearLayout.HORIZONTAL);
+        vpLine.setGravity(Gravity.CENTER_VERTICAL);
+
+        for (ShortCut sc : shortCutList) {
+            // createBtnAndSetFunc(context, framePage2, vpLine, sc.getShortCutName());
+            btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
+        }
+        //将这些布局都添加到viewpageadapter中
+        List<View> list = new ArrayList<View>();
+        list.add(musicPanel);
+        list.add(linepage1);
+        list.add(framePage2);
+
+
+        MyViewPagerAdapter pagerAdapter = new MyViewPagerAdapter(list);
+
+        vpXphook.setAdapter(pagerAdapter);
+        vpXphook.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1) {
+                    //当移动到第一页的时候，显示出导航栏，上升动画
+                    XposedBridge.log("apper NavigationBar");
+                    lineBtn.setVisibility(View.VISIBLE);
+                    //  int navBarHeight = lineBtn.getHeight();
+//                            TranslateAnimation animaUp = new TranslateAnimation(0, 0, navBarHeight, 0);
+//                            animaUp.setDuration(300);
+//                            animaUp.setFillAfter(true);
+//                            lineBtn.startAnimation(animaUp);
+                    // lineBtn.scrollBy(0,-navBarHeight);
+                } else {
+                    //当移动到非第一页的时候，隐藏导航栏本身的功能，来实现自己的一些功能。
+                    XposedBridge.log("hide NavigationBar");
+                    lineBtn.setVisibility(View.GONE);
+                    if (vpLine.getChildCount() == 0) {
+                        vpXphook.setCurrentItem(1);
+                    }
+
+                    //  int navBarHeight = lineBtn.getHeight();
+//                            TranslateAnimation animDown = new TranslateAnimation(0, 0, 0, navBarHeight);
+//                            animDown.setDuration(300);
+//                            animDown.setFillAfter(true);
+//                            lineBtn.startAnimation(animDown);
+//                            new Handler().postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                        lineBtn.setVisibility(View.GONE);
+//                                }
+//                            },300);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        vpXphook.setCurrentItem(1);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
+        navBarBg0.addView(parentView, 0, params);
+    }
 
     public static Object getPhoneStatusBar() {
         return phoneStatusBar;
@@ -440,6 +474,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
      * 开始监听剪贴板
      */
     private void startListenClipboard(final Context context) {
+
         final ClipboardManager clipboard = (ClipboardManager) context.
                 getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
@@ -468,6 +503,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     public static ArrayList<String> getClipdata() {
         return clipboardData;
     }
+    public static Activity getNowActivity(){
+        return nowActivity;
+    }
 
     private class MyReceiver extends BroadcastReceiver {
 
@@ -476,12 +514,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             shortCutList = intent.getParcelableArrayListExtra("data");
             btnFuncFactory.clearAllBtn(vpLine);
             if (shortCutList != null && shortCutList.size() != 0) {
-                for (ShortCut sc: shortCutList) {
+                for (ShortCut sc : shortCutList) {
                     btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
                 }
             }
-
-
         }
     }
 

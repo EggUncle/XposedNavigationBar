@@ -24,6 +24,7 @@ import android.os.RemoteException;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.hook.HookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
 
 import java.lang.reflect.InvocationTargetException;
@@ -116,6 +117,7 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
         public NavBarRunnable(int type) {
             mType = type;
         }
+
         @Override
         public void run() {
             switch (mType) {

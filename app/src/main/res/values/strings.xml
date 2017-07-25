@@ -25,9 +25,11 @@
     </string>
     <string name="market">
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，也可以点击下面的按钮查看二维码并捐赠，你的支持是我最大的动力。
+        \n
     </string>
+    <string name="version">版本号</string>
     <string name="author">
-        版本 1.8.3\n联系作者\ncicadashadow@gmail.com \n
+        联系作者\ncicadashadow@gmail.com \n
     </string>
     <string name="about_app">
         关于&amp;捐赠
@@ -71,6 +73,7 @@
     <string name="wechat_donate">微信捐赠</string>
     <string name="custom_icon">自定义</string>
     <string name="command_taps">自定义指令可能造成程序或系统崩溃，如果你不会使用命令行，请不要使用这个功能。</string>
+    <string name="hook_90">hook横屏时的导航栏</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>

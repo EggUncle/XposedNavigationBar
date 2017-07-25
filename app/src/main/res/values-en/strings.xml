@@ -26,7 +26,9 @@
     </string>
     <string name="market">
         Please click the word to leave a message in the review area or mark the module if you have any suggestions and comments,also can click button to donate,your support is the biggest drive for me.
+        \n
     </string>
+    <string name="version">version</string>
     <string name="author">
         version 1.8.3\n contact author\ncicadashadow@gmail.com
     </string>
@@ -72,6 +74,7 @@
     <string name="wechat_donate">wechat donate</string>
     <string name="custom_icon">custom</string>
     <string name="command_taps">custom adb shell is not safe，if you do not know how to use adb shell，please do not use this function.</string>
+    <string name="hook_90">hook Nav Bar with horizontal screen</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>

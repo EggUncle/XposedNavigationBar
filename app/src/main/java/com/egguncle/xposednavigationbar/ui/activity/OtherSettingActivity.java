@@ -26,8 +26,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
@@ -43,6 +45,8 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
     private TextView tvClearMemLevel;
     private LinearLayout btnIconSize;
     private TextView tvIconSize;
+  //  private Switch swHook90;
+
 
     private SPUtil spUtil;
 
@@ -70,6 +74,7 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
         tvClearMemLevel = (TextView) findViewById(R.id.tv_clear_mem_level);
         btnIconSize = (LinearLayout) findViewById(R.id.btn_icon_size);
         tvIconSize = (TextView) findViewById(R.id.tv_icon_size);
+      //  swHook90 = (Switch) findViewById(R.id.sw_hook_90);
     }
 
     @Override
@@ -81,6 +86,8 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
         tvClearMemLevel.setText(clearMemLevel + "");
         int iconSize = spUtil.getIconSize();
         tvIconSize.setText(iconSize + "");
+//        boolean isHook90=spUtil.getHookHorizontal();
+//        swHook90.setChecked(isHook90);
     }
 
     @Override
@@ -88,6 +95,12 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
         btnHomePoint.setOnClickListener(this);
         btnClearMemLevel.setOnClickListener(this);
         btnIconSize.setOnClickListener(this);
+//        swHook90.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                spUtil.setHookHorizontal(isChecked);
+//            }
+//        });
     }
 
     @Override

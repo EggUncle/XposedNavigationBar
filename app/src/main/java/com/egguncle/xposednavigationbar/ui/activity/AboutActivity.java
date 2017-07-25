@@ -18,10 +18,15 @@
 
 package com.egguncle.xposednavigationbar.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -32,9 +37,14 @@ import android.widget.Toast;
 import com.egguncle.xposednavigationbar.R;
 
 public class AboutActivity extends BaseActivity implements View.OnClickListener{
+
+
     private TextView tvMarket;
+    private TextView tvVersionCode;
     private Button btnAlipayDonate;
     private Button btnWechatDonate;
+
+
 
 
     @Override
@@ -49,13 +59,14 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         tvMarket = (TextView) findViewById(R.id.tv_market);
+        tvVersionCode = (TextView) findViewById(R.id.tv_version_code);
         btnAlipayDonate = (Button) findViewById(R.id.btn_alipay_donate);
         btnWechatDonate = (Button) findViewById(R.id.btn_wechat_donate);
     }
 
     @Override
     void initVar() {
-
+        tvVersionCode.setText(getAppVersionName(this));
     }
 
     @Override
@@ -96,5 +107,23 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
                 imgQr.setImageResource(R.drawable.wechat_qr);
             }break;
         }
+    }
+
+    /**
+     * 返回当前程序版本名
+     */
+    public static String getAppVersionName(Context context) {
+        String versionName = "";
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            if (versionName == null || versionName.length() <= 0) {
+                return "";
+            }
+        } catch (Exception e) {
+
+        }
+        return versionName;
     }
 }

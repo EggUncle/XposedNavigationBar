@@ -52,6 +52,7 @@ public class SPUtil {
     private static final String DISMISS = "notShow";
     private static final String CLEAR_MEM_LEVEL="clear_mem_level";
     private static final String ICON_SIZE="icon_size";
+    private static final String HookHorizontal="hook_horizontal";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -183,5 +184,14 @@ public class SPUtil {
     }
     public String getLanguage(){
         return mSharedPreferences.getString(LANGUAGE,LANGUAGE_CHINESE);
+    }
+
+    public void setHookHorizontal(boolean isHook){
+        mEditor.putBoolean(HookHorizontal,isHook);
+        mEditor.commit();
+    }
+
+    public boolean getHookHorizontal(){
+        return mSharedPreferences.getBoolean(HookHorizontal,false);
     }
 }

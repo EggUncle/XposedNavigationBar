@@ -61,24 +61,11 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
             file.mkdirs();
         }
 
-        final Handler handler =new Handler();
+        Handler handler =new Handler();
         long timecurrentTimeMillis = System.currentTimeMillis();
         String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
         try {
             Process p = Runtime.getRuntime().exec(cmd);
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        Thread.sleep(1000);
-//                        Looper.prepare();
-//                        Looper.loop();
-//                        Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }).start();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
