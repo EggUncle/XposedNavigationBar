@@ -112,10 +112,10 @@ public class BtnStatusBarController implements StatusBarController,View.OnClickL
         Process process = null;
         boolean result = false;
         try {
-            XposedBridge.log("申请root");
+           // XposedBridge.log("申请root");
             process = Runtime.getRuntime().exec("su");
             result = true;
-            XposedBridge.log("申请成功");
+           // XposedBridge.log("申请成功");
             final Process finalProcess = process;
             new Thread(new Runnable() {
                 @Override

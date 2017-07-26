@@ -24,8 +24,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,9 +32,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 import com.egguncle.xposednavigationbar.R;
-import com.egguncle.xposednavigationbar.hook.HookUtil;
+import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.ui.adapter.RcvHomeAdapter;
 import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelpCallBack;
@@ -46,7 +43,6 @@ import com.egguncle.xposednavigationbar.util.SPUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class SetFunActivity extends BaseActivity {
     private final static String TAG = "SetFunActivity";

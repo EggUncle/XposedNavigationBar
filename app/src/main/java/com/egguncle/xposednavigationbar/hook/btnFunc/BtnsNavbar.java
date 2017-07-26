@@ -24,7 +24,7 @@ import android.os.RemoteException;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.HookUtil;
+import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,13 +32,15 @@ import java.lang.reflect.Method;
 
 /**
  * Created by egguncle on 17-6-21.
- * Android原有的返回、home、最近任务键
+ * Android原有的返回、home、最近任务键,以及显示和隐藏
  */
 
 public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
     public final static int BTN_BACK = 1;
     public final static int BTN_HOME = 2;
     public final static int BTN_RECENT = 3;
+
+    public final static int BTN_HIDE = 4;
 
 
     public int mType;
@@ -59,6 +61,9 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
             case BTN_RECENT:
                 goRecent();
                 break;
+            case BTN_HIDE:
+                hide();
+                break;
         }
     }
 
@@ -75,6 +80,22 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
     @Override
     public void goRecent() {
         showRecentlyApp();
+    }
+
+    @Override
+    public void hide() {
+        HookUtil.getWindowManager().removeView(HookUtil.getNavbarView());
+    }
+
+    @Override
+    public void show() {
+        try {
+            HookUtil.getAddNavigationBarMethod().invoke(HookUtil.getPhoneStatusBar());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

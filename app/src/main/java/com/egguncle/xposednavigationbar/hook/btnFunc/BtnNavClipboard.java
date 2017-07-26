@@ -22,11 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.HookUtil;
+import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavClipboard;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
 

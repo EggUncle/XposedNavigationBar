@@ -21,7 +21,7 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 import android.content.Context;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.HookUtil;
+import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearAllNotifications;
 
 import java.lang.reflect.InvocationTargetException;

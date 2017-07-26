@@ -30,8 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
-import com.egguncle.xposednavigationbar.FinalStr.FuncName;
-import com.egguncle.xposednavigationbar.hook.BtnFuncFactory;
 import com.egguncle.xposednavigationbar.hook.hookFunc.VolumeController;
 
 import de.robv.android.xposed.XposedBridge;

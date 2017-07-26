@@ -72,6 +72,8 @@ public class FuncName {
     public final static int FUNC_CLIPBOARD_CODE=18;
     public final static int FUNC_COMMAND_CODE=19;
 
+    public final static int FUNC_NAV_HIDE_CODE=20;
+
 //    public final static String FUNC_DOWN = "下拉通知栏";
 //    public final static String FUNC_QUICK_NOTICE = "快速备忘";
 //    public final static String FUNC_SCREEN_OFF = "息屏";

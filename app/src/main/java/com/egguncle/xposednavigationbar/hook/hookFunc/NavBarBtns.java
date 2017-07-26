@@ -26,4 +26,7 @@ public interface NavBarBtns {
     void goBack();
     void goHome();
     void goRecent();
+
+    void hide();
+    void show();
 }

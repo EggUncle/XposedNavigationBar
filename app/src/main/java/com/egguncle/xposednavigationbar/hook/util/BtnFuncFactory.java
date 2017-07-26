@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook;
+package com.egguncle.xposednavigationbar.hook.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -126,6 +126,8 @@ public class BtnFuncFactory {
                 return new BtnNavClipboard();
             case FuncName.FUNC_COMMAND_CODE:
                 return new BtnStartCommand(sc.getShellStr());
+            case FuncName.FUNC_NAV_HIDE_CODE:
+                return new BtnsNavbar(BtnsNavbar.BTN_HIDE);
         }
         return null;
     }
