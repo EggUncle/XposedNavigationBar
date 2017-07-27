@@ -258,6 +258,8 @@ public class SetFunActivity extends BaseActivity {
             intent.setAction(HookUtil.ACT_BROADCAST);
             sendBroadcast(intent);
 
+            sendBroadcast(new Intent(HookUtil.ACT_NAVBAR_SHOW));
+
             spUtil.saveShortCut(shortCutList);
             Snackbar.make(parentView, getResources().getString(R.string.save_success), Snackbar.LENGTH_SHORT).show();
             return true;
