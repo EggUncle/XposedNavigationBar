@@ -32,6 +32,8 @@ import android.graphics.Color;
 
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.InputDevice;
+import android.view.InputEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +43,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +71,8 @@ import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 import com.google.gson.Gson;
+
+import static de.robv.android.xposed.XposedBridge.log;
 
 
 /**
@@ -262,10 +268,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
                             navbarView = (View) XposedHelpers.getObjectField(phoneStatusBar, "mNavigationBarView");
 
-                            if (phoneStatusBar==null){
+                            if (phoneStatusBar == null) {
                                 XposedBridge.log("------");
                             }
-                            if (addNavigationBarMethod==null){
+                            if (addNavigationBarMethod == null) {
                                 XposedBridge.log("---222---");
                             }
 
@@ -278,17 +284,25 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
                         }
                     });
+
+
         } else if (lpparam.packageName.equals("android")) {
+
             Class<?> gesturesPointerEventListenerClass = lpparam.classLoader.loadClass("com.android.server.policy.SystemGesturesPointerEventListener");
             final Method detectSwipeMethod = gesturesPointerEventListenerClass.getDeclaredMethod("detectSwipe", MotionEvent.class);
             detectSwipeMethod.setAccessible(true);
+
+            Field[] fields = gesturesPointerEventListenerClass.getDeclaredFields();
+            for (Field field : fields) {
+                XposedBridge.log(field.getName() + "->" + Modifier.toString(field.getModifiers()));
+            }
 
             XposedHelpers.findAndHookMethod(gesturesPointerEventListenerClass, "onPointerEvent", MotionEvent.class, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     super.afterHookedMethod(param);
                     MotionEvent motionEvent = (MotionEvent) param.args[0];
-
+                    Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
                     switch (motionEvent.getActionMasked()) {
                         case MotionEvent.ACTION_DOWN:
                             mSwipeFireable = true;
@@ -303,7 +317,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 //                                        XposedBridge.log("====addNavigationBarMethod null ====");
 //                                    if (phoneStatusBar==null)
 //                                        XposedBridge.log("====phoneStatusBar null ====");
-//                                    addNavigationBarMethod.invoke(phoneStatusBar);
+                                    if (mContext==null){
+                                        XposedBridge.log("mContext is null");
+                                    }else{
+                                        mContext.sendBroadcast(new Intent(ACT_NAVBAR_SHOW));
+                                    }
+                                    //  addNavigationBarMethod.invoke(phoneStatusBar);
                                 }
                             }
                             break;
@@ -314,6 +333,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                     }
                 }
             });
+
         }
 
     }
@@ -538,15 +558,19 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            shortCutList = intent.getParcelableArrayListExtra("data");
-            btnFuncFactory.clearAllBtn(vpLine);
-            if (shortCutList != null && shortCutList.size() != 0) {
-                for (ShortCut sc : shortCutList) {
-                    btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
+            //在更新以后有些用户没有进行重启，而直接进行了新功能的添加，app部分得到了更新，
+            //但是hook部分的更新需要重启后才生效，所以这里做一个异常捕获操作
+            try {
+                shortCutList = intent.getParcelableArrayListExtra("data");
+                btnFuncFactory.clearAllBtn(vpLine);
+                if (shortCutList != null && shortCutList.size() != 0) {
+                    for (ShortCut sc : shortCutList) {
+                        btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
+                    }
                 }
+            } catch (Exception e) {
+
             }
-
-
         }
     }
 

@@ -30,6 +30,8 @@ import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import de.robv.android.xposed.XposedBridge;
+
 /**
  * Created by egguncle on 17-6-21.
  * Android原有的返回、home、最近任务键,以及显示和隐藏
@@ -84,7 +86,13 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
 
     @Override
     public void hide() {
-        HookUtil.getWindowManager().removeView(HookUtil.getNavbarView());
+
+        try {
+            HookUtil.getWindowManager().removeView(HookUtil.getNavbarView());
+        } catch (Exception e) {
+            XposedBridge.log(e.getMessage());
+        }
+
     }
 
     @Override
