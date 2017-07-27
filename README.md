@@ -149,6 +149,9 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
 ## 剪贴板 ✓
 实现一个获取剪贴板记录的功能，这个功能的实现比较简单，获取ClipboardManager再对其使用变化监听即可。
 
+## 导航栏隐藏/呼出 ✓
+这个功能参考了这篇博客http://blog.csdn.net/dliyuedong/article/details/49360807 实际使用xposed以后的情况大体相同，只是呼出导航栏直接调用调用了addNavigationBar()方法。
+
 ## 踩到的一些小坑
 获取上下文对象可以通过在hook资源时拿到某个view，再getContext
 
