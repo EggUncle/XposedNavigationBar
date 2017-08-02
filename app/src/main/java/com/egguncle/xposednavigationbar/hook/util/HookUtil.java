@@ -38,6 +38,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -267,14 +268,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                             //获取到windowmanager
                             windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
                             navbarView = (View) XposedHelpers.getObjectField(phoneStatusBar, "mNavigationBarView");
-
-                            if (phoneStatusBar == null) {
-                                XposedBridge.log("------");
-                            }
-                            if (addNavigationBarMethod == null) {
-                                XposedBridge.log("---222---");
-                            }
-
                             //隐藏导航栏
 //                            XposedBridge.log("====remove navbar ====");
 //                            windowManager.removeView(navbarView);
@@ -302,7 +295,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     super.afterHookedMethod(param);
                     MotionEvent motionEvent = (MotionEvent) param.args[0];
-                    Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                  //  Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
                     switch (motionEvent.getActionMasked()) {
                         case MotionEvent.ACTION_DOWN:
                             mSwipeFireable = true;
@@ -317,11 +310,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 //                                        XposedBridge.log("====addNavigationBarMethod null ====");
 //                                    if (phoneStatusBar==null)
 //                                        XposedBridge.log("====phoneStatusBar null ====");
-                                    if (mContext==null){
-                                        XposedBridge.log("mContext is null");
-                                    }else{
-                                        mContext.sendBroadcast(new Intent(ACT_NAVBAR_SHOW));
-                                    }
+//                                    if (mContext == null) {
+//                                        XposedBridge.log("mContext is null");
+//                                    } else {
+//                                        mContext.sendBroadcast(new Intent(ACT_NAVBAR_SHOW));
+//                                    }
                                     //  addNavigationBarMethod.invoke(phoneStatusBar);
                                 }
                             }

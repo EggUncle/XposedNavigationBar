@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~     Navigation bar function expansion module
+  ~     Copyright (C) 2017 egguncle cicadashadow@gmail.com
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+
+<RelativeLayout android:background="#ffffff"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/short_cut_panel"
+    android:padding="@dimen/space_s"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="200dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:gravity="right"
+        android:id="@+id/line_btns"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_s"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:background="#00ffffff"
+            android:id="@+id/iv_remove"
+            android:layout_height="@dimen/img_size"
+            android:layout_marginRight="@dimen/space_m"
+            android:layout_width="@dimen/img_size"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_remove_black" />
+
+        <ImageButton
+            android:background="#00ffffff"
+            android:id="@+id/iv_add"
+            android:layout_height="@dimen/img_size"
+            android:layout_marginRight="@dimen/space_m"
+            android:layout_width="@dimen/img_size"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_add_black" />
+
+        <ImageButton
+            android:background="#00ffffff"
+            android:id="@+id/iv_close"
+            android:layout_height="@dimen/img_size"
+            android:layout_width="@dimen/img_size"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_down_black" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcv_app"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/line_btns"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_width="match_parent" />
+</RelativeLayout>
+

@@ -28,8 +28,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -40,6 +42,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.AppInfo;
@@ -64,8 +67,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
     private ImageButton ivClose;
     private RecyclerView rcvApp;
 
-    private AppBarLayout appBar;
-    private CollapsingToolbarLayout toolbarLayout;
+    private RelativeLayout shortCutPanel;
 
     private final static String TAG = "AppShortCutActivity";
 
@@ -93,13 +95,12 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
         //状态栏透明
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
+        shortCutPanel= (RelativeLayout) findViewById(R.id.short_cut_panel);
         ivRemove = (ImageButton) findViewById(R.id.iv_remove);
         ivAdd = (ImageButton) findViewById(R.id.iv_add);
         ivClose = (ImageButton) findViewById(R.id.iv_close);
         rcvApp = (RecyclerView) findViewById(R.id.rcv_app);
         rcvApp.setLayoutManager(new GridLayoutManager(this, SPAN_COUNT));
-        appBar = (AppBarLayout) findViewById(R.id.app_bar);
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
     }
 
@@ -121,7 +122,22 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
         //添加新的快捷方式
         ivAdd.setOnClickListener(this);
         ivRemove.setOnClickListener(this);
-        toolbarLayout.setOnClickListener(this);
+
+        //设置面板的回调，当滑动使其隐藏时，finsh这个activity
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(shortCutPanel);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+               if (newState==BottomSheetBehavior.STATE_HIDDEN){
+                   finish();
+               }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
     }
 
     /**
@@ -293,10 +309,6 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
                 appInfos.addAll(selectAppInfos);
                 adapter.notifyDataSetChanged();
                 ivRemove.setClickable(true);
-            }
-            break;
-            case R.id.toolbar_layout: {
-                finish();
             }
             break;
         }
