@@ -19,6 +19,7 @@
 package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
 public class OtherSettingActivity extends BaseActivity implements View.OnClickListener {
@@ -46,7 +48,7 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
     private LinearLayout btnIconSize;
     private TextView tvIconSize;
   //  private Switch swHook90;
-
+    private Switch swRootDown;
 
     private SPUtil spUtil;
 
@@ -75,6 +77,7 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
         btnIconSize = (LinearLayout) findViewById(R.id.btn_icon_size);
         tvIconSize = (TextView) findViewById(R.id.tv_icon_size);
       //  swHook90 = (Switch) findViewById(R.id.sw_hook_90);
+        swRootDown= (Switch) findViewById(R.id.sw_root_down);
     }
 
     @Override
@@ -86,6 +89,8 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
         tvClearMemLevel.setText(clearMemLevel + "");
         int iconSize = spUtil.getIconSize();
         tvIconSize.setText(iconSize + "");
+        boolean isRootDown=spUtil.getRootDown();
+        swRootDown.setChecked(isRootDown);
 //        boolean isHook90=spUtil.getHookHorizontal();
 //        swHook90.setChecked(isHook90);
     }
@@ -101,6 +106,16 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
 //                spUtil.setHookHorizontal(isChecked);
 //            }
 //        });
+        swRootDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                spUtil.setRootDown(isChecked);
+                Intent intent = new Intent();
+                intent.putExtra(HookUtil.USE_ROOT_EXPAND_STATUS_BAR, isChecked);
+                intent.setAction(HookUtil.ACT_CHANGE_ROOT_EXPAND_STATUS_BAR);
+                sendBroadcast(intent);
+            }
+        });
     }
 
     @Override
@@ -174,26 +189,4 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
             break;
         }
     }
-
-//    private String getClearMemLevelName(int level) {
-//        switch (level) {
-//            case FuncName.IMPORTANCE_BACKGROUND:
-//                return FuncName.IMPORTANCE_BACKGROUND_NAME;
-//            case FuncName.IMPORTANCE_CANT_SAVE_STATE:
-//                return FuncName.IMPORTANCE_CANT_SAVE_STATE_NAME;
-//            case FuncName.IMPORTANCE_EMPTY:
-//                return FuncName.IMPORTANCE_EMPTY_NAME;
-//            case FuncName.IMPORTANCE_PERCEPTIBLE:
-//                return FuncName.IMPORTANCE_PERCEPTIBLE_NAME;
-//            case FuncName.IMPORTANCE_PERSISTENT:
-//                return FuncName.IMPORTANCE_PERSISTENT_NAME;
-//            case FuncName.IMPORTANCE_SERVICE:
-//                return FuncName.IMPORTANCE_SERVICE_NAME;
-//            case FuncName.IMPORTANCE_VISIBLE:
-//                return FuncName.IMPORTANCE_VISIBLE_NAME;
-//            case FuncName.IMPORTANCE_FOREGROUND:
-//                return FuncName.IMPORTANCE_FOREGROUND_NAME;
-//        }
-//        return "";
-//    }
 }

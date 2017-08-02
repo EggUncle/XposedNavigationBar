@@ -144,6 +144,8 @@ public class BtnFuncFactory {
 //                break;
             case FuncName.FUNC_SCREEN_OFF_CODE:
                 return new BtnScreenOff();
+            case FuncName.FUNC_HOME_CODE:
+                return new BtnsNavbar(BtnsNavbar.BTN_LONG_HOME);
         }
         return null;
     }
@@ -155,7 +157,7 @@ public class BtnFuncFactory {
      * @param line
      * @param sc
      */
-    public void createBtnAndSetFunc(Context context, LinearLayout line,ShortCut sc) {
+    public void createBtnAndSetFunc(Context context, LinearLayout line, ShortCut sc) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
@@ -163,15 +165,15 @@ public class BtnFuncFactory {
         //   XposedBridge.log("====" + iconScale);
         //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton btn = new ImageButton(context);
-        String iconPath=sc.getIconPath();
-        Bitmap iconBitmap=null;
-        if (iconPath!=null){
-            iconBitmap=ImageUtil.zoomBitmap(iconPath, mIconScale);
+        String iconPath = sc.getIconPath();
+        Bitmap iconBitmap = null;
+        if (iconPath != null) {
+            iconBitmap = ImageUtil.zoomBitmap(iconPath, mIconScale);
         }
-        if (iconBitmap==null){
-            iconBitmap=ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
+        if (iconBitmap == null) {
+            iconBitmap = ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
         }
-        if (mIconScale!=100) {
+        if (mIconScale != 100) {
             iconBitmap = ImageUtil.zommBitmap(iconBitmap, mIconScale);
         }
         btn.setImageBitmap(iconBitmap);

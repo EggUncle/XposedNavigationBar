@@ -22,7 +22,9 @@
     <string name="about">
         After the module was started,click the dot on the left side of the navbar or slide the left navbar，then you can call the shortcut menu，slide the right navbar，then you can call the music controller.
         \n\nIt can be used by the model with  navbar，and the module was just be tested in the android and CM ROM，part of functions may not work in other ROMs，If the“system interface stops running” recurred after the module was activated that makes the phone doesn\'t work，please connect your phone to the computer and use the adb instructions“adb uninstall com.egguncle.xposednavigationbar”and then uninstall it。
-        \n\nwhen the android6.0 use expandSettingsPanel to drop-down the notification，it can be very slow to expand the animation，granting the system interface with root permission can solve this problem，conversely, it will not affect other functions。
+    </string>
+    <string name="about_root_expand">
+         \n\nwhen the android6.0 use expandSettingsPanel to drop-down the notification，it can be very slow to expand the animation，granting the system interface with root permission can solve this problem，conversely, it will not affect other functions.
     </string>
     <string name="market">
         Please click the word to leave a message in the review area or mark the module if you have any suggestions and comments,also can click button to donate,your support is the biggest drive for me.
@@ -75,6 +77,8 @@
     <string name="custom_icon">custom</string>
     <string name="command_taps">custom adb shell is not safe，if you do not know how to use adb shell，please do not use this function.</string>
     <string name="hook_90">hook Nav Bar with horizontal screen</string>
+    <string name="root_down">use root expand statusBar</string>
+    <string name="reboot_tips">there maybe a little problem , please try to reboot.</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>

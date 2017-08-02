@@ -24,6 +24,7 @@ import android.os.SystemClock;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.StatusBarController;
+import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -36,33 +37,38 @@ import de.robv.android.xposed.XposedBridge;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnStatusBarController implements StatusBarController,View.OnClickListener {
-    private static boolean statusExpand=false;
-    public final static int FOR_EXPAND=0;
-    public final static int FOR_NOTIFICATION=1;
+public class BtnStatusBarController implements StatusBarController, View.OnClickListener {
+    private static boolean statusExpand = false;
+    public final static int FOR_EXPAND = 0;
+    public final static int FOR_NOTIFICATION = 1;
     private int mType;
-    public BtnStatusBarController(){
+
+    public BtnStatusBarController() {
     }
 
     @Override
     public void onClick(View view) {
-       if(statusExpand){
-           collapseStatusBar(view.getContext());
-           statusExpand=false;
-       }else{
-           expandAllStatusBar(view.getContext());
-           statusExpand=true;
-       }
+        if (statusExpand) {
+            collapseStatusBar(view.getContext());
+            statusExpand = false;
+        } else {
+            expandAllStatusBar(view.getContext());
+            statusExpand = true;
+        }
     }
 
     @Override
     public void expandAllStatusBar(Context context) {
-        //如果在6.0环境下，尝试申请root权限来解决通知栏展开缓慢的问题
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && requestRoot()) {
-            //申请成功后会模拟手势进行下拉
-            //如果失败了，就按照普通的方式下拉
-            //  expandAllStatusBarWithOutRoot(context);
-        } else {
+        if (HookUtil.isExpandStatusBarWithRoot()) {
+            //如果在6.0环境下，尝试申请root权限来解决通知栏展开缓慢的问题
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && requestRoot()) {
+                //申请成功后会模拟手势进行下拉
+                //如果失败了，就按照普通的方式下拉
+                //  expandAllStatusBarWithOutRoot(context);
+            } else {
+                expandAllStatusBarWithOutRoot(context);
+            }
+        }else{
             expandAllStatusBarWithOutRoot(context);
         }
     }
@@ -112,10 +118,10 @@ public class BtnStatusBarController implements StatusBarController,View.OnClickL
         Process process = null;
         boolean result = false;
         try {
-           // XposedBridge.log("申请root");
+            // XposedBridge.log("申请root");
             process = Runtime.getRuntime().exec("su");
             result = true;
-           // XposedBridge.log("申请成功");
+            // XposedBridge.log("申请成功");
             final Process finalProcess = process;
             new Thread(new Runnable() {
                 @Override

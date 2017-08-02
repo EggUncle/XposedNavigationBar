@@ -21,8 +21,9 @@
     <string name="about">
         启动该模块后，点击导航栏左侧的小点，或者左划导航栏即可呼出快捷菜单，右划呼出音乐控制面板。
         \n\n该模块供有虚拟导航栏的机型使用，目前仅在原生和CM ROM上进行过测试，部分功能可能在其他ROM上无法正常使用，如果激活模块以后反复出现“系统界面停止运行”导致手机无法正常使用，连接电脑使用adb指令“adb uninstall com.egguncle.xposednavigationbar”卸载该模块即可。
-        \n\nandroid6.0在使用expandSettingsPanel方法来下拉通知栏的时候，展开动画会变得十分缓慢，授予系统界面root权限，能够变通的解决这个问题，不授予root权限不会影响别的功能的使用。
     </string>
+    <string name="about_root_expand">
+        android6.0在使用expandSettingsPanel方法来下拉通知栏的时候，展开动画会变得十分缓慢，授予系统界面root权限，能够变通的解决这个问题，不授予root权限不会影响别的功能的使用。</string>
     <string name="market">
         如果有什么意见或者建议，可以点击这段文字在评论区留言或者给这个模块评分，也可以点击下面的按钮查看二维码并捐赠，你的支持是我最大的动力。
         \n
@@ -74,6 +75,8 @@
     <string name="custom_icon">自定义</string>
     <string name="command_taps">自定义指令可能造成程序或系统崩溃，如果你不会使用命令行，请不要使用这个功能。</string>
     <string name="hook_90">hook横屏时的导航栏</string>
+    <string name="root_down">root下拉状态栏</string>
+    <string name="reboot_tips">好像出了一些问题。。重启试试看</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>

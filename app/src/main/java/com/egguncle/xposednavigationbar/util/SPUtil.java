@@ -53,6 +53,7 @@ public class SPUtil {
     private static final String CLEAR_MEM_LEVEL="clear_mem_level";
     private static final String ICON_SIZE="icon_size";
     private static final String HookHorizontal="hook_horizontal";
+    public static final String ROOT_DOWN="root_down";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -193,5 +194,14 @@ public class SPUtil {
 
     public boolean getHookHorizontal(){
         return mSharedPreferences.getBoolean(HookHorizontal,false);
+    }
+
+    public void setRootDown(boolean b){
+        mEditor.putBoolean(ROOT_DOWN,b);
+        mEditor.commit();
+    }
+
+    public boolean getRootDown(){
+        return mSharedPreferences.getBoolean(ROOT_DOWN,false);
     }
 }

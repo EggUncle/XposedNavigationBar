@@ -43,6 +43,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -66,11 +67,13 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 
+import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.btnFunc.MusicControllerPanel;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
+import com.egguncle.xposednavigationbar.util.SPUtil;
 import com.google.gson.Gson;
 
 import static de.robv.android.xposed.XposedBridge.log;
@@ -88,8 +91,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     public final static String ACT_BROADCAST = "com.egguncle.xpnavbar.broadcast";
     public final static String ACT_NAVBAR_SHOW = "com.egguncle.xpnavbar.shownavbar";
+    public final static String ACT_CHANGE_ROOT_EXPAND_STATUS_BAR = "com.egguncle.xpnavbar.root_expand";
 
     private static final String SHORT_CUT_DATA = "short_cut_data";
+    public static final String USE_ROOT_EXPAND_STATUS_BAR = "use_root_expand_status_bar";
 
     //剪贴板内容
     private static ArrayList<String> clipboardData;
@@ -102,6 +107,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     private static WindowManager windowManager;
     private static Method addNavigationBarMethod;
 
+    private static boolean expandStatusBarWithRoot;
 
     private boolean mSwipeFireable = false;
     //用于加载图片资源
@@ -132,7 +138,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         }
 
         String json = pre.getString(SHORT_CUT_DATA, "");
-
+        expandStatusBarWithRoot = pre.getBoolean(SPUtil.ROOT_DOWN, false);
 
         //获取主导行栏小点的位置
         homePointPosition = pre.getString(FuncName.HOME_POINT, FuncName.LEFT);
@@ -295,7 +301,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     super.afterHookedMethod(param);
                     MotionEvent motionEvent = (MotionEvent) param.args[0];
-                  //  Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                    //  Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
                     switch (motionEvent.getActionMasked()) {
                         case MotionEvent.ACTION_DOWN:
                             mSwipeFireable = true;
@@ -495,10 +501,15 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         BtnChangeReceiver btnReceiver = new HookUtil.BtnChangeReceiver();
         context.registerReceiver(btnReceiver, btnChangeFilter);
 
-        IntentFilter navbarShowFilter = new IntentFilter();
-        navbarShowFilter.addAction(ACT_NAVBAR_SHOW);
-        NavBarShowReceiver navReceiver = new HookUtil.NavBarShowReceiver();
-        context.registerReceiver(navReceiver, navbarShowFilter);
+//        IntentFilter navbarShowFilter = new IntentFilter();
+//        navbarShowFilter.addAction(ACT_NAVBAR_SHOW);
+//        NavBarShowReceiver navReceiver = new HookUtil.NavBarShowReceiver();
+//        context.registerReceiver(navReceiver, navbarShowFilter);
+
+        IntentFilter expandStatusFilter = new IntentFilter();
+        expandStatusFilter.addAction(ACT_CHANGE_ROOT_EXPAND_STATUS_BAR);
+        ExpandStatusBarReceiver expandStatusBarReceiver = new HookUtil.ExpandStatusBarReceiver();
+        context.registerReceiver(expandStatusBarReceiver, expandStatusFilter);
     }
 
     /**
@@ -547,6 +558,14 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         return windowManager;
     }
 
+    public static boolean isExpandStatusBarWithRoot() {
+        return expandStatusBarWithRoot;
+    }
+
+    public static void setExpandStatusBarWithRoot(boolean expandStatusBarWithRoot) {
+        HookUtil.expandStatusBarWithRoot = expandStatusBarWithRoot;
+    }
+
     private class BtnChangeReceiver extends BroadcastReceiver {
 
         @Override
@@ -562,7 +581,17 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                     }
                 }
             } catch (Exception e) {
+                Toast.makeText(context, R.string.reboot_tips, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
+    private class ExpandStatusBarReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                expandStatusBarWithRoot = intent.getBooleanExtra(USE_ROOT_EXPAND_STATUS_BAR, false);
+            } catch (Exception e) {
             }
         }
     }

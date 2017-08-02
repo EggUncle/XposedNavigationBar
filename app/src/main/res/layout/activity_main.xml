@@ -34,22 +34,13 @@
             android:text="@string/switch_app"
             android:textSize="@dimen/txt_m" />
 
-        <!--<Button-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/btn_setting"-->
-        <!--android:text="设置"-->
-        <!--/>-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/space_m"
             android:text="@string/about" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorGrey" />
+        <include layout="@layout/v_split_line" />
 
         <LinearLayout
             android:id="@+id/btn_setting_btns"
@@ -66,10 +57,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorGrey" />
+        <include layout="@layout/v_split_line" />
 
         <LinearLayout
             android:id="@+id/btn_setting_other"
@@ -86,11 +74,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorGrey" />
-
+        <include layout="@layout/v_split_line" />
 
 
         <LinearLayout
@@ -108,10 +92,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorGrey" />
+        <include layout="@layout/v_split_line" />
 
         <LinearLayout
             android:id="@+id/btn_language"
@@ -128,10 +109,8 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorGrey" />
+        <include layout="@layout/v_split_line" />
+
         <LinearLayout
             android:id="@+id/btn_about"
             android:layout_width="match_parent"
@@ -147,10 +126,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorGrey" />
+        <include layout="@layout/v_split_line" />
 
     </LinearLayout>
 </ScrollView>

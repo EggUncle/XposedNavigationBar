@@ -37,12 +37,14 @@ import de.robv.android.xposed.XposedBridge;
  * Android原有的返回、home、最近任务键,以及显示和隐藏
  */
 
-public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
+public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongClickListener {
     public final static int BTN_BACK = 1;
     public final static int BTN_HOME = 2;
     public final static int BTN_RECENT = 3;
 
     public final static int BTN_HIDE = 4;
+
+    public final static int BTN_LONG_HOME = 5;
 
 
     public int mType;
@@ -140,6 +142,16 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
         }
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        switch (mType) {
+            case BTN_LONG_HOME:{
+                    new Thread(new NavBarRunnable(BTN_LONG_HOME)).start();
+            }break;
+        }
+        return true;
+    }
+
     private class NavBarRunnable implements Runnable {
         private int mType;
 
@@ -160,7 +172,14 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener {
                     mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME);
                 }
                 break;
+                case BTN_LONG_HOME: {
+                    Instrumentation mInst = new Instrumentation();
+                    KeyEvent keyEvent=new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HOME);
+                    mInst.sendKeySync(keyEvent);
+                }
+                break;
             }
+
         }
     }
 }
