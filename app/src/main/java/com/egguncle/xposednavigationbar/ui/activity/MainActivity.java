@@ -31,13 +31,14 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 
+import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
 import java.util.Locale;
 
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private final static String TAG = "MainActivity";
     private Switch swApp;
     private LinearLayout btnSettingBtns;
@@ -47,9 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private LinearLayout btnMomo;
 
 
-
-
-    private String[] languages={"简体中文", "English"};
+    private String[] languages = {"简体中文", "English"};
 
     @Override
     int getLayoutId() {
@@ -88,26 +87,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         btnMomo.setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.btn_setting_btns:{
+        switch (view.getId()) {
+            case R.id.btn_setting_btns: {
                 startActivity(new Intent(MainActivity.this, SetFunActivity.class));
-            }break;
-            case R.id.btn_setting_other:{
+            }
+            break;
+            case R.id.btn_setting_other: {
                 startActivity(new Intent(MainActivity.this, OtherSettingActivity.class));
-            }break;
-            case R.id.btn_about:{
+            }
+            break;
+            case R.id.btn_about: {
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
-            }break;
-            case R.id.btn_language:{
+            }
+            break;
+            case R.id.btn_language: {
                 AlertDialog dialog = new AlertDialog.Builder(view.getContext()).setTitle(getString(R.string.about_language))
                         .setSingleChoiceItems(languages, -1, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Log.i(TAG, "onClick: "+languages[which]);
+                                Log.i(TAG, "onClick: " + languages[which]);
                                 Resources resources = getResources();
                                 DisplayMetrics dm = resources.getDisplayMetrics();
                                 Configuration config = resources.getConfiguration();
@@ -128,10 +129,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                             }
                         }).create();
                 dialog.show();
-            }break;
-            case R.id.btn_momo:{
-                startActivity(new Intent(MainActivity.this,MomoActivity.class));
-            }break;
+            }
+            break;
+            case R.id.btn_momo: {
+                startActivity(new Intent(MainActivity.this, MomoActivity.class));
+            }
+            break;
         }
     }
 }

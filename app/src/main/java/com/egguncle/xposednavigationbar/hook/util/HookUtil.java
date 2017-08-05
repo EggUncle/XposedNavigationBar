@@ -30,13 +30,16 @@ import android.content.res.Resources;
 import android.content.res.XModuleResources;
 import android.graphics.Color;
 
+import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.InputEvent;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
@@ -144,11 +147,17 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         homePointPosition = pre.getString(FuncName.HOME_POINT, FuncName.LEFT);
         //获取快捷按钮设置数据
         Gson gson = new Gson();
-        shortCutList = gson.fromJson(json, ShortCutData.class).getData();
-        for (ShortCut sc : shortCutList) {
-            if (sc.getIconPath() != null)
-                XposedBridge.log(sc.getIconPath());
+        //在第一次激活重新启动的时候，可能因为没有设置任何快捷按钮，导致这里报错
+        try{
+            shortCutList = gson.fromJson(json, ShortCutData.class).getData();
+        }catch (Exception e){
+            shortCutList=new ArrayList<>();
         }
+
+//        for (ShortCut sc : shortCutList) {
+//            if (sc.getIconPath() != null)
+//                XposedBridge.log(sc.getIconPath());
+//        }
 
         //获取图片缩放大小
         iconScale = pre.getInt(FuncName.ICON_SIZE, 100);
@@ -236,10 +245,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
                 XposedBridge.log("hook layout");
                 hook0NavBar(liparam);
+
             }
 
 
         });
+
 
     }
 
@@ -251,40 +262,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         if (!activation) {
             return;
         }
+
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
             XposedBridge.log("filter package systemui");
-            //获取清除通知的方法
-            Class<?> phoneStatusBarClass =
-                    lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
-
-            clearAllNotificationsMethod = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
-            clearAllNotificationsMethod.setAccessible(true);
-
-            addNavigationBarMethod = phoneStatusBarClass.getDeclaredMethod("addNavigationBar");
-            addNavigationBarMethod.setAccessible(true);
-            //获取到clearAllNotifications和toggleRecentApps方法
-            XposedHelpers.findAndHookMethod(phoneStatusBarClass,
-                    "start", new XC_MethodHook() {
-                        @Override
-                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                            super.afterHookedMethod(param);
-                            //在这里获取到PhoneStatusBar对象
-                            phoneStatusBar = param.thisObject;
-                            //获取到windowmanager
-                            windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
-                            navbarView = (View) XposedHelpers.getObjectField(phoneStatusBar, "mNavigationBarView");
-                            //隐藏导航栏
-//                            XposedBridge.log("====remove navbar ====");
-//                            windowManager.removeView(navbarView);
-                            //显示导航栏
-//                            XposedBridge.log("====add navbar ====");
-//                            addNavigationBarMethod.invoke(phoneStatusBar);
-
-                        }
-                    });
-
-
+            hookPhoneStatusBar(lpparam);
+            hookPhoneWindow(lpparam);
         } else if (lpparam.packageName.equals("android")) {
 
             Class<?> gesturesPointerEventListenerClass = lpparam.classLoader.loadClass("com.android.server.policy.SystemGesturesPointerEventListener");
@@ -337,12 +320,59 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     }
 
+    public void hookPhoneWindow(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        XposedBridge.log("-------");
+        Class<?> phoneWindowClass=lpparam.classLoader.loadClass("com.android.internal.policy.PhoneWindow");
+        XposedHelpers.findAndHookConstructor(phoneWindowClass, Context.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+//                Window window= (Window) param.thisObject;
+//                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+            }
+        });
+    }
+
+    public void hookPhoneStatusBar(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        //获取清除通知的方法
+        Class<?> phoneStatusBarClass =
+                lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
+
+        clearAllNotificationsMethod = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
+        clearAllNotificationsMethod.setAccessible(true);
+
+        addNavigationBarMethod = phoneStatusBarClass.getDeclaredMethod("addNavigationBar");
+        addNavigationBarMethod.setAccessible(true);
+        //获取到clearAllNotifications和toggleRecentApps方法
+        XposedHelpers.findAndHookMethod(phoneStatusBarClass,
+                "start", new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        super.afterHookedMethod(param);
+                        //在这里获取到PhoneStatusBar对象
+                        phoneStatusBar = param.thisObject;
+                        //获取到windowmanager
+                        windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
+                        navbarView = (View) XposedHelpers.getObjectField(phoneStatusBar, "mNavigationBarView");
+                        //隐藏导航栏
+//                            XposedBridge.log("====remove navbar ====");
+//                            windowManager.removeView(navbarView);
+                        //显示导航栏
+//                            XposedBridge.log("====add navbar ====");
+//                            addNavigationBarMethod.invoke(phoneStatusBar);
+
+                    }
+                });
+
+    }
 
     /**
      * hook 水平状态下的导航栏
      */
     public void hook0NavBar(XC_LayoutInflated.LayoutInflatedParam liparam) {
         LinearLayout rootView = (LinearLayout) liparam.view;
+
         //垂直状态下的导航栏整体布局
         XposedBridge.log("hook navBarBg success");
         FrameLayout navBarBg0 = (FrameLayout) rootView.findViewById(liparam.res.getIdentifier("rot0", "id", "com.android.systemui"));
@@ -351,13 +381,14 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         final LinearLayout lineBtn = (LinearLayout) navBarBg0.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
         final Context context = navBarBg0.getContext();
 
-
+       // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         LinearLayout parentView = new LinearLayout(context);
         //加入一个viewpager，第一页为空，是导航栏本身的功能
         final ViewPager vpXphook = new ViewPager(context);
 
         parentView.addView(vpXphook);
 
+        //初始化左边的整个音乐面板
         MusicControllerPanel musicPanel = new MusicControllerPanel(context);
         musicPanel.setData(mapImgRes, iconScale);
         musicPanel.initPanel();
@@ -395,7 +426,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         initBroadcast(context);
         //初始化剪贴板监听
         startListenClipboard(context);
-
 
         //viewpage的第二页
         //整个页面的基础
@@ -580,8 +610,14 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                         btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
                     }
                 }
+                ViewGroup.LayoutParams p=navbarView.getLayoutParams();
+
+                p.height=3;
+                navbarView.setLayoutParams(p);
+                XposedBridge.log("change params success");
             } catch (Exception e) {
-                Toast.makeText(context, R.string.reboot_tips, Toast.LENGTH_SHORT).show();
+                XposedBridge.log(e.getMessage());
+                Toast.makeText(context, "please reboot after update", Toast.LENGTH_SHORT).show();
             }
         }
     }

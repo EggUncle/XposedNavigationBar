@@ -174,7 +174,7 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongC
                 break;
                 case BTN_LONG_HOME: {
                     Instrumentation mInst = new Instrumentation();
-                    KeyEvent keyEvent=new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HOME);
+                    KeyEvent keyEvent=new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_HOME);
                     mInst.sendKeySync(keyEvent);
                 }
                 break;
