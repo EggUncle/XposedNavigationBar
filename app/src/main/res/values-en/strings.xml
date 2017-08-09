@@ -100,6 +100,6 @@
         <item>recent</item>
         <item>clipboard(beta)</item>
         <item>command(beta)</item>
-        <item>hide navbar</item>
+        <!--<item>hide navbar</item>-->
     </string-array>
 </resources>
