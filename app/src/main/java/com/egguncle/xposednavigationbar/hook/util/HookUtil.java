@@ -78,6 +78,7 @@ import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.btnFunc.MusicControllerPanel;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
+import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 import com.egguncle.xposednavigationbar.util.SPUtil;
@@ -99,6 +100,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     public final static String ACT_BROADCAST = "com.egguncle.xpnavbar.broadcast";
     public final static String ACT_NAVBAR_SHOW = "com.egguncle.xpnavbar.shownavbar";
     public final static String ACT_CHANGE_ROOT_EXPAND_STATUS_BAR = "com.egguncle.xpnavbar.root_expand";
+    public final static String ACT_NAV_BAR_DATA="com.egguncle.xpnavbar.navbardata";
 
     private static final String SHORT_CUT_DATA = "short_cut_data";
     public static final String USE_ROOT_EXPAND_STATUS_BAR = "use_root_expand_status_bar";
@@ -132,15 +134,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     private XSharedPreferences pre;
 
     private void initHook(StartupParam startupParam) throws Throwable {
-        //读取sp，查看程序是否被允许激活
         pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
         pre.makeWorldReadable();
-        boolean activation = pre.getBoolean("activation", false);
-//        if (!activation) {
-//            XposedBridge.log("xpnavbar not activation");
-//            return;
-//        }
-//        XposedBridge.log("xpnavbar  activation");
 
         String json = pre.getString(SHORT_CUT_DATA, "");
         expandStatusBarWithRoot = pre.getBoolean(SPUtil.ROOT_DOWN, false);
@@ -224,11 +219,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
         //  XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
-//        boolean activation = pre.getBoolean("activation", false);
-//        if (!activation) {
-//            return;
-//        }
-
         //过滤包名
         if (!resparam.packageName.equals("com.android.systemui"))
             return;
@@ -258,12 +248,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        //  XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
-        boolean activation = pre.getBoolean("activation", false);
         //       XposedBridge.log(lpparam.packageName);
-//        if (!activation) {
-//            return;
-//        }
 
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
@@ -530,6 +515,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         expandStatusFilter.addAction(ACT_CHANGE_ROOT_EXPAND_STATUS_BAR);
         ExpandStatusBarReceiver expandStatusBarReceiver = new HookUtil.ExpandStatusBarReceiver();
         context.registerReceiver(expandStatusBarReceiver, expandStatusFilter);
+
+        IntentFilter dataFilter = new IntentFilter();
+        dataFilter.addAction(ACT_NAV_BAR_DATA);
+        NavbarDataReceiver navbarDataReceiver = new HookUtil.NavbarDataReceiver();
+        context.registerReceiver(navbarDataReceiver, dataFilter);
     }
 
     /**
@@ -586,6 +576,29 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         HookUtil.expandStatusBarWithRoot = expandStatusBarWithRoot;
     }
 
+    /**
+     * 解析xpnvbarsetting的内容
+     * @param context
+     * @param setting
+     */
+    public void xpNavBarDataAnalysis(Context context,XpNavBarSetting setting){
+        List<ShortCut> list=setting.getShortCutData();
+        int iconSize=setting.getIconSize();
+        int homePosition=setting.getHomePointPosition();
+        boolean rootDOwn=setting.isRootDown();
+    }
+
+    /**
+     * 根据获取到的数据来更新导航栏
+     * @param shortCutData
+     * @param homePointPosition
+     * @param iconSize
+     * @param rootDown
+     */
+    public void updateNavBar(List<ShortCut> shortCutData,int homePointPosition,int iconSize,boolean rootDown){
+
+    }
+
     private class BtnChangeReceiver extends BroadcastReceiver {
 
         @Override
@@ -613,6 +626,22 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             try {
                 expandStatusBarWithRoot = intent.getBooleanExtra(USE_ROOT_EXPAND_STATUS_BAR, false);
             } catch (Exception e) {
+            }
+        }
+    }
+
+    private class NavbarDataReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try{
+                XpNavBarSetting setting= intent.getParcelableExtra("data");
+                List<ShortCut> list=setting.getShortCutData();
+                for (ShortCut sc:list){
+                    XposedBridge.log(sc.getCode()+"------");
+                }
+            }catch (Exception e){
+
             }
         }
     }

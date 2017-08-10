@@ -23,20 +23,13 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/space_m">
-
-
-        <Switch
-            android:id="@+id/sw_app"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:text="@string/switch_app"
-            android:textSize="@dimen/txt_m" />
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:paddingTop="@dimen/space_m"
             android:text="@string/about" />
 
@@ -47,7 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -64,7 +59,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -82,7 +79,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -99,7 +98,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -116,7 +117,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -128,5 +131,12 @@
 
         <include layout="@layout/v_split_line" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_send_data"
+            />
     </LinearLayout>
+
+
 </ScrollView>

@@ -47,7 +47,7 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
     private TextView tvClearMemLevel;
     private LinearLayout btnIconSize;
     private TextView tvIconSize;
-  //  private Switch swHook90;
+    //  private Switch swHook90;
     private Switch swRootDown;
 
     private SPUtil spUtil;
@@ -76,20 +76,20 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
         tvClearMemLevel = (TextView) findViewById(R.id.tv_clear_mem_level);
         btnIconSize = (LinearLayout) findViewById(R.id.btn_icon_size);
         tvIconSize = (TextView) findViewById(R.id.tv_icon_size);
-      //  swHook90 = (Switch) findViewById(R.id.sw_hook_90);
-        swRootDown= (Switch) findViewById(R.id.sw_root_down);
+        //  swHook90 = (Switch) findViewById(R.id.sw_hook_90);
+        swRootDown = (Switch) findViewById(R.id.sw_root_down);
     }
 
     @Override
     void initVar() {
         spUtil = SPUtil.getInstance(this);
-        String homePositon = spUtil.getHomePointPosition();
-        tvHomePosition.setText(homePositon);
+        int homePositon = spUtil.getHomePointPosition();
+        tvHomePosition.setText(homePointStr[homePositon]);
         int clearMemLevel = spUtil.getClearMemLevel();
         tvClearMemLevel.setText(clearMemLevel + "");
         int iconSize = spUtil.getIconSize();
         tvIconSize.setText(iconSize + "");
-        boolean isRootDown=spUtil.getRootDown();
+        boolean isRootDown = spUtil.getRootDown();
         swRootDown.setChecked(isRootDown);
 //        boolean isHook90=spUtil.getHookHorizontal();
 //        swHook90.setChecked(isHook90);
@@ -127,7 +127,7 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
                         .setSingleChoiceItems(homePointStr, 0, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                spUtil.setHomePointPosition(homePointStr[i]);
+                                spUtil.setHomePointPosition(i);
                                 tvHomePosition.setText(homePointStr[i]);
                             }
                         }).setPositiveButton(R.string.ok, null);

@@ -26,6 +26,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -33,20 +34,25 @@ import android.widget.Switch;
 
 import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.hook.util.HookUtil;
+import com.egguncle.xposednavigationbar.model.ShortCut;
+import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
+import java.util.List;
 import java.util.Locale;
 
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private final static String TAG = "MainActivity";
-    private Switch swApp;
     private LinearLayout btnSettingBtns;
     private LinearLayout btnSettingOther;
     private LinearLayout btnAbout;
     private LinearLayout btnLanguage;
     private LinearLayout btnMomo;
+    private Button btnSendData;
 
+    private SPUtil spUtil;
 
     private String[] languages = {"简体中文", "English"};
 
@@ -57,34 +63,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     void initView() {
-        swApp = (Switch) findViewById(R.id.sw_app);
-    }
-
-    @Override
-    void initVar() {
-        boolean act = SPUtil.getInstance(this).getActivation();
-        swApp = (Switch) findViewById(R.id.sw_app);
-        swApp.setChecked(act);
         btnSettingBtns = (LinearLayout) findViewById(R.id.btn_setting_btns);
         btnSettingOther = (LinearLayout) findViewById(R.id.btn_setting_other);
         btnAbout = (LinearLayout) findViewById(R.id.btn_about);
         btnLanguage = (LinearLayout) findViewById(R.id.btn_language);
         btnMomo = (LinearLayout) findViewById(R.id.btn_momo);
+        btnSendData= (Button) findViewById(R.id.btn_send_data);
+    }
+
+    @Override
+    void initVar() {
+        spUtil=SPUtil.getInstance(this);
     }
 
     @Override
     void initAction() {
-        swApp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                SPUtil.getInstance(MainActivity.this).setActivation(b);
-            }
-        });
         btnSettingBtns.setOnClickListener(this);
         btnSettingOther.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
         btnLanguage.setOnClickListener(this);
         btnMomo.setOnClickListener(this);
+        btnSendData.setOnClickListener(this);
     }
 
     @Override
@@ -135,6 +134,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(new Intent(MainActivity.this, MomoActivity.class));
             }
             break;
+            case R.id.btn_send_data:{
+                Log.i(TAG, "onClick: send data");
+                List<ShortCut> shortCutData=spUtil.getAllShortCutData();
+                int iconSize=spUtil.getIconSize();
+                int homePosition=spUtil.getHomePointPosition();
+                boolean rootDown=spUtil.getRootDown();
+                XpNavBarSetting setting=new XpNavBarSetting(shortCutData,iconSize,homePosition,rootDown);
+                Intent intent =new Intent();
+                intent.putExtra("data",setting);
+                intent.setAction(HookUtil.ACT_NAV_BAR_DATA);
+                sendBroadcast(intent);
+            }
         }
     }
 }
