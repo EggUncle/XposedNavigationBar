@@ -68,7 +68,7 @@ public class SPUtil {
             synchronized (SPUtil.class) {
                 instance = new SPUtil();
                 //由于xp模块需要读取sp的内容，所以将sp的类型设置为MODE_WORLD_READABLE
-                mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_WORLD_READABLE);
+                mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_PRIVATE);
                 mEditor = mSharedPreferences.edit();
             }
         }
