@@ -140,7 +140,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 int iconSize=spUtil.getIconSize();
                 int homePosition=spUtil.getHomePointPosition();
                 boolean rootDown=spUtil.getRootDown();
-                XpNavBarSetting setting=new XpNavBarSetting(shortCutData,iconSize,homePosition,rootDown);
+                XpNavBarSetting setting=new XpNavBarSetting(shortCutData,homePosition,iconSize,rootDown);
                 Intent intent =new Intent();
                 intent.putExtra("data",setting);
                 intent.setAction(HookUtil.ACT_NAV_BAR_DATA);

@@ -43,6 +43,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -100,7 +101,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     public final static String ACT_BROADCAST = "com.egguncle.xpnavbar.broadcast";
     public final static String ACT_NAVBAR_SHOW = "com.egguncle.xpnavbar.shownavbar";
     public final static String ACT_CHANGE_ROOT_EXPAND_STATUS_BAR = "com.egguncle.xpnavbar.root_expand";
-    public final static String ACT_NAV_BAR_DATA="com.egguncle.xpnavbar.navbardata";
+    public final static String ACT_NAV_BAR_DATA = "com.egguncle.xpnavbar.navbardata";
 
     private static final String SHORT_CUT_DATA = "short_cut_data";
     public static final String USE_ROOT_EXPAND_STATUS_BAR = "use_root_expand_status_bar";
@@ -123,11 +124,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     //用于获取保存的快捷按键设置
     private static ArrayList<ShortCut> shortCutList;
-    private int iconScale;
+    private int mIconScale;
 
     private LinearLayout vpLine;
+    private LinearLayout linepage1;
 
-    private String homePointPosition;
+    private int homePointPosition;
 
     private BtnFuncFactory btnFuncFactory;
 
@@ -141,7 +143,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         expandStatusBarWithRoot = pre.getBoolean(SPUtil.ROOT_DOWN, false);
 
         //获取主导行栏小点的位置
-        homePointPosition = pre.getString(FuncName.HOME_POINT, FuncName.LEFT);
+        homePointPosition = pre.getInt(FuncName.HOME_POINT, 0);
         //获取快捷按钮设置数据
         Gson gson = new Gson();
         //在第一次激活重新启动的时候，可能因为没有设置任何快捷按钮，导致这里报错
@@ -152,10 +154,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         }
 
         //获取图片缩放大小
-        iconScale = pre.getInt(FuncName.ICON_SIZE, 100);
+        mIconScale = pre.getInt(FuncName.ICON_SIZE, 100);
         //初始化剪贴板内容集合
         clipboardData = new ArrayList<>();
-
 
         //加载图片资源文件
         Resources res = XModuleResources.createInstance(startupParam.modulePath, null);
@@ -249,18 +250,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //       XposedBridge.log(lpparam.packageName);
-
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
             XposedBridge.log("filter package systemui");
             hookPhoneStatusBar(lpparam);
-        } else if (lpparam.packageName.equals("android")) {
-            //7.0的hook位置
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                hookSharedPreferences(lpparam);
-//            }
         }
-
     }
 
     /**
@@ -347,35 +341,38 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     /**
      * Android 6.0 及以下hook布局的方法
+     *
      * @param liparam
      */
-    public void hookNavBar(XC_LayoutInflated.LayoutInflatedParam liparam){
+    public void hookNavBar(XC_LayoutInflated.LayoutInflatedParam liparam) {
         LinearLayout navBarParentView = (LinearLayout) liparam.view;
         //垂直状态下的导航栏整体布局
         XposedBridge.log("hook navBarBg success");
         FrameLayout rootView = (FrameLayout) navBarParentView.findViewById(liparam.res.getIdentifier("rot0", "id", "com.android.systemui"));
         //垂直状态下的导航栏三大按钮布局
         final LinearLayout navBarView = (LinearLayout) rootView.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-        hookNavBarFunc(rootView,navBarView);
+        hookNavBarFunc(rootView, navBarView);
     }
 
     /**
      * Android 7.0 的hook布局的方法
+     *
      * @param liparam
      */
-    public void hookNavBarOnNougat(XC_LayoutInflated.LayoutInflatedParam liparam){
+    public void hookNavBarOnNougat(XC_LayoutInflated.LayoutInflatedParam liparam) {
         final FrameLayout rootView = (FrameLayout) liparam.view;
         final FrameLayout navBarView = (FrameLayout) rootView.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-        hookNavBarFunc(rootView,navBarView);
+        hookNavBarFunc(rootView, navBarView);
     }
 
     /**
      * 基础的hook方法
+     *
      * @param rootView
      * @param navbarView
      */
     public void hookNavBarFunc(ViewGroup rootView, final ViewGroup navbarView) {
-        Context context=rootView.getContext();
+        Context context = rootView.getContext();
         LinearLayout parentView = new LinearLayout(context);
         //加入一个viewpager，第一页为空，是导航栏本身的功能
         final ViewPager vpXphook = new ViewPager(context);
@@ -384,37 +381,33 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         //初始化左边的整个音乐面板
         MusicControllerPanel musicPanel = new MusicControllerPanel(context);
-        musicPanel.setData(mapImgRes, iconScale);
+        musicPanel.setData(mapImgRes, mIconScale);
         musicPanel.initPanel();
 
         //第一个界面，与原本的导航栏重合，实际在导航栏的下层
-        LinearLayout linepage1 = new LinearLayout(context);
-        if (!homePointPosition.equals(FuncName.DISMISS)) {
-            //用于呼出整个扩展导航栏的一个小点
-            ImageButton btnCall = new ImageButton(context);
-            btnCall.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_SMALL_POINT_CODE)));
-            btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            btnCall.setBackgroundColor(Color.alpha(255));
-            LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linepage1 = new LinearLayout(context);
 
-            if (homePointPosition.equals(FuncName.LEFT)) {
-                //line1Params.gravity = Gravity.LEFT;
-                linepage1.setGravity(Gravity.LEFT);
-            } else if (homePointPosition.equals(FuncName.RIGHT)) {
-                //  line1Params.gravity = Gravity.RIGHT;
-                linepage1.setGravity(Gravity.RIGHT);
+        //用于呼出整个扩展导航栏的一个小点
+        ImageButton btnCall = new ImageButton(context);
+        btnCall.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_SMALL_POINT_CODE)));
+        btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        btnCall.setBackgroundColor(Color.alpha(255));
+        LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+        linepage1.addView(btnCall, line1Params);
+        setHomePointPosition(linepage1, homePointPosition);
+
+        //点击这个按钮，跳转到扩展部分
+        btnCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vpXphook.setCurrentItem(2);
+
             }
-            linepage1.addView(btnCall, line1Params);
-            //点击这个按钮，跳转到扩展部分
-            btnCall.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    vpXphook.setCurrentItem(2);
+        });
 
-                }
-            });
-        }
 
         //初始化广播接收器
         initBroadcast(context);
@@ -430,7 +423,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 return true;
             }
         });
-        btnFuncFactory = new BtnFuncFactory(iconScale, framePage2, vpXphook, mapImgRes);
+        btnFuncFactory = new BtnFuncFactory(framePage2, vpXphook, mapImgRes);
 
         //   LinearLayout
         vpLine = new LinearLayout(context);
@@ -441,7 +434,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         for (ShortCut sc : shortCutList) {
             // createBtnAndSetFunc(context, framePage2, vpLine, sc.getShortCutName());
-            btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
+            btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc, mIconScale);
         }
         //将这些布局都添加到viewpageadapter中
         List<View> list = new ArrayList<View>();
@@ -501,10 +494,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
      * @param context
      */
     private void initBroadcast(Context context) {
-        IntentFilter btnChangeFilter = new IntentFilter();
-        btnChangeFilter.addAction(ACT_BROADCAST);
-        BtnChangeReceiver btnReceiver = new HookUtil.BtnChangeReceiver();
-        context.registerReceiver(btnReceiver, btnChangeFilter);
+//        IntentFilter btnChangeFilter = new IntentFilter();
+//        btnChangeFilter.addAction(ACT_BROADCAST);
+//        BtnChangeReceiver btnReceiver = new HookUtil.BtnChangeReceiver();
+//        context.registerReceiver(btnReceiver, btnChangeFilter);
 
 //        IntentFilter navbarShowFilter = new IntentFilter();
 //        navbarShowFilter.addAction(ACT_NAVBAR_SHOW);
@@ -520,6 +513,18 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         dataFilter.addAction(ACT_NAV_BAR_DATA);
         NavbarDataReceiver navbarDataReceiver = new HookUtil.NavbarDataReceiver();
         context.registerReceiver(navbarDataReceiver, dataFilter);
+    }
+
+    private void setHomePointPosition(LinearLayout ll, int position) {
+       // ll = linepage1;
+        ImageButton pointbtn = (ImageButton) ll.getChildAt(0);
+        if (position == SPUtil.LEFT) {
+            ll.setGravity(Gravity.LEFT);
+        } else if (position == SPUtil.RIGHT) {
+            ll.setGravity(Gravity.RIGHT);
+        } else if (position == SPUtil.DISMISS) {
+            pointbtn.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -578,47 +583,59 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     /**
      * 解析xpnvbarsetting的内容
+     *
      * @param context
      * @param setting
      */
-    public void xpNavBarDataAnalysis(Context context,XpNavBarSetting setting){
-        List<ShortCut> list=setting.getShortCutData();
-        int iconSize=setting.getIconSize();
-        int homePosition=setting.getHomePointPosition();
-        boolean rootDOwn=setting.isRootDown();
+    public void xpNavBarDataAnalysis(Context context, XpNavBarSetting setting) {
+        List<ShortCut> list = setting.getShortCutData();
+        int iconSize = setting.getIconSize();
+        int homePosition = setting.getHomePointPosition();
+        boolean rootDown = setting.isRootDown();
+        XposedBridge.log(homePosition+"  "+iconSize);
+
+        updateNavBar(context, list, homePosition, iconSize, rootDown);
     }
 
     /**
      * 根据获取到的数据来更新导航栏
+     *
      * @param shortCutData
      * @param homePointPosition
      * @param iconSize
      * @param rootDown
      */
-    public void updateNavBar(List<ShortCut> shortCutData,int homePointPosition,int iconSize,boolean rootDown){
-
-    }
-
-    private class BtnChangeReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //在更新以后有些用户没有进行重启，而直接进行了新功能的添加，app部分得到了更新，
-            //但是hook部分的更新需要重启后才生效，所以这里做一个异常捕获操作
-            try {
-                shortCutList = intent.getParcelableArrayListExtra("data");
-                btnFuncFactory.clearAllBtn(vpLine);
-                if (shortCutList != null && shortCutList.size() != 0) {
-                    for (ShortCut sc : shortCutList) {
-                        btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc);
-                    }
-                }
-            } catch (Exception e) {
-                XposedBridge.log(e.getMessage());
-                Toast.makeText(context, "please reboot after update", Toast.LENGTH_SHORT).show();
+    public void updateNavBar(Context context, List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown) {
+        btnFuncFactory.clearAllBtn(vpLine);
+        if (shortCutData != null && shortCutData.size() != 0) {
+            for (ShortCut sc : shortCutData) {
+                btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc, iconSize);
             }
         }
+        setHomePointPosition(linepage1,homePointPosition);
+        expandStatusBarWithRoot=rootDown;
     }
+
+//    private class BtnChangeReceiver extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            //在更新以后有些用户没有进行重启，而直接进行了新功能的添加，app部分得到了更新，
+//            //但是hook部分的更新需要重启后才生效，所以这里做一个异常捕获操作
+//            try {
+//                shortCutList = intent.getParcelableArrayListExtra("data");
+//                btnFuncFactory.clearAllBtn(vpLine);
+//                if (shortCutList != null && shortCutList.size() != 0) {
+//                    for (ShortCut sc : shortCutList) {
+//                        btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc, mIconScale);
+//                    }
+//                }
+//            } catch (Exception e) {
+//                XposedBridge.log(e.getMessage());
+//                Toast.makeText(context, "please reboot after update", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
     private class ExpandStatusBarReceiver extends BroadcastReceiver {
         @Override
@@ -626,21 +643,20 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
             try {
                 expandStatusBarWithRoot = intent.getBooleanExtra(USE_ROOT_EXPAND_STATUS_BAR, false);
             } catch (Exception e) {
+                XposedBridge.log(e.getMessage());
+                Toast.makeText(context, "please reboot after update", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private class NavbarDataReceiver extends BroadcastReceiver{
+    private class NavbarDataReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            try{
-                XpNavBarSetting setting= intent.getParcelableExtra("data");
-                List<ShortCut> list=setting.getShortCutData();
-                for (ShortCut sc:list){
-                    XposedBridge.log(sc.getCode()+"------");
-                }
-            }catch (Exception e){
+            try {
+                XpNavBarSetting setting = intent.getParcelableExtra("data");
+                xpNavBarDataAnalysis(context, setting);
+            } catch (Exception e) {
 
             }
         }

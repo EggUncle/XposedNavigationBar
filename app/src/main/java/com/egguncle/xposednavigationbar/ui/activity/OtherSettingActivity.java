@@ -153,8 +153,8 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_icon_size, null);
                 final TextView tvImgSize = (TextView) dialogView.findViewById(R.id.tv_img_size);
                 final SeekBar skImgSize = (SeekBar) dialogView.findViewById(R.id.sk_img_size);
-                //设置范围30～100
-                skImgSize.setMax(70);
+                //设置范围30～150
+                skImgSize.setMax(120);
                 int nowSize = Integer.parseInt(tvIconSize.getText().toString());
                 skImgSize.setProgress(nowSize - 30);
                 tvImgSize.setText(nowSize + " %");

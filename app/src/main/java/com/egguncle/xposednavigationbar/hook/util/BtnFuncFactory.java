@@ -65,17 +65,14 @@ import de.robv.android.xposed.XposedBridge;
  */
 
 public class BtnFuncFactory {
-    private int mIconScale;
     private ViewGroup mRootViewGroup;
     private ViewPager mViewPager;
     //用于加载图片资源
     private Map<Integer, byte[]> mMapImgRes;
 
-    public BtnFuncFactory(int iconscale,
-                          ViewGroup rootViewGroup,
+    public BtnFuncFactory(ViewGroup rootViewGroup,
                           ViewPager viewPager,
                           Map<Integer, byte[]> mapImgRes) {
-        mIconScale = iconscale;
         mRootViewGroup = rootViewGroup;
         mMapImgRes = mapImgRes;
         mViewPager = viewPager;
@@ -157,7 +154,7 @@ public class BtnFuncFactory {
      * @param line
      * @param sc
      */
-    public void createBtnAndSetFunc(Context context, LinearLayout line, ShortCut sc) {
+    public void createBtnAndSetFunc(Context context, LinearLayout line, ShortCut sc,int iconsize) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
@@ -168,13 +165,14 @@ public class BtnFuncFactory {
         String iconPath = sc.getIconPath();
         Bitmap iconBitmap = null;
         if (iconPath != null) {
-            iconBitmap = ImageUtil.zoomBitmap(iconPath, mIconScale);
+            iconBitmap = ImageUtil.zoomBitmap(iconPath, iconsize);
         }
         if (iconBitmap == null) {
             iconBitmap = ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
         }
-        if (mIconScale != 100) {
-            iconBitmap = ImageUtil.zommBitmap(iconBitmap, mIconScale);
+        if (iconsize != 100) {
+            XposedBridge.log("---scale---");
+            iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconsize);
         }
         btn.setImageBitmap(iconBitmap);
         btn.setScaleType(ImageView.ScaleType.FIT_CENTER);

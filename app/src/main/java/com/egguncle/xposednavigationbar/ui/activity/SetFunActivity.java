@@ -35,6 +35,7 @@ import android.widget.CheckBox;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
+import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.ui.adapter.RcvHomeAdapter;
 import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelpCallBack;
 import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelper;
@@ -255,10 +256,13 @@ public class SetFunActivity extends BaseActivity {
             }
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra("data", shortCutList);
-            intent.setAction(HookUtil.ACT_BROADCAST);
+            int iconSize=spUtil.getIconSize();
+            int homePosition=spUtil.getHomePointPosition();
+            boolean rootDown=spUtil.getRootDown();
+            XpNavBarSetting setting=new XpNavBarSetting(shortCutList,homePosition,iconSize,rootDown);
+            intent.putExtra("data",setting);
+            intent.setAction(HookUtil.ACT_NAV_BAR_DATA);
             sendBroadcast(intent);
-
-           // sendBroadcast(new Intent(HookUtil.ACT_NAVBAR_SHOW));
 
             spUtil.saveShortCut(shortCutList);
             Snackbar.make(parentView, getResources().getString(R.string.save_success), Snackbar.LENGTH_SHORT).show();
