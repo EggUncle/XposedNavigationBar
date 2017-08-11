@@ -16,11 +16,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.ui.activity;
+package com.egguncle.xposednavigationbar.ui.fragment;
+
 
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.Momo;
@@ -31,28 +33,29 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MomoActivity extends BaseActivity {
+/**
+ * Created by egguncle on 17-8-11.
+ */
 
-    private CoordinatorLayout parentView;
+public class MomoFragment extends  BaseFragment{
     private RecyclerView rcvMomo;
 
     private List<Momo> momoList;
     private MomoAdapter adapter;
 
-    @Override
-    int getLayoutId() {
-        return R.layout.a_momo;
-    }
 
     @Override
-    void initView() {
-        getSupportActionBar().setTitle(getResources().getString(R.string.momo_history));
-        parentView = (CoordinatorLayout) findViewById(R.id.parent_view);
-        rcvMomo = (RecyclerView) findViewById(R.id.rcv_momo);
-        rcvMomo.setLayoutManager(new LinearLayoutManager(this));
+    void initView(View view) {
+        rcvMomo = (RecyclerView)view.findViewById(R.id.rcv_momo);
+        rcvMomo.setLayoutManager(new LinearLayoutManager(view.getContext()));
         momoList=new ArrayList<>();
         adapter=new MomoAdapter(momoList);
         rcvMomo.setAdapter(adapter);
+    }
+
+    @Override
+    void initAction() {
+
     }
 
     @Override
@@ -62,7 +65,7 @@ public class MomoActivity extends BaseActivity {
     }
 
     @Override
-    void initAction() {
-
+    int getLayoutId() {
+        return R.layout.f_momo;
     }
 }

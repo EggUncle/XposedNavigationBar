@@ -47,7 +47,7 @@ public class QuickNotificationActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quick_notification);
+        setContentView(R.layout.a_quick_notification);
 
         //状态栏透明
         getWindow().setStatusBarColor(Color.TRANSPARENT);

@@ -73,7 +73,6 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
         // String shortCutName = shortCut.getShortCutName();
         int code = shortCut.getCode();
         holder.itemTvName.setText(mCodeToFuncName.getFuncNameFromCode(code));
-        final int p = position;
         holder.itemImgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

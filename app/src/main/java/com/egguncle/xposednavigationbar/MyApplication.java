@@ -45,9 +45,12 @@ public class MyApplication extends LitePalApplication {
         Configuration config = resources.getConfiguration();
         // 应用用户选择语言
         String language = SPUtil.getInstance(this).getLanguage();
+        if ("".equals(language)){
+            language =Locale.getDefault().getLanguage();
+        }
         if (language.equals(SPUtil.LANGUAGE_CHINESE)) {
             config.setLocale(Locale.getDefault());
-        } else if (language.equals(SPUtil.LANGUAGE_ENGLICH)) {
+        } else  {
             config.setLocale(Locale.ENGLISH);
         }
         resources.updateConfiguration(config, dm);

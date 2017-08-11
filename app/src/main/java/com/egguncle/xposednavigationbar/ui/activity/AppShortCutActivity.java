@@ -30,9 +30,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,17 +38,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.AppInfo;
-import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.ui.adapter.AppActAdapter;
 import com.egguncle.xposednavigationbar.ui.adapter.DialogItemAdapter;
 import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelpCallBack;
-import com.egguncle.xposednavigationbar.ui.touchHelper.MyItemTouchHelper;
 
 import org.litepal.crud.DataSupport;
 
@@ -84,7 +78,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_short_cut);
+        setContentView(R.layout.a_app_short_cut);
         initView();
         initVar();
         initAction();
@@ -241,7 +235,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
                 ivAdd.setClickable(false);
                 //快捷方式列表
                 List<AppInfo> appInfos = new ArrayList<>();
-                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
+                View dialogView = View.inflate(view.getContext(), R.layout.d_apps, null);
                 RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
                 rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
                 final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);
@@ -282,7 +276,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
                 ivRemove.setClickable(false);
                 //快捷方式列表
                 List<AppInfo> appInfos = new ArrayList<>();
-                View dialogView = View.inflate(view.getContext(), R.layout.dialog_apps, null);
+                View dialogView = View.inflate(view.getContext(), R.layout.d_apps, null);
                 RecyclerView rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_apps);
                 rcvDialogApps.setLayoutManager(new LinearLayoutManager(view.getContext()));
                 final DialogItemAdapter adapter = new DialogItemAdapter(view.getContext(), appInfos);

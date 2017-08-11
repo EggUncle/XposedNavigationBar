@@ -26,13 +26,11 @@ import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 
-import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
@@ -58,7 +56,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     int getLayoutId() {
-        return R.layout.activity_main;
+        return R.layout.a_main;
     }
 
     @Override
@@ -126,7 +124,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 startActivity(it);
                                 finish();
                             }
-                        }).create();
+                        })
+                        .create();
                 dialog.show();
             }
             break;

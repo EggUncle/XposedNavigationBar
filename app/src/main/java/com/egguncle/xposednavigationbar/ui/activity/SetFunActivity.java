@@ -66,7 +66,7 @@ public class SetFunActivity extends BaseActivity {
 
     @Override
     int getLayoutId() {
-        return R.layout.activity_set_fun;
+        return R.layout.a_set_fun;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class SetFunActivity extends BaseActivity {
     void initAction() {
         tapsNotAppear = spUtil.getTapsStatus();
         if (tapsNotAppear) {
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_taps, null);
+            View dialogView = getLayoutInflater().inflate(R.layout.d_taps, null);
             final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.checkBox);
             AlertDialog dialogTaps = new AlertDialog.Builder(SetFunActivity.this)
                     .setTitle(getResources().getString(R.string.taps))

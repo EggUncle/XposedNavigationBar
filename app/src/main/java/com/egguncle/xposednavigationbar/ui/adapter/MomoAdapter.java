@@ -18,7 +18,11 @@
 
 package com.egguncle.xposednavigationbar.ui.adapter;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,7 @@ import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.Momo;
+import com.egguncle.xposednavigationbar.ui.activity.SetFunActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,22 +43,46 @@ import java.util.List;
 public class MomoAdapter extends RecyclerView.Adapter<MomoAdapter.MomoViewHolder> {
     private List<Momo> mListMomo;
 
-    public MomoAdapter(List<Momo> listMomo){
-        mListMomo=listMomo;
+    public MomoAdapter(List<Momo> listMomo) {
+        mListMomo = listMomo;
     }
 
     @Override
     public MomoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MomoViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_momo,parent, false));
+        return new MomoViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_momo, parent, false));
     }
 
     @Override
     public void onBindViewHolder(MomoViewHolder holder, int position) {
-        Momo momo=mListMomo.get(position);
+        final Momo momo = mListMomo.get(position);
         holder.itemTvMomoContent.setText(momo.getContent());
-        Date date=momo.getDate();
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = momo.getDate();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         holder.itemTvMomoTime.setText(format.format(date));
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setTitle(R.string.custom_icon)
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                notifyItemRemoved(mListMomo.indexOf(momo));
+                                mListMomo.remove(momo);
+                                momo.delete();
+                            }
+                        })
+                        .create().show();
+                return true;
+            }
+        });
     }
 
     @Override

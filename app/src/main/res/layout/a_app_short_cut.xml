@@ -19,5 +19,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/app_short_panel" />
+    <include layout="@layout/v_short_panel" />
 </android.support.design.widget.CoordinatorLayout>

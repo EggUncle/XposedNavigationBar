@@ -16,10 +16,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.ui.activity;
+package com.egguncle.xposednavigationbar.ui.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -30,12 +33,22 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
+import com.egguncle.xposednavigationbar.MyApplication;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.util.HookUtil;
+import com.egguncle.xposednavigationbar.ui.activity.HomeActivity;
+import com.egguncle.xposednavigationbar.ui.activity.OtherSettingActivity;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
-public class OtherSettingActivity extends BaseActivity implements View.OnClickListener {
-    private final static String TAG = "OtherSettingActivity";
+import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.callbacks.XC_LayoutInflated;
+
+/**
+ * Created by egguncle on 17-8-11.
+ */
+
+public class SetOtherFragment extends BaseFragment implements View.OnClickListener {
+    private final static String TAG = SetOtherFragment.class.getName();
 
     private LinearLayout btnHomePoint;
     private TextView tvHomePosition;
@@ -45,8 +58,14 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
     private TextView tvIconSize;
     //  private Switch swHook90;
     private Switch swRootDown;
+    private LinearLayout settingAboutMarshmallow;
 
     private SPUtil spUtil;
+    private Context mContext;
+
+    public SetOtherFragment() {
+        mContext = MyApplication.getContext();
+    }
 
     private String[] homePointStr = {
             FuncName.LEFT,
@@ -59,26 +78,43 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
     };
 
     @Override
-    int getLayoutId() {
-        return R.layout.a_other_setting;
+    void initView(View view) {
+        btnHomePoint = (LinearLayout) view.findViewById(R.id.btn_home_point);
+        tvHomePosition = (TextView) view.findViewById(R.id.tv_home_position);
+        btnClearMemLevel = (LinearLayout) view.findViewById(R.id.btn_clear_mem_level);
+        tvClearMemLevel = (TextView) view.findViewById(R.id.tv_clear_mem_level);
+        btnIconSize = (LinearLayout) view.findViewById(R.id.btn_icon_size);
+        tvIconSize = (TextView) view.findViewById(R.id.tv_icon_size);
+        //  swHook90 = (Switch) findViewById(R.id.sw_hook_90);
+        swRootDown = (Switch) view.findViewById(R.id.sw_root_down);
+        settingAboutMarshmallow = (LinearLayout) view.findViewById(R.id.setting_about_marshmallow);
     }
 
     @Override
-    void initView() {
-        getSupportActionBar().setTitle(getResources().getString(R.string.setting_other));
-        btnHomePoint = (LinearLayout) findViewById(R.id.btn_home_point);
-        tvHomePosition = (TextView) findViewById(R.id.tv_home_position);
-        btnClearMemLevel = (LinearLayout) findViewById(R.id.btn_clear_mem_level);
-        tvClearMemLevel = (TextView) findViewById(R.id.tv_clear_mem_level);
-        btnIconSize = (LinearLayout) findViewById(R.id.btn_icon_size);
-        tvIconSize = (TextView) findViewById(R.id.tv_icon_size);
-        //  swHook90 = (Switch) findViewById(R.id.sw_hook_90);
-        swRootDown = (Switch) findViewById(R.id.sw_root_down);
+    void initAction() {
+        //在Android M 上有一个通知栏下拉动画缓慢的bug，这里为它添加一个设置选项，只有M可见
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            settingAboutMarshmallow.setVisibility(View.VISIBLE);
+        }
+
+        btnHomePoint.setOnClickListener(this);
+        btnClearMemLevel.setOnClickListener(this);
+        btnIconSize.setOnClickListener(this);
+        swRootDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                spUtil.setRootDown(isChecked);
+                Intent intent = new Intent();
+                intent.putExtra(HookUtil.USE_ROOT_EXPAND_STATUS_BAR, isChecked);
+                intent.setAction(HookUtil.ACT_CHANGE_ROOT_EXPAND_STATUS_BAR);
+                mContext.sendBroadcast(intent);
+            }
+        });
     }
 
     @Override
     void initVar() {
-        spUtil = SPUtil.getInstance(this);
+        spUtil = SPUtil.getInstance(mContext);
         int homePositon = spUtil.getHomePointPosition();
         tvHomePosition.setText(homePointStr[homePositon]);
         int clearMemLevel = spUtil.getClearMemLevel();
@@ -87,51 +123,30 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
         tvIconSize.setText(iconSize + "");
         boolean isRootDown = spUtil.getRootDown();
         swRootDown.setChecked(isRootDown);
-//        boolean isHook90=spUtil.getHookHorizontal();
-//        swHook90.setChecked(isHook90);
     }
 
     @Override
-    void initAction() {
-        btnHomePoint.setOnClickListener(this);
-        btnClearMemLevel.setOnClickListener(this);
-        btnIconSize.setOnClickListener(this);
-//        swHook90.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                spUtil.setHookHorizontal(isChecked);
-//            }
-//        });
-        swRootDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                spUtil.setRootDown(isChecked);
-                Intent intent = new Intent();
-                intent.putExtra(HookUtil.USE_ROOT_EXPAND_STATUS_BAR, isChecked);
-                intent.setAction(HookUtil.ACT_CHANGE_ROOT_EXPAND_STATUS_BAR);
-                sendBroadcast(intent);
-            }
-        });
+    int getLayoutId() {
+        return R.layout.f_set_other;
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_home_point: {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(OtherSettingActivity.this);
-                builder.setTitle(getResources().getString(R.string.need_reboot))
-                        .setSingleChoiceItems(homePointStr, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                spUtil.setHomePointPosition(i);
-                                tvHomePosition.setText(homePointStr[i]);
-                            }
-                        }).setPositiveButton(R.string.ok, null);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setSingleChoiceItems(homePointStr, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        spUtil.setHomePointPosition(i);
+                        tvHomePosition.setText(homePointStr[i]);
+                    }
+                }).setPositiveButton(R.string.ok, null);
                 builder.create().show();
             }
             break;
             case R.id.btn_clear_mem_level: {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(OtherSettingActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder
                         //.setTitle(getResources().getString(R.string.need_reboot))
                         .setSingleChoiceItems(clearMemLevels, 0, new DialogInterface.OnClickListener() {
@@ -146,7 +161,7 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
             }
             break;
             case R.id.btn_icon_size: {
-                View dialogView = getLayoutInflater().inflate(R.layout.d_icon_size, null);
+                View dialogView = View.inflate(view.getContext(), R.layout.d_icon_size, null);
                 final TextView tvImgSize = (TextView) dialogView.findViewById(R.id.tv_img_size);
                 final SeekBar skImgSize = (SeekBar) dialogView.findViewById(R.id.sk_img_size);
                 //设置范围30～150
@@ -170,9 +185,8 @@ public class OtherSettingActivity extends BaseActivity implements View.OnClickLi
 
                     }
                 });
-                AlertDialog.Builder builder = new AlertDialog.Builder(OtherSettingActivity.this);
-                builder.setTitle(getResources().getString(R.string.need_reboot))
-                        .setView(dialogView)
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setView(dialogView)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

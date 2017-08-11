@@ -44,7 +44,7 @@ public class SPUtil {
     //在原导航键上添加一个小点，点击后出现扩展的部分
     private static final String HOME_POINT = "home_point";
     private static final String LANGUAGE = "LANGUAGE";
-    public static final String LANGUAGE_CHINESE = "zh_simple";
+    public static final String LANGUAGE_CHINESE = "zh";
     public static final String LANGUAGE_ENGLICH = "en";
     public final static int LEFT = 0;
     public final static int RIGHT = 1;
@@ -95,9 +95,9 @@ public class SPUtil {
      *
      * @return
      */
-    public List<ShortCut> getAllShortCutData() {
+    public ArrayList<ShortCut> getAllShortCutData() {
         Gson gson = new Gson();
-        List<ShortCut> list = new ArrayList<>();
+        ArrayList<ShortCut> list = new ArrayList<>();
         String data = mSharedPreferences.getString(SHORT_CUT_DATA, "");
         if ("".equals(data)) {
             return null;
@@ -168,7 +168,7 @@ public class SPUtil {
     }
 
     public String getLanguage() {
-        return mSharedPreferences.getString(LANGUAGE, LANGUAGE_CHINESE);
+        return mSharedPreferences.getString(LANGUAGE, "");
     }
 
     public void setHookHorizontal(boolean isHook) {

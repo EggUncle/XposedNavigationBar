@@ -17,7 +17,7 @@
   -->
 
 <resources>
-    <string name="app_name">navigation bar extension module</string>
+    <string name="app_name">NavBar extension module</string>
     <string name="switch_app">the module master switch(takes effect after rebooted)</string>
     <string name="about">
         After the module was started,click the dot on the left side of the navbar or slide the left navbar，then you can call the shortcut menu，slide the right navbar，then you can call the music controller.
@@ -67,6 +67,7 @@
     <string name="cant_start_act">can\'t start the apps</string>
     <string name="taps_start_apps">If the apps was frozen in the icebox，please grant root permission，and the module will run pm enable packageName to thaw the operation。</string>
     <string name="about_language">Language</string>
+    <string name="set_language_success">Change language success , please reboot app.</string>
     <string name="momo_history">momo history</string>
     <string name="screen_shot_success">screenShot success</string>
     <string name="screen_shot_failed">screenShot failed</string>
@@ -79,6 +80,10 @@
     <string name="hook_90">hook Nav Bar with horizontal screen</string>
     <string name="root_down">use root expand statusBar</string>
     <string name="reboot_tips">there maybe a little problem , please try to reboot.</string>
+
+    <string name="tab_set_func">shortcut setting</string>
+    <string name="tab_set_other">other settings</string>
+    <string name="tab_momo_history">>momo history</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>

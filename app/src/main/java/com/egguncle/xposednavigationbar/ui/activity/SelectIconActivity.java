@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
@@ -58,7 +57,7 @@ public class SelectIconActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_icon);
+        setContentView(R.layout.a_select_icon);
         //状态栏透明
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         initVar();
@@ -68,7 +67,7 @@ public class SelectIconActivity extends Activity {
 
 
     private void initView() {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_custom_icon, null);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.d_custom_icon, null);
         imgIcon = (ImageView) dialogView.findViewById(R.id.iv_item_icon);
         edDialog = (EditText) dialogView.findViewById(R.id.ed_dialog);
         tvDialog = (TextView) dialogView.findViewById(R.id.tv_dialog);

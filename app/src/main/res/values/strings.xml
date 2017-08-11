@@ -65,6 +65,7 @@
     <string name="cant_start_act">无法启动这个应用</string>
     <string name="taps_start_apps">如果该应用是被冻结在冰箱里，请授予root权限，模块会执行pm enable packageName进行解冻操作。</string>
     <string name="about_language">Language</string>
+    <string name="set_language_success">Change language success , please reboot app.</string>
     <string name="momo_history">备忘记录</string>
     <string name="screen_shot_success">截图成功</string>
     <string name="screen_shot_failed">截图失败</string>
@@ -77,6 +78,10 @@
     <string name="hook_90">hook横屏时的导航栏</string>
     <string name="root_down">root下拉状态栏</string>
     <string name="reboot_tips">好像出了一些问题。。重启试试看</string>
+    <string name="tab_set_func">快捷按钮设置</string>
+    <string name="tab_set_other">其他设置</string>
+    <string name="tab_momo_history">备忘历史</string>
+
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>

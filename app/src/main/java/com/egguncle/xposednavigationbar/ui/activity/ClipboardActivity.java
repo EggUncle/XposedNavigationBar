@@ -44,7 +44,7 @@ public class ClipboardActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clipboard);
+        setContentView(R.layout.a_clipboard);
         initView();
         initVar();
         initAction();
@@ -65,7 +65,7 @@ public class ClipboardActivity extends Activity {
 
 
     private void initAction() {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_clip, null);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.d_clip, null);
         rcvDialogApps = (RecyclerView) dialogView.findViewById(R.id.rcv_dialog_clip);
         rcvDialogApps.setLayoutManager(new LinearLayoutManager(this));
         rcvDialogApps.setHasFixedSize(true);

@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,8 +31,6 @@ import com.egguncle.xposednavigationbar.util.SPUtil;
 
 import java.util.List;
 
-import de.robv.android.xposed.XposedBridge;
-
 
 public class ClearMemActivity extends Activity {
     private final static String TAG="ClearMemActivity";
@@ -41,7 +38,7 @@ public class ClearMemActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clear_mem);
+        setContentView(R.layout.a_clear_mem);
         //状态栏透明
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 

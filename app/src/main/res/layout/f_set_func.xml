@@ -16,20 +16,15 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <dimen name="space_xs">4dp</dimen>
-    <dimen name="space_s">8dp</dimen>
-    <dimen name="space_m">16dp</dimen>
-    <dimen name="img_size">20dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="txt_m">16sp</dimen>
-    <dimen name="app_icon_size">40dp</dimen>
-    <dimen name="icon_size_m">20dp</dimen>
-    <dimen name="icon_size_h">60dp</dimen>
-    <dimen name="app_bar_height">400dp</dimen>
-    <dimen name="dialog_item_height">50dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="appbar_padding_top">8dp</dimen>
-</resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent_view"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcv_setting"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/space_xs" />
+</LinearLayout>
