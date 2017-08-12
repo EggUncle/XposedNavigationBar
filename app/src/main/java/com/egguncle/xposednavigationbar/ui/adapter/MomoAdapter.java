@@ -19,10 +19,8 @@
 package com.egguncle.xposednavigationbar.ui.adapter;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +28,6 @@ import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.Momo;
-import com.egguncle.xposednavigationbar.ui.activity.SetFunActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,7 +61,7 @@ public class MomoAdapter extends RecyclerView.Adapter<MomoAdapter.MomoViewHolder
             @Override
             public boolean onLongClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setTitle(R.string.custom_icon)
+                builder.setTitle(R.string.delete)
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

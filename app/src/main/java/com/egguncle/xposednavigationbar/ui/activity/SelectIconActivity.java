@@ -104,7 +104,7 @@ public class SelectIconActivity extends Activity {
                         if (TextUtils.isEmpty(command)) {
                             intent.putExtra("command", edDialog.getText().toString());
                         }
-                        setResult(SetFunActivity.RESULT_OK, intent);
+                        setResult(HomeActivity.RESULT_OK, intent);
                         finish();
                     }
                 })

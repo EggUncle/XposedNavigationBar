@@ -34,15 +34,14 @@ import android.widget.Toast;
 
 import com.egguncle.xposednavigationbar.R;
 
-public class AboutActivity extends BaseActivity implements View.OnClickListener{
+public class AboutActivity extends BaseActivity implements View.OnClickListener {
 
 
-    private TextView tvMarket;
     private TextView tvVersionCode;
-    private Button btnAlipayDonate;
-    private Button btnWechatDonate;
-
-
+    private TextView tvMarket;
+    private TextView tvAlipayDonate;
+    private TextView tvWechatDonate;
+    private TextView tvPaypalDonate;
 
 
     @Override
@@ -56,10 +55,12 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
         actionBar.setTitle(getResources().getString(R.string.about_app));
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        tvMarket = (TextView) findViewById(R.id.tv_market);
         tvVersionCode = (TextView) findViewById(R.id.tv_version_code);
-        btnAlipayDonate = (Button) findViewById(R.id.btn_alipay_donate);
-        btnWechatDonate = (Button) findViewById(R.id.btn_wechat_donate);
+        tvMarket = (TextView) findViewById(R.id.tv_market);
+        tvAlipayDonate = (TextView) findViewById(R.id.tv_alipay_donate);
+        tvWechatDonate = (TextView) findViewById(R.id.tv_wechat_donate);
+        tvPaypalDonate = (TextView) findViewById(R.id.tv_paypal_donate);
+
     }
 
     @Override
@@ -70,40 +71,52 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
     @Override
     void initAction() {
         tvMarket.setOnClickListener(this);
-        btnAlipayDonate.setOnClickListener(this);
-        btnWechatDonate.setOnClickListener(this);
+        tvAlipayDonate.setOnClickListener(this);
+        tvWechatDonate.setOnClickListener(this);
+        tvPaypalDonate.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.tv_market:{
-                try{
-                    Uri uri = Uri.parse("market://details?id="+getPackageName());
-                    Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+        switch (view.getId()) {
+            case R.id.tv_market: {
+                try {
+                    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }catch(Exception e){
+                } catch (Exception e) {
                     Toast.makeText(AboutActivity.this, "您的手机没有安装Android应用市场", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-            }break;
-            case R.id.btn_alipay_donate:{
-                View dialogView= LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr,null);
-                ImageView imgQr= (ImageView) dialogView.findViewById(R.id.iv_qr);
-                AlertDialog.Builder builder=new AlertDialog.Builder(AboutActivity.this);
-                builder.setView(dialogView).setNegativeButton(R.string.no,null);
+            }
+            break;
+            case R.id.tv_alipay_donate: {
+                View dialogView = LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr, null);
+                ImageView imgQr = (ImageView) dialogView.findViewById(R.id.iv_qr);
+                AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
+                builder.setView(dialogView).setNegativeButton(R.string.no, null);
                 builder.create().show();
                 imgQr.setImageResource(R.drawable.alipay_qr);
-            }break;
-            case R.id.btn_wechat_donate:{
-                View dialogView= LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr,null);
-                ImageView imgQr= (ImageView) dialogView.findViewById(R.id.iv_qr);
-                AlertDialog.Builder builder=new AlertDialog.Builder(AboutActivity.this);
-                builder.setView(dialogView).setNegativeButton(R.string.no,null);
+            }
+            break;
+            case R.id.tv_wechat_donate: {
+                View dialogView = LayoutInflater.from(AboutActivity.this).inflate(R.layout.scanner_qr, null);
+                ImageView imgQr = (ImageView) dialogView.findViewById(R.id.iv_qr);
+                AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
+                builder.setView(dialogView).setNegativeButton(R.string.no, null);
                 builder.create().show();
                 imgQr.setImageResource(R.drawable.wechat_qr);
-            }break;
+            }
+            break;
+            case R.id.tv_paypal_donate: {
+                String url = getResources().getString(R.string.paypal_url);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                intent.addCategory("android.intent.category.BROWSABLE");
+                startActivity(Intent.createChooser(intent, "请选择浏览器"));
+            }
+            break;
         }
     }
 

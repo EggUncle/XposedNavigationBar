@@ -30,12 +30,23 @@
         Please click the word to leave a message in the review area or mark the module if you have any suggestions and comments,also can click button to donate,your support is the biggest drive for me.
         \n
     </string>
+    <string name="manual">
+        click the dot on the left side of the navbar or slide the left navbar，then you can call the shortcut menu，slide the right navbar，then you can call the music controller.
+        \n
+        It can be used by the model with  navbar，and the module was just be tested in the android and CM ROM，part of functions may not work in other ROMs，If the“system interface stops running” recurred after the module was activated that makes the phone doesn\'t work，please connect your phone to the computer and use the adb instructions“adb uninstall com.egguncle.xposednavigationbar”and then uninstall it。
+        \n\n
+        It also can work on Nougat with Xposed for N，now I just test it on Mokee.Because for limit of Nougat，it could not load some data about your setting of this app.
+        So when you reboot phone, please open this app and click SAVE button,then this can work.
+    </string>
     <string name="version">version</string>
     <string name="author">
-        version 1.8.3\n contact author\ncicadashadow@gmail.com
+        contact author cicadashadow@gmail.com
+    </string>
+    <string name="app_github">
+        Github: https://github.com/EggUncle/XposedNavigationBar \nCan you give me a star?ヾ(●゜▽゜●)♡
     </string>
     <string name="about_app">
-        about&amp;donate
+        About&amp;Donate
     </string>
 
     <string name="no_select">
@@ -58,8 +69,8 @@
     <string name="icon_size">adjust the icon size</string>
     <string name="select_apps">please choose the shortcut which needs add</string>
     <string name="delect_apps">please choose the shortcut which needs delete</string>
-    <string name="ok">ok</string>
-    <string name="no">cancel</string>
+    <string name="ok">Ok</string>
+    <string name="no">Cancel</string>
     <string name="delete">delete</string>
     <string name="quick_notice">momo</string>
     <string name="select_shortcut">add shortcut</string>
@@ -75,6 +86,7 @@
     <string name="clip_success">copy success</string>
     <string name="alipay_donate">alipay donate</string>
     <string name="wechat_donate">wechat donate</string>
+    <string name="paypal_donate">Paypal donate</string>
     <string name="custom_icon">custom</string>
     <string name="command_taps">custom adb shell is not safe，if you do not know how to use adb shell，please do not use this function.</string>
     <string name="hook_90">hook Nav Bar with horizontal screen</string>
@@ -83,7 +95,13 @@
 
     <string name="tab_set_func">shortcut setting</string>
     <string name="tab_set_other">other settings</string>
-    <string name="tab_momo_history">>momo history</string>
+    <string name="tab_momo_history">momo history</string>
+    <string name="about_manual">Manual</string>
+    <string name="job">
+        \nIf you working in XiaoMi or OnePlus，please give me a referral of fall campus recruitment，I am a student and graduate in 2018，please ask me for my resume，thanks.
+        \n(2017.8.12)
+    </string>
+    <string name="paypal_url">paypal.me/songyucheng</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>

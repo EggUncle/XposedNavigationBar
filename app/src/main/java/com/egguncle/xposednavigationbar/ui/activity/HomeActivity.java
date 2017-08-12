@@ -41,6 +41,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.R;
@@ -105,6 +106,26 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     void initAction() {
+        Boolean tapsNotAppear = spUtil.getTapsStatus();
+        if (tapsNotAppear) {
+            View dialogView = getLayoutInflater().inflate(R.layout.d_taps, null);
+            final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.checkBox);
+            AlertDialog dialogTaps = new AlertDialog.Builder(this)
+                    .setTitle(getResources().getString(R.string.taps))
+                    .setView(dialogView)
+                    .setPositiveButton(getResources().getString(R.string.i_know), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (checkBox.isChecked()) {
+                                        spUtil.nolongerTaps();
+                                        Log.i(TAG, "onClick: no longer appear");
+                                    }
+                                }
+                            }
+                    ).create();
+            dialogTaps.show();
+        }
+
         fabAddFunc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -192,12 +213,20 @@ public class HomeActivity extends BaseActivity {
                                 } else {
                                     spUtil.setLanguage(SPUtil.LANGUAGE_CHINESE);
                                 }
-                                Snackbar.make(mViewPager,getResources().getString(R.string.set_language_success),Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(mViewPager, getResources().getString(R.string.set_language_success), Snackbar.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         })
                         .create();
                 dialog.show();
+                return true;
+            }
+            case R.id.menu_about: {
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            }
+            case R.id.menu_manual: {
+                startActivity(new Intent(this, ManualActivity.class));
                 return true;
             }
             default: {
@@ -210,7 +239,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode) {
-            case SetFunActivity.RESULT_OK:
+            case HomeActivity.RESULT_OK:
 
                 int position = data.getIntExtra("position", 0);
                 String imgPath = data.getStringExtra("imagepath");

@@ -28,14 +28,20 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_save"
         />
-    <!--<item-->
-        <!--android:id="@+id/action_settings"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:title="@string/about"-->
-        <!--app:showAsAction="never" />-->
     <item
         android:id="@+id/menu_language"
         android:orderInCategory="100"
         android:title="@string/about_language"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="100"
+        android:title="@string/about_app"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_manual"
+        android:orderInCategory="100"
+        android:title="@string/about_manual"
         app:showAsAction="never" />
 </menu>

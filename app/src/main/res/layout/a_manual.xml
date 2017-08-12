@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Navigation bar function expansion module
   ~     Copyright (C) 2017 egguncle cicadashadow@gmail.com
   ~
@@ -17,20 +16,19 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/parent_view"
-    android:orientation="vertical"
-    tools:context="com.egguncle.xposednavigationbar.ui.activity.MomoActivity">
+    android:paddingLeft="@dimen/space_m"
+    android:paddingRight="@dimen/space_m"
+    android:paddingTop="@dimen/space_m"
+    tools:context="com.egguncle.xposednavigationbar.ui.activity.ManualActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:padding="@dimen/space_xs"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rcv_momo"
+        android:layout_height="wrap_content"
+        android:text="@string/manual"
         />
 
-</android.support.design.widget.CoordinatorLayout>
+</ScrollView>

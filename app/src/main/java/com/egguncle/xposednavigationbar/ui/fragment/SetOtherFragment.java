@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -36,12 +35,7 @@ import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 import com.egguncle.xposednavigationbar.MyApplication;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.util.HookUtil;
-import com.egguncle.xposednavigationbar.ui.activity.HomeActivity;
-import com.egguncle.xposednavigationbar.ui.activity.OtherSettingActivity;
 import com.egguncle.xposednavigationbar.util.SPUtil;
-
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 
 /**
  * Created by egguncle on 17-8-11.
