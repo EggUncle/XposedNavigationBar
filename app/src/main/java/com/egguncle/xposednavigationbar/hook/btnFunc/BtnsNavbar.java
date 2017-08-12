@@ -124,9 +124,9 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongC
             Object statusBarObject = statusBarClass.getClasses()[0].getMethod(
                     "asInterface", IBinder.class).invoke(null,
                     new Object[]{retbinder});
-            Method clearAll = statusBarClass.getMethod("toggleRecentApps");
-            clearAll.setAccessible(true);
-            clearAll.invoke(statusBarObject);
+            Method recentApps = statusBarClass.getMethod("toggleRecentApps");
+            recentApps.setAccessible(true);
+            recentApps.invoke(statusBarObject);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {

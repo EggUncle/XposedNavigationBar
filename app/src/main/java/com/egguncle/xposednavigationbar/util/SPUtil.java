@@ -21,6 +21,7 @@ package com.egguncle.xposednavigationbar.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.egguncle.xposednavigationbar.FinalStr.FuncName;
 import com.egguncle.xposednavigationbar.model.ShortCut;
@@ -66,8 +67,13 @@ public class SPUtil {
         if (instance == null) {
             synchronized (SPUtil.class) {
                 instance = new SPUtil();
-                //由于xp模块需要读取sp的内容，所以将sp的类型设置为MODE_WORLD_READABLE
-                mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_PRIVATE);
+                //由于xp模块需要读取sp的内容，所以将sp的类型设置为MODE_WORLD_READABLE,但是7.0上不允许使用这个模式，
+                //而且考虑到很多用户是旧版升级上来的，所以这个地方根据系统版本做一个判定
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_WORLD_READABLE);
+                } else {
+                    mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_PRIVATE);
+                }
                 mEditor = mSharedPreferences.edit();
             }
         }

@@ -137,7 +137,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     private void initHook(StartupParam startupParam) throws Throwable {
         pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
-        pre.makeWorldReadable();
 
         String json = pre.getString(SHORT_CUT_DATA, "");
         expandStatusBarWithRoot = pre.getBoolean(SPUtil.ROOT_DOWN, false);
@@ -516,7 +515,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
     }
 
     private void setHomePointPosition(LinearLayout ll, int position) {
-       // ll = linepage1;
+        // ll = linepage1;
         ImageButton pointbtn = (ImageButton) ll.getChildAt(0);
         if (position == SPUtil.LEFT) {
             ll.setGravity(Gravity.LEFT);
@@ -592,7 +591,7 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         int iconSize = setting.getIconSize();
         int homePosition = setting.getHomePointPosition();
         boolean rootDown = setting.isRootDown();
-        XposedBridge.log(homePosition+"  "+iconSize);
+        XposedBridge.log(homePosition + "  " + iconSize);
 
         updateNavBar(context, list, homePosition, iconSize, rootDown);
     }
@@ -612,8 +611,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc, iconSize);
             }
         }
-        setHomePointPosition(linepage1,homePointPosition);
-        expandStatusBarWithRoot=rootDown;
+        setHomePointPosition(linepage1, homePointPosition);
+        expandStatusBarWithRoot = rootDown;
     }
 
 //    private class BtnChangeReceiver extends BroadcastReceiver {
@@ -653,6 +652,8 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            //在更新以后有些用户没有进行重启，而直接进行了新功能的添加，app部分得到了更新，
+            //但是hook部分的更新需要重启后才生效，所以这里做一个异常捕获操作
             try {
                 XpNavBarSetting setting = intent.getParcelableExtra("data");
                 xpNavBarDataAnalysis(context, setting);
