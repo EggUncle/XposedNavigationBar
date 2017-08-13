@@ -218,32 +218,66 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
-        //  XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        XposedBridge.log("try to hook resource ");
         //过滤包名
         if (!resparam.packageName.equals("com.android.systemui"))
             return;
 
-        XposedBridge.log("hook resource ");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_bar", new XC_LayoutInflated() {
-                @Override
-                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                    XposedBridge.log("hook layout");
-                    //hook0NavBar(liparam);
-                    hookNavBar(liparam);
-                }
-            });
-        } else {
-            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_layout", new XC_LayoutInflated() {
-                @Override
-                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                    XposedBridge.log("hook layout on nougat");
-                    hookNavBarOnNougat(liparam);
-                }
-            });
-        }
+//        XposedBridge.log("hook resource ");
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+//            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_bar", new XC_LayoutInflated() {
+//                @Override
+//                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+//                    XposedBridge.log("hook layout");
+//                    //hook0NavBar(liparam);
+//                    hookNavBar(liparam);
+//                }
+//            });
+//        } else {
+//            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_layout", new XC_LayoutInflated() {
+//                @Override
+//                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+//                    XposedBridge.log("hook layout on nougat");
+//                    hookNavBarOnNougat(liparam);
+//                }
+//            });
+//        }
 
 
+    }
+
+    /**
+     * hook android 7.0下的导航栏
+     * 在lineage os上hook资源文件的方法没生效，只能在这里做hook了
+     */
+    public void hookNavBarOnNougat(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        final Class<?> navigationBarInflaterViewClass = lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarInflaterView");
+        XposedHelpers.findAndHookMethod(navigationBarInflaterViewClass, "onFinishInflate", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+                FrameLayout navbar = (FrameLayout) XposedHelpers.getObjectField(param.thisObject, "mRot0");
+                FrameLayout navbarBtns = (FrameLayout) navbar.getChildAt(0);
+                hookNavBarFunc(navbar, navbarBtns);
+            }
+        });
+    }
+
+    public void hookNavBarBeforeNougat(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        final Class<?> navigationBarInflaterViewClass = lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
+        XposedHelpers.findAndHookMethod(navigationBarInflaterViewClass, "onFinishInflate", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+                View navBarView = (View) param.thisObject;
+                View[] mRotatedViews = (View[]) XposedHelpers.getObjectField(navBarView, "mRotatedViews");
+                Resources res = navBarView.getResources();
+                ViewGroup rootView = (ViewGroup) mRotatedViews[Surface.ROTATION_0];
+                ViewGroup navBtnsRot0 = (ViewGroup) mRotatedViews[Surface.ROTATION_0]
+                        .findViewById(res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
+                hookNavBarFunc(rootView, navBtnsRot0);
+            }
+        });
     }
 
     @Override
@@ -253,6 +287,11 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         if (lpparam.packageName.equals("com.android.systemui")) {
             XposedBridge.log("filter package systemui");
             hookPhoneStatusBar(lpparam);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                hookNavBarBeforeNougat(lpparam);
+            } else {
+                hookNavBarOnNougat(lpparam);
+            }
         }
     }
 
@@ -493,21 +532,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
      * @param context
      */
     private void initBroadcast(Context context) {
-//        IntentFilter btnChangeFilter = new IntentFilter();
-//        btnChangeFilter.addAction(ACT_BROADCAST);
-//        BtnChangeReceiver btnReceiver = new HookUtil.BtnChangeReceiver();
-//        context.registerReceiver(btnReceiver, btnChangeFilter);
-
-//        IntentFilter navbarShowFilter = new IntentFilter();
-//        navbarShowFilter.addAction(ACT_NAVBAR_SHOW);
-//        NavBarShowReceiver navReceiver = new HookUtil.NavBarShowReceiver();
-//        context.registerReceiver(navReceiver, navbarShowFilter);
-
-        IntentFilter expandStatusFilter = new IntentFilter();
-        expandStatusFilter.addAction(ACT_CHANGE_ROOT_EXPAND_STATUS_BAR);
-        ExpandStatusBarReceiver expandStatusBarReceiver = new HookUtil.ExpandStatusBarReceiver();
-        context.registerReceiver(expandStatusBarReceiver, expandStatusFilter);
-
         IntentFilter dataFilter = new IntentFilter();
         dataFilter.addAction(ACT_NAV_BAR_DATA);
         NavbarDataReceiver navbarDataReceiver = new HookUtil.NavbarDataReceiver();
@@ -615,39 +639,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         expandStatusBarWithRoot = rootDown;
     }
 
-//    private class BtnChangeReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            //在更新以后有些用户没有进行重启，而直接进行了新功能的添加，app部分得到了更新，
-//            //但是hook部分的更新需要重启后才生效，所以这里做一个异常捕获操作
-//            try {
-//                shortCutList = intent.getParcelableArrayListExtra("data");
-//                btnFuncFactory.clearAllBtn(vpLine);
-//                if (shortCutList != null && shortCutList.size() != 0) {
-//                    for (ShortCut sc : shortCutList) {
-//                        btnFuncFactory.createBtnAndSetFunc(context, vpLine, sc, mIconScale);
-//                    }
-//                }
-//            } catch (Exception e) {
-//                XposedBridge.log(e.getMessage());
-//                Toast.makeText(context, "please reboot after update", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-
-    private class ExpandStatusBarReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                expandStatusBarWithRoot = intent.getBooleanExtra(USE_ROOT_EXPAND_STATUS_BAR, false);
-            } catch (Exception e) {
-                XposedBridge.log(e.getMessage());
-                Toast.makeText(context, "please reboot after update", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     private class NavbarDataReceiver extends BroadcastReceiver {
 
         @Override
@@ -659,19 +650,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 xpNavBarDataAnalysis(context, setting);
             } catch (Exception e) {
 
-            }
-        }
-    }
-
-    private class NavBarShowReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                addNavigationBarMethod.invoke(phoneStatusBar);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
             }
         }
     }

@@ -98,10 +98,6 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 spUtil.setRootDown(isChecked);
-                Intent intent = new Intent();
-                intent.putExtra(HookUtil.USE_ROOT_EXPAND_STATUS_BAR, isChecked);
-                intent.setAction(HookUtil.ACT_CHANGE_ROOT_EXPAND_STATUS_BAR);
-                mContext.sendBroadcast(intent);
             }
         });
     }
