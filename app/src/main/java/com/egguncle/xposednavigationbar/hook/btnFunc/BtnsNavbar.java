@@ -99,13 +99,13 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongC
 
     @Override
     public void show() {
-        try {
-            HookUtil.getAddNavigationBarMethod().invoke(HookUtil.getPhoneStatusBar());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            HookUtil.getAddNavigationBarMethod().invoke(HookUtil.getPhoneStatusBar());
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**

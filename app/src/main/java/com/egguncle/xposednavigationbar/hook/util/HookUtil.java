@@ -94,7 +94,7 @@ import static de.robv.android.xposed.XposedBridge.log;
  * 一个hook模块，为了在android设备的底部导航栏虚拟按键上实现功能扩展
  */
 
-public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageResources, IXposedHookZygoteInit {
+public class HookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     private final static String TAG = "HookUtil";
 
@@ -115,7 +115,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
 
     private static View navbarView;
     private static WindowManager windowManager;
-    private static Method addNavigationBarMethod;
 
     private static boolean expandStatusBarWithRoot;
 
@@ -216,38 +215,55 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         initHook(startupParam);
     }
 
+//    @Override
+//    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
+//        XposedBridge.log("try to hook resource ");
+//        //过滤包名
+//        if (!resparam.packageName.equals("com.android.systemui"))
+//            return;
+//
+////        XposedBridge.log("hook resource ");
+////        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+////            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_bar", new XC_LayoutInflated() {
+////                @Override
+////                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+////                    XposedBridge.log("hook layout");
+////                    //hook0NavBar(liparam);
+////                    hookNavBar(liparam);
+////                }
+////            });
+////        } else {
+////            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_layout", new XC_LayoutInflated() {
+////                @Override
+////                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+////                    XposedBridge.log("hook layout on nougat");
+////                    hookNavBarOnNougat(liparam);
+////                }
+////            });
+////        }
+//    }
+
+
+
     @Override
-    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
-        XposedBridge.log("try to hook resource ");
+    public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        //       XposedBridge.log(lpparam.packageName);
         //过滤包名
-        if (!resparam.packageName.equals("com.android.systemui"))
-            return;
-
-//        XposedBridge.log("hook resource ");
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_bar", new XC_LayoutInflated() {
-//                @Override
-//                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-//                    XposedBridge.log("hook layout");
-//                    //hook0NavBar(liparam);
-//                    hookNavBar(liparam);
-//                }
-//            });
-//        } else {
-//            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_layout", new XC_LayoutInflated() {
-//                @Override
-//                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-//                    XposedBridge.log("hook layout on nougat");
-//                    hookNavBarOnNougat(liparam);
-//                }
-//            });
-//        }
-
-
+        if (lpparam.packageName.equals("com.android.systemui")) {
+            XposedBridge.log("filter package systemui");
+            hookPhoneStatusBar(lpparam);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                XposedBridge.log("hook on Marshmallow");
+                hookNavBarBeforeNougat(lpparam);
+            } else {
+                XposedBridge.log("hook on Nougat");
+                hookNavBarOnNougat(lpparam);
+            }
+        }
     }
 
     /**
-     * hook android 7.0下的导航栏
+     * hook android 7.0的导航栏
      * 在lineage os上hook资源文件的方法没生效，只能在这里做hook了
      */
     public void hookNavBarOnNougat(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -263,6 +279,10 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         });
     }
 
+    /**hook android 7.0以下的导航栏
+     * @param lpparam
+     * @throws Throwable
+     */
     public void hookNavBarBeforeNougat(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         final Class<?> navigationBarInflaterViewClass = lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
         XposedHelpers.findAndHookMethod(navigationBarInflaterViewClass, "onFinishInflate", new XC_MethodHook() {
@@ -278,21 +298,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                 hookNavBarFunc(rootView, navBtnsRot0);
             }
         });
-    }
-
-    @Override
-    public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        //       XposedBridge.log(lpparam.packageName);
-        //过滤包名
-        if (lpparam.packageName.equals("com.android.systemui")) {
-            XposedBridge.log("filter package systemui");
-            hookPhoneStatusBar(lpparam);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                hookNavBarBeforeNougat(lpparam);
-            } else {
-                hookNavBarOnNougat(lpparam);
-            }
-        }
     }
 
     /**
@@ -352,9 +357,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         clearAllNotificationsMethod = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
         clearAllNotificationsMethod.setAccessible(true);
 
-        addNavigationBarMethod = phoneStatusBarClass.getDeclaredMethod("addNavigationBar");
-        addNavigationBarMethod.setAccessible(true);
-        //获取到clearAllNotifications和toggleRecentApps方法
         XposedHelpers.findAndHookMethod(phoneStatusBarClass,
                 "start", new XC_MethodHook() {
                     @Override
@@ -365,13 +367,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
                         //获取到windowmanager
                         windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
                         navbarView = (View) XposedHelpers.getObjectField(phoneStatusBar, "mNavigationBarView");
-                        //隐藏导航栏
-//                            XposedBridge.log("====remove navbar ====");
-//                            windowManager.removeView(navbarView);
-                        //显示导航栏
-//                            XposedBridge.log("====add navbar ====");
-//                            addNavigationBarMethod.invoke(phoneStatusBar);
-
                     }
                 });
 
@@ -588,20 +583,12 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookInitPackageR
         return navbarView;
     }
 
-    public static Method getAddNavigationBarMethod() {
-        return addNavigationBarMethod;
-    }
-
     public static WindowManager getWindowManager() {
         return windowManager;
     }
 
     public static boolean isExpandStatusBarWithRoot() {
         return expandStatusBarWithRoot;
-    }
-
-    public static void setExpandStatusBarWithRoot(boolean expandStatusBarWithRoot) {
-        HookUtil.expandStatusBarWithRoot = expandStatusBarWithRoot;
     }
 
     /**

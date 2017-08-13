@@ -99,7 +99,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="@dimen/space_m"
                 android:text="@string/alipay_donate" />
 
             <TextView
@@ -108,17 +107,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="@dimen/space_m"
                 android:text="@string/wechat_donate" />
 
             <TextView
-
                 android:id="@+id/tv_paypal_donate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:autoLink="web"
-                android:paddingTop="@dimen/space_m"
                 android:text="@string/paypal_url" />
         </LinearLayout>
 

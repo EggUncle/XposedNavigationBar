@@ -7,6 +7,9 @@
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 
 --开发中--
+## 扩展的实现
+实现的方法还是很简单的，只是在导航栏对应的view中使用addview加入一些布局，但是获取到view实例的方法有两种，一种通过布局文件，一种通过view这个类的onFinishInflate方法，起初使用的是前一种方法，现在用的是后一种，因为目前发现在lineage OS上，对应布局文件的hook无法生效。
+
 ## 支付宝&微信扫一扫 ✓
 支付宝扫一扫：
 ```java
