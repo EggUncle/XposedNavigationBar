@@ -8,7 +8,7 @@ http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 
 --开发中--
 ## 扩展的实现
-实现的方法还是很简单的，只是在导航栏对应的view中使用addview加入一些布局，但是获取到view实例的方法有两种，一种通过布局文件，一种通过view这个类的onFinishInflate方法，起初使用的是前一种方法，现在用的是后一种，因为目前发现在lineage OS上，对应布局文件的hook无法生效。
+实现的方法还是很简单的，只是在导航栏对应的view中使用addview加入一些布局，但是获取到view实例的方法有两种，一种通过布局文件，一种通过view这个类的onFinishInflate方法，起初使用的是前一种方法，现在用的是后一种，因为目前发现在lineage OS上，对应布局文件的hook无法生效，但是目前通过第二种方法以及可以hook成功了，rr上也有类似的问题，使用第二种方法也无法解决，原因不详，因为xposed的handleInitPackageResources方法会在布局文件加载的时候生效，可能是不同的rom在这个地方的行为有一些不同，rr上很多对导航栏进行修改的模块都没有生效。
 
 ## 支付宝&微信扫一扫 ✓
 支付宝扫一扫：

@@ -89,23 +89,11 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongC
     @Override
     public void hide() {
 
-        try {
-            HookUtil.getWindowManager().removeView(HookUtil.getNavbarView());
-        } catch (Exception e) {
-            XposedBridge.log(e.getMessage());
-        }
-
     }
 
     @Override
     public void show() {
-//        try {
-//            HookUtil.getAddNavigationBarMethod().invoke(HookUtil.getPhoneStatusBar());
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     /**

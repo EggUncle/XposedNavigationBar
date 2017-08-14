@@ -98,13 +98,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     private final static String TAG = "HookUtil";
 
-    public final static String ACT_BROADCAST = "com.egguncle.xpnavbar.broadcast";
-    public final static String ACT_NAVBAR_SHOW = "com.egguncle.xpnavbar.shownavbar";
-    public final static String ACT_CHANGE_ROOT_EXPAND_STATUS_BAR = "com.egguncle.xpnavbar.root_expand";
     public final static String ACT_NAV_BAR_DATA = "com.egguncle.xpnavbar.navbardata";
 
     private static final String SHORT_CUT_DATA = "short_cut_data";
-    public static final String USE_ROOT_EXPAND_STATUS_BAR = "use_root_expand_status_bar";
 
     //剪贴板内容
     private static ArrayList<String> clipboardData;
@@ -113,7 +109,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     private static Object phoneStatusBar;
     private static Method clearAllNotificationsMethod;
 
-    private static View navbarView;
     private static WindowManager windowManager;
 
     private static boolean expandStatusBarWithRoot;
@@ -215,36 +210,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         initHook(startupParam);
     }
 
-//    @Override
-//    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
-//        XposedBridge.log("try to hook resource ");
-//        //过滤包名
-//        if (!resparam.packageName.equals("com.android.systemui"))
-//            return;
-//
-////        XposedBridge.log("hook resource ");
-////        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-////            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_bar", new XC_LayoutInflated() {
-////                @Override
-////                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-////                    XposedBridge.log("hook layout");
-////                    //hook0NavBar(liparam);
-////                    hookNavBar(liparam);
-////                }
-////            });
-////        } else {
-////            resparam.res.hookLayout(resparam.packageName, "layout", "navigation_layout", new XC_LayoutInflated() {
-////                @Override
-////                public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-////                    XposedBridge.log("hook layout on nougat");
-////                    hookNavBarOnNougat(liparam);
-////                }
-////            });
-////        }
-//    }
-
-
-
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //       XposedBridge.log(lpparam.packageName);
@@ -300,55 +265,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         });
     }
 
-    /**
-     * 因为这个模块的功能部分的数据存储其实是使用SharedPreferences以json形式存储在机器上的，而xp读取它
-     * 则它需要使用MODE_WORLD_READABLE这个模式，但是在android Nougat中，使用这个权限会报错，在源码中检索后发现
-     * ContextImpl中有一个checkMode方法来对其进行检测，所以此处其实是对ContextImpl的checkmode进行hook，越过其对
-     * sp模式的检测导致报错
-     * 这里仅仅是一个尝试
-     */
-    public void hookSharedPreferences(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        Class<?> contextImplClass = lpparam.classLoader.loadClass("android.app.ContextImpl");
-        XposedHelpers.findAndHookMethod(contextImplClass, "checkMode", int.class, new XC_MethodReplacement() {
-
-            @Override
-            protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log("===replace success===");
-                XSharedPreferences sharedPreferences = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
-                String json = sharedPreferences.getString(SHORT_CUT_DATA, "null");
-                XposedBridge.log(json);
-                return null;
-            }
-        });
-//        XposedHelpers.findAndHookMethod(contextImplClass, "getSharedPreferences", File.class, int.class, new XC_MethodHook() {
-//            @Override
-//            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-//                super.beforeHookedMethod(param);
-//                //-rw-rw-r-- 1 u0_a72 u0_a72  400 2017-08-09 16:12 XposedNavigationBar.xml
-//                //-rw-rw-r-- u0_a62   u0_a62  398 2017-08-05 05:39 XposedNavigationBar.xml
-//
-//                XposedBridge.log("===setReadable===");
-//                //这个方法的第一个参数是文件，修改其存取权限尝试来绕过nougat的限制
-//                File file=new File("/data/data/com.egguncle.xposednavigationbar/shared_prefs/XposedNavigationBar.xml");
-//                file.setReadable(true, false);
-//                XposedBridge.log(file.getPath());
-//                file.getParentFile().setReadable(true, false);
-//                XposedBridge.log(file.getParentFile().getPath());
-//                file.getParentFile().getParentFile().setReadable(true, false);
-//                XposedBridge.log(file.getParentFile().getParentFile().getPath());
-//            }
-//        });
-
-        XposedHelpers.findAndHookMethod(contextImplClass, "setFilePermissionsFromMode", String.class, int.class, int.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                super.beforeHookedMethod(param);
-                XposedBridge.log("===MODE_WORLD_READABLE===");
-                param.args[1] = Activity.MODE_WORLD_READABLE;
-            }
-        });
-    }
-
     public void hookPhoneStatusBar(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //获取清除通知的方法
         Class<?> phoneStatusBarClass =
@@ -366,36 +282,9 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                         phoneStatusBar = param.thisObject;
                         //获取到windowmanager
                         windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
-                        navbarView = (View) XposedHelpers.getObjectField(phoneStatusBar, "mNavigationBarView");
                     }
                 });
 
-    }
-
-    /**
-     * Android 6.0 及以下hook布局的方法
-     *
-     * @param liparam
-     */
-    public void hookNavBar(XC_LayoutInflated.LayoutInflatedParam liparam) {
-        LinearLayout navBarParentView = (LinearLayout) liparam.view;
-        //垂直状态下的导航栏整体布局
-        XposedBridge.log("hook navBarBg success");
-        FrameLayout rootView = (FrameLayout) navBarParentView.findViewById(liparam.res.getIdentifier("rot0", "id", "com.android.systemui"));
-        //垂直状态下的导航栏三大按钮布局
-        final LinearLayout navBarView = (LinearLayout) rootView.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-        hookNavBarFunc(rootView, navBarView);
-    }
-
-    /**
-     * Android 7.0 的hook布局的方法
-     *
-     * @param liparam
-     */
-    public void hookNavBarOnNougat(XC_LayoutInflated.LayoutInflatedParam liparam) {
-        final FrameLayout rootView = (FrameLayout) liparam.view;
-        final FrameLayout navBarView = (FrameLayout) rootView.findViewById(liparam.res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-        hookNavBarFunc(rootView, navBarView);
     }
 
     /**
@@ -577,10 +466,6 @@ public class HookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     public static ArrayList<String> getClipdata() {
         return clipboardData;
-    }
-
-    public static View getNavbarView() {
-        return navbarView;
     }
 
     public static WindowManager getWindowManager() {

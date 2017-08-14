@@ -159,8 +159,6 @@ public class BtnFuncFactory {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
         p.gravity = Gravity.CENTER;
-        //   XposedBridge.log("====" + iconScale);
-        //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton btn = new ImageButton(context);
         String iconPath = sc.getIconPath();
         Bitmap iconBitmap = null;
@@ -171,7 +169,6 @@ public class BtnFuncFactory {
             iconBitmap = ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
         }
         if (iconsize != 100) {
-            XposedBridge.log("---scale---");
             iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconsize);
         }
         btn.setImageBitmap(iconBitmap);
