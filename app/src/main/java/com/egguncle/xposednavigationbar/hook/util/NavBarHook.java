@@ -158,8 +158,7 @@ public class NavBarHook {
 
         btnFuncFactory = new BtnFuncFactory(fmExtPage, vpXphook, llExtPage, DataHook.mapImgRes);
         for (ShortCut sc : DataHook.shortCutList) {
-            // createBtnAndSetFunc(context, fmExtPage, llExtPage, sc.getShortCutName());
-            btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, DataHook.iconScale);
+                btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, DataHook.iconScale);
         }
         //将这些布局都添加到viewpageadapter中
         List<View> list = new ArrayList<View>();
@@ -224,8 +223,15 @@ public class NavBarHook {
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if (DataHook.shortCutList.size()==0){
+                        Intent intent = new Intent(ConstantStr.ACTION_INIT_DATA);
+                        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        view.getContext().startActivity(intent);
+                    }
+                }
                 vpXphook.setCurrentItem(2);
-
             }
         });
 
@@ -297,6 +303,7 @@ public class NavBarHook {
     public static void updateNavBar(Context context, List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown) {
         btnFuncFactory.clearAllBtn();
         if (shortCutData != null && shortCutData.size() != 0) {
+            DataHook.shortCutList=shortCutData;
             for (ShortCut sc : shortCutData) {
                 btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, iconSize);
             }

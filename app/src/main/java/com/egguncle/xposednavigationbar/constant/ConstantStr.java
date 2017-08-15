@@ -25,8 +25,8 @@ package com.egguncle.xposednavigationbar.constant;
 
 public class ConstantStr {
     public final static String ACT_NAV_BAR_DATA = "com.egguncle.xpnavbar.navbardata";
-    public final static  String SHORT_CUT_DATA = "short_cut_data";
-
+    public final static String SHORT_CUT_DATA = "short_cut_data";
+    public final static String ACTION_INIT_DATA="com.egguncle.xposednavigationbar.ui.activity.InitActivity";
 
     public final static String BACK = "back";
     public final static String NEXT_PAGE = "next";

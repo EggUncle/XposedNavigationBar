@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -46,7 +47,7 @@ public class DataHook {
     public static int iconScale;
     public static boolean expandStatusBarWithRoot;
     //用于获取保存的快捷按键设置
-    public static ArrayList<ShortCut> shortCutList;
+    public static List<ShortCut> shortCutList;
     public static int homePointPosition;
 
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {

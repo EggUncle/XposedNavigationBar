@@ -136,7 +136,11 @@ public class SPUtil {
     }
 
     public int getHomePointPosition() {
-        return mSharedPreferences.getInt(HOME_POINT, LEFT);
+        try{
+            return mSharedPreferences.getInt(HOME_POINT, LEFT);
+        }catch (Exception e){
+            return LEFT;
+        }
     }
 
 
