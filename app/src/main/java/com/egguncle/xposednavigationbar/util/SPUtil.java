@@ -23,7 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
-import com.egguncle.xposednavigationbar.FinalStr.FuncName;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.google.gson.Gson;
@@ -151,7 +151,7 @@ public class SPUtil {
     }
 
     public int getClearMemLevel() {
-        return mSharedPreferences.getInt(CLEAR_MEM_LEVEL, FuncName.IMPORTANCE_VISIBLE);
+        return mSharedPreferences.getInt(CLEAR_MEM_LEVEL, ConstantStr.IMPORTANCE_VISIBLE);
     }
 
     /**

@@ -24,7 +24,8 @@ import android.os.SystemClock;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.StatusBarController;
-import com.egguncle.xposednavigationbar.hook.util.HookUtil;
+import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
+import com.egguncle.xposednavigationbar.hook.util.NavBarHook;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
 
     @Override
     public void expandAllStatusBar(Context context) {
-        if (HookUtil.isExpandStatusBarWithRoot()) {
+        if (NavBarHook.isExpandStatusBarWithRoot()) {
             //如果在6.0环境下，尝试申请root权限来解决通知栏展开缓慢的问题
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && requestRoot()) {
                 //申请成功后会模拟手势进行下拉

@@ -16,18 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.FinalStr;
+package com.egguncle.xposednavigationbar.constant;
 
-
-import android.content.Context;
-
-import java.util.Locale;
 
 /**
  * Created by egguncle on 17-6-7.
  */
 
-public class FuncName {
+public class ConstantStr {
+    public final static String ACT_NAV_BAR_DATA = "com.egguncle.xpnavbar.navbardata";
+    public final static  String SHORT_CUT_DATA = "short_cut_data";
+
+
     public final static String BACK = "back";
     public final static String NEXT_PAGE = "next";
     public final static String PREVIOUS = "previous";

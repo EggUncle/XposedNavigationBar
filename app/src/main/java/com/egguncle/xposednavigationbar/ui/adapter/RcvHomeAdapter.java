@@ -21,27 +21,20 @@ package com.egguncle.xposednavigationbar.ui.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.egguncle.xposednavigationbar.FinalStr.FuncName;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.ui.activity.SelectIconActivity;
 import com.egguncle.xposednavigationbar.util.CodeToFuncName;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -89,7 +82,7 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
                 String iconPath=shortCut.getIconPath();
                 intent.putExtra("iconpath",iconPath);
                 if (view.getContext() instanceof Activity){
-                    if (shortCut.getCode()==FuncName.FUNC_COMMAND_CODE){
+                    if (shortCut.getCode()== ConstantStr.FUNC_COMMAND_CODE){
                         intent.putExtra("isCommand",true);
                        intent.putExtra("command",shortCut.getShellStr());
                     }

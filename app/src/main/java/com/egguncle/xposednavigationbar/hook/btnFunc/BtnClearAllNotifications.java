@@ -21,8 +21,9 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 import android.content.Context;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.util.HookUtil;
+import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearAllNotifications;
+import com.egguncle.xposednavigationbar.hook.util.PhoneSatatusBarHook;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,17 +35,8 @@ import de.robv.android.xposed.XposedBridge;
  */
 
 public class BtnClearAllNotifications implements ClearAllNotifications, View.OnClickListener {
-    //用于获取phonestatusbar对象和clearAllNotifications方法
-//    private Object mPhoneStatusBar;
-//    private Method mClearAllNotificationsMethod;
-
     private BtnStatusBarController btnStatusBarController;
 
-    //    public BtnClearAllNotifications(Object phoneStatusBar, Method clearAllNotificationsMethod) {
-//        mPhoneStatusBar = phoneStatusBar;
-//        mClearAllNotificationsMethod = clearAllNotificationsMethod;
-//        btnStatusBarController = new BtnStatusBarController();
-//    }
     public BtnClearAllNotifications() {
         btnStatusBarController = new BtnStatusBarController();
     }
@@ -56,8 +48,8 @@ public class BtnClearAllNotifications implements ClearAllNotifications, View.OnC
 
     @Override
     public void clearAllNotifications(Context context) {
-        Object mPhoneStatusBar = HookUtil.getPhoneStatusBar();
-        Method mClearAllNotificationsMethod = HookUtil.getClearAllNotificationsMethod();
+        Object mPhoneStatusBar = PhoneSatatusBarHook.getPhoneStatusBar();
+        Method mClearAllNotificationsMethod = PhoneSatatusBarHook.getClearAllNotificationsMethod();
         if (mClearAllNotificationsMethod == null || mPhoneStatusBar == null) {
             XposedBridge.log("method or object is null");
             return;

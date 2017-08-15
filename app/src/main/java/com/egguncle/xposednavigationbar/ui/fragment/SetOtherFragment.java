@@ -20,7 +20,6 @@ package com.egguncle.xposednavigationbar.ui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -31,10 +30,9 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.egguncle.xposednavigationbar.FinalStr.FuncName;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.MyApplication;
 import com.egguncle.xposednavigationbar.R;
-import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
 /**
@@ -62,9 +60,9 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     }
 
     private String[] homePointStr = {
-            FuncName.LEFT,
-            FuncName.RIGHT,
-            FuncName.DISMISS
+            ConstantStr.LEFT,
+            ConstantStr.RIGHT,
+            ConstantStr.DISMISS
     };
 
     private String[] clearMemLevels = {

@@ -20,8 +20,6 @@ package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,20 +30,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import com.egguncle.xposednavigationbar.R;
-import com.egguncle.xposednavigationbar.hook.util.HookUtil;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.ui.fragment.MomoFragment;
@@ -196,7 +190,7 @@ public class HomeActivity extends BaseActivity {
                 boolean rootDown = spUtil.getRootDown();
                 XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown);
                 intent.putExtra("data", setting);
-                intent.setAction(HookUtil.ACT_NAV_BAR_DATA);
+                intent.setAction(ConstantStr.ACT_NAV_BAR_DATA);
                 sendBroadcast(intent);
                 spUtil.saveShortCut(shortCutList);
                 return true;

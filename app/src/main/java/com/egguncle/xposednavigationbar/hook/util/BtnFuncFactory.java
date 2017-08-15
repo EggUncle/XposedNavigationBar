@@ -20,14 +20,7 @@ package com.egguncle.xposednavigationbar.hook.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
@@ -36,7 +29,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.egguncle.xposednavigationbar.FinalStr.FuncName;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnAlipayScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnBackLight;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnClearAllNotifications;
@@ -58,8 +51,6 @@ import com.egguncle.xposednavigationbar.util.ImageUtil;
 
 import java.util.Map;
 
-import de.robv.android.xposed.XposedBridge;
-
 /**
  * Created by egguncle on 17-6-10.
  */
@@ -69,61 +60,63 @@ public class BtnFuncFactory {
     private ViewPager mViewPager;
     //用于加载图片资源
     private Map<Integer, byte[]> mMapImgRes;
+    private ViewGroup mllExtPage;
 
     public BtnFuncFactory(ViewGroup rootViewGroup,
-                          ViewPager viewPager,
+                          ViewPager viewPager,ViewGroup llExtPage,
                           Map<Integer, byte[]> mapImgRes) {
         mRootViewGroup = rootViewGroup;
         mMapImgRes = mapImgRes;
         mViewPager = viewPager;
+        mllExtPage=llExtPage;
     }
 
 
     public View.OnClickListener getBtnFuncOfName(ShortCut sc) {
         switch (sc.getCode()) {
-//            case FuncName.BACK:
+//            case ConstantStr.BACK:
 //                break;
-            case FuncName.FUNC_DOWN_CODE:
+            case ConstantStr.FUNC_DOWN_CODE:
                 return new BtnStatusBarController();
-            case FuncName.FUNC_QUICK_NOTICE_CODE:
+            case ConstantStr.FUNC_QUICK_NOTICE_CODE:
                 return new BtnQuickNotice();
-            case FuncName.FUNC_CLEAR_NOTIFICATION_CODE:
+            case ConstantStr.FUNC_CLEAR_NOTIFICATION_CODE:
                 return new BtnClearAllNotifications();
-            case FuncName.FUNC_SCREEN_OFF_CODE:
+            case ConstantStr.FUNC_SCREEN_OFF_CODE:
                 return new BtnScreenOff();
-            case FuncName.FUNC_CLEAR_MEM_CODE:
+            case ConstantStr.FUNC_CLEAR_MEM_CODE:
                 return new BtnClearBackground();
-            case FuncName.FUNC_VOLUME_CODE:
-                return new BtnVolume(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
-            case FuncName.FUNC_LIGHT_CODE:
-                return new BtnBackLight(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(FuncName.FUNC_BACK_CODE)));
-            case FuncName.FUNC_HOME_CODE:
+            case ConstantStr.FUNC_VOLUME_CODE:
+                return new BtnVolume(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(ConstantStr.FUNC_BACK_CODE)));
+            case ConstantStr.FUNC_LIGHT_CODE:
+                return new BtnBackLight(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(ConstantStr.FUNC_BACK_CODE)));
+            case ConstantStr.FUNC_HOME_CODE:
                 return new BtnNavBarGoHome(mViewPager);
-            case FuncName.FUNC_START_ACTS_CODE:
+            case ConstantStr.FUNC_START_ACTS_CODE:
                 return new BtnOpenActPanel();
-            case FuncName.FUNC_NEXT_PLAY_CODE:
+            case ConstantStr.FUNC_NEXT_PLAY_CODE:
                 return new BtnMusicController(BtnMusicController.NEXT);
-            case FuncName.FUNC_PLAY_MUSIC_CODE:
+            case ConstantStr.FUNC_PLAY_MUSIC_CODE:
                 return new BtnMusicController(BtnMusicController.START_OR_STOP);
-            case FuncName.FUNC_PREVIOUS_PLAY_CODE:
+            case ConstantStr.FUNC_PREVIOUS_PLAY_CODE:
                 return new BtnMusicController(BtnMusicController.PREVIOUS);
-            case FuncName.FUNC_WECHAT_SACNNER_CODE:
+            case ConstantStr.FUNC_WECHAT_SACNNER_CODE:
                 return new BtnWeChatScanner();
-            case FuncName.FUNC_ALIPAY_SACNNER_CODE:
+            case ConstantStr.FUNC_ALIPAY_SACNNER_CODE:
                 return new BtnAlipayScanner();
-            case FuncName.FUNC_SCREEN_SHOT_CODE:
+            case ConstantStr.FUNC_SCREEN_SHOT_CODE:
                 return new BtnScreenShot();
-            case FuncName.FUNC_NAV_BACK_CODE:
+            case ConstantStr.FUNC_NAV_BACK_CODE:
                 return new BtnsNavbar(BtnsNavbar.BTN_BACK);
-            case FuncName.FUNC_NAV_HOME_CODE:
+            case ConstantStr.FUNC_NAV_HOME_CODE:
                 return new BtnsNavbar(BtnsNavbar.BTN_HOME);
-            case FuncName.FUNC_NAV_RECENT_CODE:
+            case ConstantStr.FUNC_NAV_RECENT_CODE:
                 return new BtnsNavbar(BtnsNavbar.BTN_RECENT);
-            case FuncName.FUNC_CLIPBOARD_CODE:
+            case ConstantStr.FUNC_CLIPBOARD_CODE:
                 return new BtnNavClipboard();
-            case FuncName.FUNC_COMMAND_CODE:
+            case ConstantStr.FUNC_COMMAND_CODE:
                 return new BtnStartCommand(sc.getShellStr());
-            case FuncName.FUNC_NAV_HIDE_CODE:
+            case ConstantStr.FUNC_NAV_HIDE_CODE:
                 return new BtnsNavbar(BtnsNavbar.BTN_HIDE);
         }
         return null;
@@ -137,11 +130,11 @@ public class BtnFuncFactory {
      */
     public View.OnLongClickListener getBtnLongFuncOfName(int code) {
         switch (code) {
-//            case FuncName.BACK:
+//            case ConstantStr.BACK:
 //                break;
-            case FuncName.FUNC_SCREEN_OFF_CODE:
+            case ConstantStr.FUNC_SCREEN_OFF_CODE:
                 return new BtnScreenOff();
-            case FuncName.FUNC_HOME_CODE:
+            case ConstantStr.FUNC_HOME_CODE:
                 return new BtnsNavbar(BtnsNavbar.BTN_LONG_HOME);
         }
         return null;
@@ -181,8 +174,8 @@ public class BtnFuncFactory {
 
     }
 
-    public void clearAllBtn(LinearLayout line) {
-        line.removeAllViews();
+    public void clearAllBtn() {
+        mllExtPage.removeAllViews();
     }
 
 

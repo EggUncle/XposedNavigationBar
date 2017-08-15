@@ -24,20 +24,17 @@ import android.os.RemoteException;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.util.HookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import de.robv.android.xposed.XposedBridge;
 
 /**
  * Created by egguncle on 17-6-21.
  * Android原有的返回、home、最近任务键,以及显示和隐藏
  */
 
-public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongClickListener {
+public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLongClickListener {
     public final static int BTN_BACK = 1;
     public final static int BTN_HOME = 2;
     public final static int BTN_RECENT = 3;
@@ -133,9 +130,10 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongC
     @Override
     public boolean onLongClick(View v) {
         switch (mType) {
-            case BTN_LONG_HOME:{
-                    new Thread(new NavBarRunnable(BTN_LONG_HOME)).start();
-            }break;
+            case BTN_LONG_HOME: {
+                new Thread(new NavBarRunnable(BTN_LONG_HOME)).start();
+            }
+            break;
         }
         return true;
     }
@@ -162,7 +160,7 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener,View.OnLongC
                 break;
                 case BTN_LONG_HOME: {
                     Instrumentation mInst = new Instrumentation();
-                    KeyEvent keyEvent=new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_HOME);
+                    KeyEvent keyEvent = new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_HOME);
                     mInst.sendKeySync(keyEvent);
                 }
                 break;

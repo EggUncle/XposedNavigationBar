@@ -28,7 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.egguncle.xposednavigationbar.FinalStr.FuncName;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
 import java.util.Map;
@@ -82,13 +82,13 @@ public class MusicControllerPanel extends LinearLayout {
         ImageButton playBtn = new ImageButton(context);
         ImageButton nextBtn = new ImageButton(context);
         if (iconScale != 100) {
-            previousBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(FuncName.FUNC_PREVIOUS_PLAY_CODE), iconScale));
-            playBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(FuncName.FUNC_PLAY_MUSIC_CODE), iconScale));
-            nextBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(FuncName.FUNC_NEXT_PLAY_CODE), iconScale));
+            previousBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PREVIOUS_PLAY_CODE), iconScale));
+            playBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PLAY_MUSIC_CODE), iconScale));
+            nextBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_NEXT_PLAY_CODE), iconScale));
         } else {
-            previousBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_PREVIOUS_PLAY_CODE)));
-            playBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_PLAY_MUSIC_CODE)));
-            nextBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(FuncName.FUNC_NEXT_PLAY_CODE)));
+            previousBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(ConstantStr.FUNC_PREVIOUS_PLAY_CODE)));
+            playBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(ConstantStr.FUNC_PLAY_MUSIC_CODE)));
+            nextBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(ConstantStr.FUNC_NEXT_PLAY_CODE)));
         }
         previousBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
         playBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
