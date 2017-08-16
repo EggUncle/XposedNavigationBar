@@ -45,6 +45,12 @@
     <string name="app_github">
         Github: https://github.com/EggUncle/XposedNavigationBar \nCan you give me a star?ヾ(●゜▽゜●)♡
     </string>
+    <string name="about_open_source">
+        About open source
+        \nXposed: https://github.com/rovo89/Xposed
+        \nlitepal: https://github.com/LitePalFramework/LitePal
+        \ngson: https://github.com/google/gson
+    </string>
     <string name="about_app">
         About&amp;Donate
     </string>

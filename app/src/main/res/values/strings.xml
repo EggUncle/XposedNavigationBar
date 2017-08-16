@@ -43,6 +43,12 @@
     <string name="app_github">
         Github: https://github.com/EggUncle/XposedNavigationBar \n能给我一个小星星吗ヾ(●゜▽゜●)♡
     </string>
+    <string name="about_open_source">
+        开源相关
+        \nXposed: https://github.com/rovo89/Xposed
+        \nlitepal: https://github.com/LitePalFramework/LitePal
+        \ngson: https://github.com/google/gson
+    </string>
     <string name="about_app">
         关于&amp;捐赠
     </string>
