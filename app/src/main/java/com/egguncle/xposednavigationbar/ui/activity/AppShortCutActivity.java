@@ -19,8 +19,11 @@
 package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -41,6 +44,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.model.AppInfo;
 import com.egguncle.xposednavigationbar.ui.adapter.AppActAdapter;
 import com.egguncle.xposednavigationbar.ui.adapter.DialogItemAdapter;
@@ -62,6 +66,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
     private RecyclerView rcvApp;
 
     private RelativeLayout shortCutPanel;
+    private CloseReceiver receiver;
 
     private final static String TAG = "AppShortCutActivity";
 
@@ -89,7 +94,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
         //状态栏透明
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
-        shortCutPanel= (RelativeLayout) findViewById(R.id.short_cut_panel);
+        shortCutPanel = (RelativeLayout) findViewById(R.id.short_cut_panel);
         ivRemove = (ImageButton) findViewById(R.id.iv_remove);
         ivAdd = (ImageButton) findViewById(R.id.iv_add);
         ivClose = (ImageButton) findViewById(R.id.iv_close);
@@ -109,6 +114,10 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
 //        MyItemTouchHelper myItemTouchHelper = new MyItemTouchHelper(onItemTouchCallbackListener);
 //        myItemTouchHelper.attachToRecyclerView(rcvApp);
 
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction(ConstantStr.ACTION_CLOSE_ACT_PANEL);
+        receiver=new CloseReceiver();
+        registerReceiver(receiver,intentFilter);
     }
 
     private void initAction() {
@@ -122,9 +131,9 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-               if (newState==BottomSheetBehavior.STATE_HIDDEN){
-                   finish();
-               }
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    finish();
+                }
             }
 
             @Override
@@ -222,6 +231,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
             appInfo.delete();
             Log.i(TAG, "onDestroy: delete" + appInfo.getLabel());
         }
+        unregisterReceiver(receiver);
     }
 
     @Override
@@ -305,6 +315,17 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
                 ivRemove.setClickable(true);
             }
             break;
+        }
+    }
+
+    private static class CloseReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (context instanceof Activity) {
+                ((Activity) context).finish();
+            }
+
         }
     }
 }

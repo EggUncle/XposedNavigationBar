@@ -18,10 +18,14 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Process;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.hook.hookFunc.StartActPanel;
 
 import de.robv.android.xposed.XposedBridge;
@@ -34,18 +38,30 @@ public class BtnOpenActPanel implements StartActPanel, View.OnClickListener {
     //启动快速备忘
     private final static String ACTION_START_ACT = "com.egguncle.xposednavigationbar.ui.activity.AppShortCutActivity";
 
+    private static boolean open;
+
     @Override
     public void onClick(View view) {
-        openActPanel(view.getContext());
+        if (open) {
+            closeActPanel(view.getContext());
+            open = false;
+        } else {
+            openActPanel(view.getContext());
+            open = true;
+        }
     }
 
     @Override
     public void openActPanel(Context context) {
+        Intent intent = new Intent(ACTION_START_ACT);
+        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
 
-            Intent intent = new Intent(ACTION_START_ACT);
-            //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
-
+    public void closeActPanel(Context context){
+        Intent intent=new Intent();
+        intent.setAction(ConstantStr.ACTION_CLOSE_ACT_PANEL);
+        context.sendBroadcast(intent);
     }
 }

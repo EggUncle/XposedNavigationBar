@@ -26,4 +26,5 @@ import android.content.Context;
 
 public interface StartActPanel {
     void openActPanel(Context context);
+    void closeActPanel(Context context);
 }

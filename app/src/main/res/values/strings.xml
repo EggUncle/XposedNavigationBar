@@ -33,8 +33,7 @@
         \n
         该模块供有虚拟导航栏的机型使用，目前仅在原生和CM ROM以及上进行过测试，部分功能可能在其他ROM上无法正常使用，如果激活模块以后反复出现“系统界面停止运行”导致手机无法正常使用，连接电脑使用adb指令“adb uninstall com.egguncle.xposednavigationbar”卸载该模块即可。
         \n\n
-        Nougat上的Xposed的框架也可以使用，目前仅在魔趣上进行过测试，但是由于7.0的一些系统限制，无法在开机时加载关于这个模块设置的一些数据。
-        所以请在开机后进入软件点击一下主页面右上角的保存，即可正常使用。
+        Nougat上的Xposed的框架也可以使用，目前仅在魔趣上进行过测试。
     </string>
     <string name="version">版本号</string>
     <string name="author">
