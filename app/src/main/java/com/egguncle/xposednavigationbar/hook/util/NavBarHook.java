@@ -180,11 +180,11 @@ public class NavBarHook {
             public void onPageSelected(int position) {
                 if (position == 1) {
                     //当移动到第一页的时候，显示出导航栏，上升动画
-                    XposedBridge.log("apper NavigationBar");
+                    XpLog.i("apper NavigationBar");
                     navbarView.setVisibility(View.VISIBLE);
                 } else {
                     //当移动到非第一页的时候，隐藏导航栏本身的功能，来实现自己的一些功能。
-                    XposedBridge.log("hide NavigationBar");
+                    XpLog.i("hide NavigationBar");
                     navbarView.setVisibility(View.GONE);
                     if (llExtPage.getChildCount() == 0) {
                         vpXphook.setCurrentItem(1);
@@ -287,7 +287,7 @@ public class NavBarHook {
         int iconSize = setting.getIconSize();
         int homePosition = setting.getHomePointPosition();
         boolean rootDown = setting.isRootDown();
-        XposedBridge.log(homePosition + "  " + iconSize);
+        XpLog.i(homePosition + "  " + iconSize);
 
         updateNavBar(context, list, homePosition, iconSize, rootDown);
     }

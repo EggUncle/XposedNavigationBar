@@ -103,7 +103,7 @@ http://www.jianshu.com/p/d17ce2880753
 2460     * services, removing their alarms, etc.
 2461     */
 ```
-该方法需要有系统签名才可以使用，最近会改成这个方法来清理后台。
+该方法需要有系统签名才可以使用，最近会改成这个方法来清理后台。实测后发现systemui并没有使用它的权限，在阻止运行源码中发现他hook的位置是SystemServer,回头hook到这里面去尝试调用这个方法。
 
 ## 手电筒
 
