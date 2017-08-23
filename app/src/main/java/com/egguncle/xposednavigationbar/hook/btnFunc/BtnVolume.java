@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.VolumeController;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import de.robv.android.xposed.XposedBridge;
 
@@ -79,7 +80,7 @@ public class BtnVolume implements VolumeController,View.OnClickListener {
         final AudioManager am = (AudioManager) view.getContext().getSystemService(Context.AUDIO_SERVICE);
         int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         seekBar.setMax(maxVolume);
-        XposedBridge.log("max volume is " + maxVolume);
+        XpLog.i("max volume is " + maxVolume);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {

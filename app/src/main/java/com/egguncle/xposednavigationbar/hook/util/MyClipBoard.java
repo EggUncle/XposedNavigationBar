@@ -45,7 +45,7 @@ public class MyClipBoard {
         clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
             @Override
             public void onPrimaryClipChanged() {
-                //  XposedBridge.log("onPrimaryClipChanged");
+                //  XpLog.i("onPrimaryClipChanged");
                 //获取剪贴板内容，先判断该内容是否为空
                 if (clipboard.hasPrimaryClip()) {
                     ClipData clipData = clipboard.getPrimaryClip();

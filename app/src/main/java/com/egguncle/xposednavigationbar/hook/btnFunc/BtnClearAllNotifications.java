@@ -24,6 +24,7 @@ import android.view.View;
 import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearAllNotifications;
 import com.egguncle.xposednavigationbar.hook.util.PhoneSatatusBarHook;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,7 +52,7 @@ public class BtnClearAllNotifications implements ClearAllNotifications, View.OnC
         Object mPhoneStatusBar = PhoneSatatusBarHook.getPhoneStatusBar();
         Method mClearAllNotificationsMethod = PhoneSatatusBarHook.getClearAllNotificationsMethod();
         if (mClearAllNotificationsMethod == null || mPhoneStatusBar == null) {
-            XposedBridge.log("method or object is null");
+            XpLog.i("method or object is null");
             return;
         }
         try {

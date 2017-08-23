@@ -64,10 +64,10 @@ public class NavBarHook {
 
     public static void hook(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            XposedBridge.log("hook on Marshmallow");
+            XpLog.i("hook on Marshmallow");
             hookNavBarBeforeNougat(lpparam);
         } else {
-            XposedBridge.log("hook on Nougat");
+            XpLog.i("hook on Nougat");
             hookNavBarOnNougat(lpparam);
         }
     }

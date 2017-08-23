@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenShot;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
         try {
             screenshot(view.getContext());
         } catch (Exception e) {
-            XposedBridge.log(e.getMessage());
+            XpLog.i(e.getMessage());
         }
     }
 
@@ -74,7 +75,7 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
             },1000);
         } catch (IOException e) {
             Toast.makeText(context,"screenShot failed",Toast.LENGTH_SHORT).show();
-            XposedBridge.log(e.getMessage());
+            XpLog.i(e.getMessage());
         }
     }
 }

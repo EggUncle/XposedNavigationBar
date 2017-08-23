@@ -19,27 +19,13 @@
 package com.egguncle.xposednavigationbar.hook.util;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-
-import android.content.Intent;
-import android.content.IntentFilter;
-
-import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
-import com.egguncle.xposednavigationbar.constant.ConstantStr;
-import com.egguncle.xposednavigationbar.model.ShortCut;
-import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 
-import static de.robv.android.xposed.XposedBridge.log;
+
+
 
 
 /**
@@ -59,10 +45,10 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        //       XposedBridge.log(lpparam.packageName);
+        //       XpLog.i(lpparam.packageName);
         //过滤包名
         if (lpparam.packageName.equals("com.android.systemui")) {
-            XposedBridge.log("filter package systemui");
+            XpLog.i("filter package systemui");
             PhoneSatatusBarHook.hook(lpparam);
             NavBarHook.hook(lpparam);
         }

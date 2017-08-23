@@ -24,8 +24,8 @@ import android.net.Uri;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScannerQRcode;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
-import de.robv.android.xposed.XposedBridge;
 
 /**
  * Created by egguncle on 17-6-16.
@@ -45,7 +45,7 @@ public class BtnAlipayScanner implements ScannerQRcode,View.OnClickListener {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }catch (Exception e){
-            XposedBridge.log(e.getMessage());
+            XpLog.i(e.getMessage());
         }
 
     }

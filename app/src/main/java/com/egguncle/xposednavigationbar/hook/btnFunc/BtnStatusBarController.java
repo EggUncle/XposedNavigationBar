@@ -26,6 +26,7 @@ import android.view.View;
 import com.egguncle.xposednavigationbar.hook.hookFunc.StatusBarController;
 import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.hook.util.NavBarHook;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -119,10 +120,10 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
         Process process = null;
         boolean result = false;
         try {
-            // XposedBridge.log("申请root");
+            // XpLog.i("申请root");
             process = Runtime.getRuntime().exec("su");
             result = true;
-            // XposedBridge.log("申请成功");
+            // XpLog.i("申请成功");
             final Process finalProcess = process;
             new Thread(new Runnable() {
                 @Override
@@ -161,7 +162,7 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
             }).start();
         } catch (IOException e) {
             e.printStackTrace();
-            XposedBridge.log("申请 失败");
+            XpLog.i("申请 失败");
         }
 
         return result;

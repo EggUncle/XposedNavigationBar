@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.BacklightController;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -121,16 +122,16 @@ public class BtnBackLight implements BacklightController,View.OnClickListener {
             setBacklightBrightness.setAccessible(true);
             setBacklightBrightness.invoke(pm, light);
 
-            XposedBridge.log("=====setBacklightBrightness");
+            XpLog.i("=====setBacklightBrightness");
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            XposedBridge.log(e.getMessage());
+            XpLog.i(e.getMessage());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            XposedBridge.log(e.getMessage());
+            XpLog.i(e.getMessage());
         } catch (InvocationTargetException e) {
             e.printStackTrace();
-            XposedBridge.log(e.getMessage());
+            XpLog.i(e.getMessage());
         }
     }
 }

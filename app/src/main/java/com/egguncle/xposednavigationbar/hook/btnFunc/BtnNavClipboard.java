@@ -25,6 +25,7 @@ import android.view.View;
 import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavClipboard;
 import com.egguncle.xposednavigationbar.hook.util.MyClipBoard;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public class BtnNavClipboard implements NavClipboard, View.OnClickListener {
     public void getClipboadrData(Context context) {
         ArrayList<String> data = MyClipBoard.getClipboardData();
         for (String s : data) {
-            XposedBridge.log(s);
+            XpLog.i(s);
         }
         Intent intent = new Intent(ACTION_CLIPBOARD);
         intent.putStringArrayListExtra("data",data);

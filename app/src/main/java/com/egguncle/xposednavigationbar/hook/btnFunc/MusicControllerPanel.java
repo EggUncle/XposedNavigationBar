@@ -76,7 +76,7 @@ public class MusicControllerPanel extends LinearLayout {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
         p.gravity = Gravity.CENTER;
-        //   XposedBridge.log("====" + iconScale);
+        //   XpLog.i("====" + iconScale);
         //  p.width= (int) (p.width*(iconScale/100.0));
         ImageButton previousBtn = new ImageButton(context);
         ImageButton playBtn = new ImageButton(context);
