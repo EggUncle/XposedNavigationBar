@@ -80,7 +80,30 @@ http://www.jianshu.com/p/d17ce2880753
 ```
 
 ## 后台清理 ✓
-待改进，清理效果不是很理想。
+~~待改进，清理效果不是很理想。~~
+阅读部分阻止运行源码以后发现有一个forceStopPackage方法，它的注释是这样：
+```java
+2443    /**
+2444     * Have the system perform a force stop of everything associated with
+2445     * the given application package.  All processes that share its uid
+2446     * will be killed, all services it has running stopped, all activities
+2447     * removed, etc.  In addition, a {@link Intent#ACTION_PACKAGE_RESTARTED}
+2448     * broadcast will be sent, so that any of its registered alarms can
+2449     * be stopped, notifications removed, etc.
+2450     *
+2451     * <p>You must hold the permission
+2452     * {@link android.Manifest.permission#FORCE_STOP_PACKAGES} to be able to
+2453     * call this method.
+2454     *
+2455     * @param packageName The name of the package to be stopped.
+2456     * @param userId The user for which the running package is to be stopped.
+2457     *
+2458     * @hide This is not available to third party applications due to
+2459     * it allowing them to break other applications by stopping their
+2460     * services, removing their alarms, etc.
+2461     */
+```
+该方法需要有系统签名才可以使用，最近会改成这个方法来清理后台。
 
 ## 手电筒
 
