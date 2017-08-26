@@ -19,9 +19,14 @@
 package com.egguncle.xposednavigationbar.hook.util;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.Space;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +54,8 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnsNavbar;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -63,12 +70,12 @@ public class BtnFuncFactory {
     private ViewGroup mllExtPage;
 
     public BtnFuncFactory(ViewGroup rootViewGroup,
-                          ViewPager viewPager,ViewGroup llExtPage,
+                          ViewPager viewPager, ViewGroup llExtPage,
                           Map<Integer, byte[]> mapImgRes) {
         mRootViewGroup = rootViewGroup;
         mMapImgRes = mapImgRes;
         mViewPager = viewPager;
-        mllExtPage=llExtPage;
+        mllExtPage = llExtPage;
     }
 
 
@@ -147,12 +154,16 @@ public class BtnFuncFactory {
      * @param line
      * @param sc
      */
-    public void createBtnAndSetFunc(Context context, LinearLayout line, ShortCut sc,int iconsize) {
+    public void createBtnAndSetFunc(Context context, LinearLayout line, ShortCut sc, int iconsize) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
         p.gravity = Gravity.CENTER;
-        ImageButton btn = new ImageButton(context);
+
+        ImageView btn = new ImageView(context);
+        Space sp1 = new Space(context);
+        Space sp2 = new Space(context);
+
         String iconPath = sc.getIconPath();
         Bitmap iconBitmap = null;
         if (iconPath != null) {
@@ -161,17 +172,24 @@ public class BtnFuncFactory {
         if (iconBitmap == null) {
             iconBitmap = ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
         }
-        if (iconsize != 100) {
-            iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconsize);
-        }
+        iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconsize);
         btn.setImageBitmap(iconBitmap);
-        btn.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-        btn.setBackgroundColor(Color.alpha(255));
+        //给按钮设置水波纹点击背景，因为7.0上有一些rom有获取资源的限制所以这个功能暂时只在7.0以下的版本使用
+        //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        try {
+            btn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
+        } catch (Exception e) {
+            XpLog.e(e);
+        }
+        //  }
+        btn.setScaleType(ImageView.ScaleType.CENTER);
         btn.setOnClickListener(getBtnFuncOfName(sc));
         btn.setOnLongClickListener(getBtnLongFuncOfName(sc.getCode()));
-        line.addView(btn, p);
 
+        line.addView(sp1, p);
+        line.addView(btn, p);
+        line.addView(sp2, p);
     }
 
     public void clearAllBtn() {

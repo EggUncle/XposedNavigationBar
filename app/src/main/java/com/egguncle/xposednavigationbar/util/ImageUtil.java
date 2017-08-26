@@ -18,7 +18,6 @@
 
 package com.egguncle.xposednavigationbar.util;
 
-import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;

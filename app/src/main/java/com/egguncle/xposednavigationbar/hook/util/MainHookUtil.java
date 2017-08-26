@@ -19,13 +19,15 @@
 package com.egguncle.xposednavigationbar.hook.util;
 
 
+import android.content.res.XModuleResources;
+
+import com.egguncle.xposednavigationbar.R;
+
+import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-
-
-
-
 
 
 /**
@@ -34,31 +36,45 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  * 一个hook模块，为了在android设备的底部导航栏虚拟按键上实现功能扩展
  */
 
-public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit {
+public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteInit, IXposedHookInitPackageResources {
 
     private final static String TAG = "MainHookUtil";
+    private final static String SYSTEM_UI = "com.android.systemui";
+    private static String MODULE_PATH;
+
+    private static int BTN_BG_RES_ID;
 
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
-       DataHook.init(startupParam);
+        MODULE_PATH = startupParam.modulePath;
+        DataHook.init(startupParam);
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //       XpLog.i(lpparam.packageName);
         //过滤包名
-        if (lpparam.packageName.equals("com.android.systemui")) {
+        if (lpparam.packageName.equals(SYSTEM_UI)) {
             XpLog.i("filter package systemui");
             PhoneSatatusBarHook.hook(lpparam);
             NavBarHook.hook(lpparam);
         }
     }
 
+    //获取drawable等资源的方法，Lineage OS无效
+    @Override
+    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
+        if (resparam.packageName.equals(SYSTEM_UI)) {
+            XpLog.i("handleInitPackageResources "+SYSTEM_UI);
+            try {
+                XModuleResources xRes = XModuleResources.createInstance(MODULE_PATH,resparam.res);
+                BTN_BG_RES_ID=resparam.res.addResource(xRes, R.drawable.btn_bg);
+            } catch (Exception e) {
+                XpLog.e(e);
+            }
+        }
+    }
 
-
-
-
-
-
+    public static int getBtnBgResId(){return BTN_BG_RES_ID;}
 }
 

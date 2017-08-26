@@ -152,15 +152,15 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                 View dialogView = View.inflate(view.getContext(), R.layout.d_icon_size, null);
                 final TextView tvImgSize = (TextView) dialogView.findViewById(R.id.tv_img_size);
                 final SeekBar skImgSize = (SeekBar) dialogView.findViewById(R.id.sk_img_size);
-                //设置范围30～150
-                skImgSize.setMax(120);
+                //设置范围10～100
+                skImgSize.setMax(90);
                 int nowSize = Integer.parseInt(tvIconSize.getText().toString());
-                skImgSize.setProgress(nowSize - 30);
+                skImgSize.setProgress(nowSize - 10);
                 tvImgSize.setText(nowSize + " %");
                 skImgSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                        tvImgSize.setText(30 + i + " %");
+                        tvImgSize.setText(10 + i + " %");
                     }
 
                     @Override
@@ -178,7 +178,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                int imgSize = skImgSize.getProgress() + 30;
+                                int imgSize = skImgSize.getProgress() + 10;
                                 tvIconSize.setText(imgSize + "");
                                 spUtil.setIconSize(imgSize);
                             }

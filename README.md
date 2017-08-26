@@ -183,7 +183,22 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
 ## 踩到的一些小坑
 获取上下文对象可以通过在hook资源时拿到某个view，再getContext
 
-资源文件要放在asset文件夹下，使用时取出来转换为byte[]再去转换为需要的类型
+~~资源文件要放在asset文件夹下，使用时取出来转换为byte[]再去转换为需要的类型~~
+这并不全对，资源文件还是可以放在他们本来该放的文件夹里面。
+```java
+    @Override
+    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
+        if (resparam.packageName.equals(SYSTEM_UI)) {
+            try {
+                XModuleResources xRes = XModuleResources.createInstance(MODULE_PATH,resparam.res);
+                TEST_ICON_ID=resparam.res.addResource(xRes, R.drawable.ic_save);
+            } catch (Exception e) {
+                XpLog.e(e.getMessage());
+            }
+        }
+    }
+```
+这种方法也可以获取到app本身的一些资源。但是在Android 7.0上似乎有一些限制（Lineage OS 14.1 Nexus5，这个rom当初在尝试hook导航栏布局的时候就出现了问题所以后来转为hook类里面的东西来给navbarview添加扩展），所以仍然使用原来的方案，（哇要不开个~~7.0~~Lineage OS的专版吧N和M两个系统版本各种不一样233333333）
 
 当应用被放在冰箱里时，无法正常打开app
 

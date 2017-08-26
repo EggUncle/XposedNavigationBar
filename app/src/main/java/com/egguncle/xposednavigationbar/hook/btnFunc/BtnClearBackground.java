@@ -42,48 +42,48 @@ public class BtnClearBackground implements ClearBackground, View.OnClickListener
 
     @Override
     public void clearBackground(Context context) {
-//        Intent intent = new Intent(ACTION_CLEAR_BACK);
-//        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        context.startActivity(intent);
-        long beforeMem = getAvailabaleMemory(context);
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-
-        Method forceStopPackage = null;
-        try {
-            forceStopPackage = ActivityManager.class.getMethod("forceStopPackage", String.class);
-            //forceStopPackage.invoke(am, "com.douguo.recipe");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-        List<ActivityManager.RunningAppProcessInfo> processInfoList = am.getRunningAppProcesses();
-        if (processInfoList != null && processInfoList.size() != 0) {
-            for (int i = 0; i < processInfoList.size(); i++) {
-                ActivityManager.RunningAppProcessInfo processInfo = processInfoList.get(i);
-                if (processInfo.importance > ConstantStr.IMPORTANCE_VISIBLE) {
-                    String[] pkgList = processInfo.pkgList;
-                    for (String pkgName : pkgList) {
-                        //am.killBackgroundProcesses(pkgName);
-                        try {
-                            forceStopPackage.invoke(am, pkgName);
-                            XpLog.i("clear success");
-                        } catch (IllegalAccessException e) {
-                            XpLog.e(e.getMessage());
-                        } catch (InvocationTargetException e) {
-                            XpLog.e(e.getMessage());
-                        }
-                        XpLog.i("clear: " + pkgName);
-                    }
-                }
-            }
-        }
-        long afterMen = getAvailabaleMemory(context);
-        long clearMem = afterMen - beforeMem;
-        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-        am.getMemoryInfo(mi);
-        long totalMem = mi.totalMem / (1024 * 1024);
-        XpLog.i("========" + clearMem);
+        Intent intent = new Intent(ACTION_CLEAR_BACK);
+        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+//        long beforeMem = getAvailabaleMemory(context);
+//        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//
+//        Method forceStopPackage = null;
+//        try {
+//            forceStopPackage = ActivityManager.class.getMethod("forceStopPackage", String.class);
+//            //forceStopPackage.invoke(am, "com.douguo.recipe");
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
+//
+//        List<ActivityManager.RunningAppProcessInfo> processInfoList = am.getRunningAppProcesses();
+//        if (processInfoList != null && processInfoList.size() != 0) {
+//            for (int i = 0; i < processInfoList.size(); i++) {
+//                ActivityManager.RunningAppProcessInfo processInfo = processInfoList.get(i);
+//                if (processInfo.importance > ConstantStr.IMPORTANCE_VISIBLE) {
+//                    String[] pkgList = processInfo.pkgList;
+//                    for (String pkgName : pkgList) {
+//                        //am.killBackgroundProcesses(pkgName);
+//                        try {
+//                            forceStopPackage.invoke(am, pkgName);
+//                            XpLog.i("clear success");
+//                        } catch (IllegalAccessException e) {
+//                            XpLog.e(e);
+//                        } catch (InvocationTargetException e) {
+//                            XpLog.e(e);
+//                        }
+//                        XpLog.i("clear: " + pkgName);
+//                    }
+//                }
+//            }
+//        }
+//        long afterMen = getAvailabaleMemory(context);
+//        long clearMem = afterMen - beforeMem;
+//        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+//        am.getMemoryInfo(mi);
+//        long totalMem = mi.totalMem / (1024 * 1024);
+//        XpLog.i("========" + clearMem);
     }
 
     @Override

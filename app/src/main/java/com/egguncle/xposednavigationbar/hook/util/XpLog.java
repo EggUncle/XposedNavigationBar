@@ -36,6 +36,10 @@ public class XpLog {
         XposedBridge.log("[E/" + TAG + "] "+logContent);
     }
 
+    public static void e(Throwable e){
+        XposedBridge.log("[E/" + TAG + "] "+e.getMessage());
+    }
+
     public static void w(String logContent){
         XposedBridge.log("[W/" + TAG + "] "+logContent);
     }
