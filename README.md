@@ -5,6 +5,8 @@
 
 下载地址
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
+历史版本地址
+http://repo.xposed.info/node/1281/revisions
 
 --开发中--
 ## 扩展的实现
@@ -198,7 +200,7 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
         }
     }
 ```
-这种方法也可以获取到app本身的一些资源。但是在Android 7.0上似乎有一些限制（Lineage OS 14.1 Nexus5，这个rom当初在尝试hook导航栏布局的时候就出现了问题所以后来转为hook类里面的东西来给navbarview添加扩展），所以仍然使用原来的方案，（哇要不开个~~7.0~~Lineage OS的专版吧N和M两个系统版本各种不一样233333333）
+这种方法也可以获取到app本身的一些资源。但是在Android 7.0上似乎有一些限制（Lineage OS 14.1 Nexus5，这个rom当初在尝试hook导航栏布局的时候就出现了问题所以后来转为hook类里面的东西来给navbarview添加扩展，但是魔趣没有出现这样的情况，考虑到7.0刚刚适配，而且rovo89没有发布正式的Xposed for N），所以仍然使用原来的方案，（哇要不开个7.0的专版吧N和以前的系统各种不一样233333333）
 
 当应用被放在冰箱里时，无法正常打开app
 
