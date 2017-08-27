@@ -61,15 +61,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.ClearMemActivity"
-            android:theme="@style/myTransparentTheme">
-            <intent-filter>
-                <action android:name="com.egguncle.xposednavigationbar.ui.activity.ClearMemActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.activity.AboutActivity"
             android:parentActivityName=".ui.activity.HomeActivity" />
         <activity

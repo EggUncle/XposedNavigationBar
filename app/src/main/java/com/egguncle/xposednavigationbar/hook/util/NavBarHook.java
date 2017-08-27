@@ -315,7 +315,7 @@ public class NavBarHook {
         musicPanel.updateIconSize(iconSize);
         setHomePointPosition(homePointPosition);
         expandStatusBarWithRoot = rootDown;
-        DataHook.clearMenLevel=clearMemLevel;
+        DataHook.clearMenLevel = clearMemLevel;
     }
 
 

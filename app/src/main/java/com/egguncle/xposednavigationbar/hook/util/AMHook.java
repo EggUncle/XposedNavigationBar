@@ -42,7 +42,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class AMHook {
     private final static String ACTIVITY_MANAGER = "android.app.ActivityManager";
-   // private final static String ACTIVITY_MANAGER_SERVICE = "com.android.server.am.ActivityManagerService";
     public final static String ACTION_FORCE_STOP_AC = "com.egguncle.xpnavbar.forcestoppackage";
 
     private static Context amContext;

@@ -40,16 +40,9 @@ import java.util.List;
  */
 
 public class BtnClearBackground implements ClearBackground, View.OnClickListener {
-    //启动后台清理
-    private final static String ACTION_CLEAR_BACK = "com.egguncle.xposednavigationbar.ui.activity.ClearMemActivity";
 
     @Override
     public void clearBackground(Context context) {
-//        Intent intent = new Intent(ACTION_CLEAR_BACK);
-//        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        context.startActivity(intent);
-//        long beforeMem = getAvailabaleMemory(context);
         XpLog.i("clear mem level is " + DataHook.clearMenLevel);
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ArrayList<String> pkgNames = new ArrayList<>();
