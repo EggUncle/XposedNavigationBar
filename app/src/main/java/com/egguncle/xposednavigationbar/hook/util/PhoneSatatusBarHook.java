@@ -18,11 +18,16 @@
 
 package com.egguncle.xposednavigationbar.hook.util;
 
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
@@ -36,12 +41,60 @@ public class PhoneSatatusBarHook {
     private static Method clearAllNotificationsMethod;
     private static WindowManager windowManager;
 
+    private final static String PHONE_STATUS_BRA_CLASS = "com.android.systemui.statusbar.phone.PhoneStatusBar";
+    private final static String NOTIFICATION_STACK_SCROLL_LAYOUT =
+            "com.android.systemui.statusbar.stack.NotificationStackScrollLayout";
+    private final static String I_STATUS_BAR_SERVICE = "com.android.internal.statusbar.IStatusBarService";
+
     public static void hook(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //获取清除通知的方法
         Class<?> phoneStatusBarClass =
-                lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.PhoneStatusBar");
+                lpparam.classLoader.loadClass(PHONE_STATUS_BRA_CLASS);
         clearAllNotificationsMethod = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
         clearAllNotificationsMethod.setAccessible(true);
+
+//        Class<?> istatusbarservice = lpparam.classLoader.loadClass(I_STATUS_BAR_SERVICE);
+//        final Method onClearAllNotifications = istatusbarservice.getMethod("onClearAllNotifications", int.class);
+//
+//        XposedHelpers.findAndHookMethod(phoneStatusBarClass, "clearAllNotifications", new XC_MethodReplacement() {
+//            @Override
+//            protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+//                XpLog.i("try to replace clearAllNotifications");
+//                ViewGroup mStackScroller = (ViewGroup) XposedHelpers.getObjectField(param.thisObject, "mStackScroller");
+//
+//                int numChildren = mStackScroller.getChildCount();
+//                final ArrayList<View> viewsToHide = new ArrayList<View>(numChildren);
+//                for (int i = 0; i < numChildren; i++) {
+//                    final View child = mStackScroller.getChildAt(i);
+//                    boolean b = (boolean) XposedHelpers.callMethod(mStackScroller, "canChildBeDismissed", child);
+//                    if (b) {
+//                        if (child.getVisibility() == View.VISIBLE) {
+//                            viewsToHide.add(child);
+//                        }
+//                    }
+//                }
+//                if (viewsToHide.isEmpty()) {
+//                    XposedHelpers.callMethod(param.thisObject, "animateCollapsePanels", 0);
+//                    return null;
+//                }
+//                final Object mBarService = XposedHelpers.getObjectField(param.thisObject, "mBarService");
+//                final int mCurrentUserId = (int) XposedHelpers.getObjectField(param.thisObject, "mCurrentUserId");
+//                XposedHelpers.callMethod(param.thisObject, "addPostCollapseAction", new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            onClearAllNotifications.invoke(mBarService, mCurrentUserId);
+//                        } catch (Exception e) {
+//                            XpLog.e(e);
+//                        }
+//                    }
+//                });
+//
+//                XposedHelpers.callMethod(param.thisObject, "performDismissAllAnimations", viewsToHide);
+//                XpLog.i("--- clearAllNotifications ---");
+//                return null;
+//            }
+//        });
         XposedHelpers.findAndHookMethod(phoneStatusBarClass,
                 "start", new XC_MethodHook() {
                     @Override
@@ -53,6 +106,7 @@ public class PhoneSatatusBarHook {
                         windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
                     }
                 });
+
     }
 
     public static Object getPhoneStatusBar() {
