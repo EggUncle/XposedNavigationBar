@@ -61,6 +61,7 @@ public class NavBarHook {
     private static LinearLayout llUnderMainNavBar;
     private static boolean expandStatusBarWithRoot;
     private static LinearLayout llExtPage;
+    private static MusicControllerPanel musicPanel;
 
     public static void hook(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
@@ -133,11 +134,11 @@ public class NavBarHook {
         parentView.addView(vpXphook);
 
         //初始化左边的整个音乐面板
-        MusicControllerPanel musicPanel = new MusicControllerPanel(context);
+        musicPanel = new MusicControllerPanel(context);
         musicPanel.setData(DataHook.mapImgRes, DataHook.iconScale);
         musicPanel.initPanel();
 
-        initHomePoint(context,vpXphook);
+        initHomePoint(context, vpXphook);
 
 
         //viewpage的第二页
@@ -158,7 +159,7 @@ public class NavBarHook {
 
         btnFuncFactory = new BtnFuncFactory(fmExtPage, vpXphook, llExtPage, DataHook.mapImgRes);
         for (ShortCut sc : DataHook.shortCutList) {
-                btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, DataHook.iconScale);
+            btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, DataHook.iconScale);
         }
         //将这些布局都添加到viewpageadapter中
         List<View> list = new ArrayList<View>();
@@ -206,7 +207,7 @@ public class NavBarHook {
     /**
      * 初始化主导航栏上面的小点
      */
-    private static void initHomePoint(Context context, final ViewPager vpXphook){
+    private static void initHomePoint(Context context, final ViewPager vpXphook) {
         //第一个界面，与原本的导航栏重合，实际在导航栏的下层
         llUnderMainNavBar = new LinearLayout(context);
         //用于呼出整个扩展导航栏的一个小点
@@ -216,7 +217,7 @@ public class NavBarHook {
         btnCall.setBackgroundColor(Color.alpha(255));
         LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        llUnderMainNavBar.addView(btnCall,line1Params);
+        llUnderMainNavBar.addView(btnCall, line1Params);
         setHomePointPosition(DataHook.homePointPosition);
 
         //点击这个按钮，跳转到扩展部分
@@ -224,7 +225,7 @@ public class NavBarHook {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    if (DataHook.shortCutList.size()==0){
+                    if (DataHook.shortCutList.size() == 0) {
                         Intent intent = new Intent(ConstantStr.ACTION_INIT_DATA);
                         //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -303,11 +304,12 @@ public class NavBarHook {
     public static void updateNavBar(Context context, List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown) {
         btnFuncFactory.clearAllBtn();
         if (shortCutData != null && shortCutData.size() != 0) {
-            DataHook.shortCutList=shortCutData;
+            DataHook.shortCutList = shortCutData;
             for (ShortCut sc : shortCutData) {
                 btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, iconSize);
             }
         }
+        musicPanel.updateIconSize(iconSize);
         setHomePointPosition(homePointPosition);
         expandStatusBarWithRoot = rootDown;
     }

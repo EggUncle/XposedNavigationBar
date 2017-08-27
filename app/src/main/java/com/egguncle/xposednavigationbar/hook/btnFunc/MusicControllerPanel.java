@@ -21,6 +21,7 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.Space;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
 import java.util.Map;
@@ -73,38 +76,64 @@ public class MusicControllerPanel extends LinearLayout {
      */
     private void initView(Context context, Map<Integer, byte[]> mapImgRes, int iconScale) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
         p.gravity = Gravity.CENTER;
         //   XpLog.i("====" + iconScale);
         //  p.width= (int) (p.width*(iconScale/100.0));
-        ImageButton previousBtn = new ImageButton(context);
-        ImageButton playBtn = new ImageButton(context);
-        ImageButton nextBtn = new ImageButton(context);
-        if (iconScale != 100) {
-            previousBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PREVIOUS_PLAY_CODE), iconScale));
-            playBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PLAY_MUSIC_CODE), iconScale));
-            nextBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_NEXT_PLAY_CODE), iconScale));
-        } else {
-            previousBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(ConstantStr.FUNC_PREVIOUS_PLAY_CODE)));
-            playBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(ConstantStr.FUNC_PLAY_MUSIC_CODE)));
-            nextBtn.setImageBitmap(ImageUtil.byte2Bitmap(mapImgRes.get(ConstantStr.FUNC_NEXT_PLAY_CODE)));
-        }
-        previousBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        playBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        nextBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        ImageView previousBtn = new ImageView(context);
+        ImageView playBtn = new ImageView(context);
+        ImageView nextBtn = new ImageView(context);
 
-        previousBtn.setBackgroundColor(Color.alpha(255));
-        playBtn.setBackgroundColor(Color.alpha(255));
-        nextBtn.setBackgroundColor(Color.alpha(255));
+        previousBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PREVIOUS_PLAY_CODE), iconScale));
+        playBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PLAY_MUSIC_CODE), iconScale));
+        nextBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_NEXT_PLAY_CODE), iconScale));
+
+        previousBtn.setScaleType(ImageView.ScaleType.CENTER);
+        playBtn.setScaleType(ImageView.ScaleType.CENTER);
+        nextBtn.setScaleType(ImageView.ScaleType.CENTER);
+
+        try {
+            previousBtn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
+            playBtn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
+            nextBtn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
+        } catch (Exception e) {
+            XpLog.e(e);
+        }
+
 
         previousBtn.setOnClickListener(new BtnMusicController(BtnMusicController.PREVIOUS));
         playBtn.setOnClickListener(new BtnMusicController(BtnMusicController.START_OR_STOP));
         nextBtn.setOnClickListener(new BtnMusicController(BtnMusicController.NEXT));
 
+        Space sp11= new Space(context);
+        Space sp12 = new Space(context);
+        Space sp21= new Space(context);
+        Space sp22 = new Space(context);
+        Space sp31= new Space(context);
+        Space sp32 = new Space(context);
+
+        this.addView(sp11,p);
         this.addView(previousBtn, p);
+        this.addView(sp12,p);
+
+        this.addView(sp21,p);
         this.addView(playBtn, p);
+        this.addView(sp22,p);
+
+        this.addView(sp31,p);
         this.addView(nextBtn, p);
+        this.addView(sp32,p);
+    }
+
+    /**
+     * 更新音乐控制面板的图标大小
+     * @param iconScale
+     */
+    public void updateIconSize(int iconScale){
+        this.removeAllViews();
+        initView(mContext,mMapImgRes,iconScale);
+        XpLog.i("update musicpanel iconscale:"+iconScale);
     }
 
 }

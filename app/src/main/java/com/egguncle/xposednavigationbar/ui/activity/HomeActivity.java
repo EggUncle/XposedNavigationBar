@@ -193,6 +193,7 @@ public class HomeActivity extends BaseActivity {
                 intent.setAction(ConstantStr.ACT_NAV_BAR_DATA);
                 sendBroadcast(intent);
                 spUtil.saveShortCut(shortCutList);
+                Snackbar.make(mViewPager, getResources().getString(R.string.save_success), Snackbar.LENGTH_SHORT).show();
                 return true;
             }
             case R.id.menu_language: {
