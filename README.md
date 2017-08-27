@@ -3,6 +3,8 @@
 在导航栏中实现一个左划菜单，实现多种快捷功能
 代码基于GPL3.0协议开源
 
+开发相关实现思路请往下翻阅
+
 ## 下载地址
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 ## 历史版本下载地址
@@ -89,6 +91,8 @@ http://repo.xposed.info/node/1281/revisions
 # -开发中-
 ## 扩展的实现
 实现的方法还是很简单的，只是在导航栏对应的view中使用addview加入一些布局，但是获取到view实例的方法有两种，一种通过布局文件，一种通过view这个类的onFinishInflate方法，起初使用的是前一种方法，现在用的是后一种，因为目前发现在lineage OS上，对应布局文件的hook无法生效，但是目前通过第二种方法以及可以hook成功了，rr上也有类似的问题，使用第二种方法也无法解决，原因不详，因为xposed的handleInitPackageResources方法会在布局文件加载的时候生效，可能是不同的rom在这个地方的行为有一些不同，rr上很多对导航栏进行修改的模块都没有生效。
+
+还有就是远程进程间通信的思路，这里统一用的广播，因为这个模块的设置需要即时在导航栏上生效，而导航栏是在systemuiapplication中的，所以只能使用广播，而且在7.0以后，因为sharedpreference权限的限制，只能在系统启动后打开app（这里其实是打开了一个属于这个模块的透明的activity），发送广播初始化各种设置;还有一些方法权限很高，即使是systemuiapplication也调用不了的，也只能使用广播进行通信，先在需要的地方hook进去设置广播接收器，然后再向它发送广播，这里具体的体现是在清理内存功能的实现上，起初使用的killprocess方法，这个是自带的api，效果不是很理想，后来在在ActivityManager中找到一个叫forceStopPackage的方法，但是使用它的条件比较苛刻，所以这里就hook了ActivityManager并设置一个广播监听器，然后其他地方发送广播来调用这个方法。
 
 ## 支付宝&微信扫一扫 ✓
 支付宝扫一扫：
@@ -184,6 +188,7 @@ http://www.jianshu.com/p/d17ce2880753
 2461     */
 ```
 该方法需要有系统签名才可以使用，最近会改成这个方法来清理后台。实测后发现systemui并没有使用它的权限，在阻止运行源码中发现他hook的位置是SystemServer,回头hook到这里面去尝试调用这个方法。
+(2017-8-27)hook进了ActivityManager中调用了这个方法，效果拔群，不过因为效果太拔群了，在level为50(最低)的情况下，会误伤很多"com.android.*"中的包，所以这里做了过滤，不杀死这些报名下的进程。
 
 ## 手电筒
 

@@ -96,7 +96,7 @@ public class AMHook {
             long totalMem = mi.totalMem / (1024 * 1024);
             XpLog.i("clear mem :" + clearMem + " MB");
 
-            Toast.makeText(context,"clear mem "+ clearMem+" "+afterMen+"/"+totalMem,Toast.LENGTH_SHORT);
+            Toast.makeText(context,"clear mem "+ clearMem+" "+afterMen+"/"+totalMem,Toast.LENGTH_SHORT).show();
         }
 
         //获取可用内存大小
