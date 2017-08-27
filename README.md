@@ -11,6 +11,11 @@ http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 http://repo.xposed.info/node/1281/revisions
 
 ## 更新日志
+
+### 2.0.4(21)
+音乐面板的图标大小也会随设置变化了;
+修改清理内存功能的实现方式，效果拔群，不再鸡肋了。
+
 ### 2.0.3-beta(20)
 调整图标大小修改范围
 点击图标后会有水波纹动画（部分Nougat rom暂时可能无效）
