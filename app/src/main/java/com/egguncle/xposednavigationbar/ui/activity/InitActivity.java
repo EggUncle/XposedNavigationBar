@@ -60,7 +60,8 @@ public class InitActivity extends BaseActivity {
         int iconSize = spUtil.getIconSize();
         int homePosition = spUtil.getHomePointPosition();
         boolean rootDown = spUtil.getRootDown();
-        XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown);
+        int clearMenLevel=spUtil.getClearMemLevel();
+        XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,clearMenLevel);
         intent.putExtra("data", setting);
         intent.setAction(ConstantStr.ACT_NAV_BAR_DATA);
         sendBroadcast(intent);

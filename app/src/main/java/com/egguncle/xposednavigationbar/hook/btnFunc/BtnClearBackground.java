@@ -26,10 +26,13 @@ import android.view.View;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearBackground;
+import com.egguncle.xposednavigationbar.hook.util.AMHook;
+import com.egguncle.xposednavigationbar.hook.util.DataHook;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,61 +45,38 @@ public class BtnClearBackground implements ClearBackground, View.OnClickListener
 
     @Override
     public void clearBackground(Context context) {
-        Intent intent = new Intent(ACTION_CLEAR_BACK);
-        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(intent);
+//        Intent intent = new Intent(ACTION_CLEAR_BACK);
+//        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        context.startActivity(intent);
 //        long beforeMem = getAvailabaleMemory(context);
-//        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-//
-//        Method forceStopPackage = null;
-//        try {
-//            forceStopPackage = ActivityManager.class.getMethod("forceStopPackage", String.class);
-//            //forceStopPackage.invoke(am, "com.douguo.recipe");
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        }
-//
-//        List<ActivityManager.RunningAppProcessInfo> processInfoList = am.getRunningAppProcesses();
-//        if (processInfoList != null && processInfoList.size() != 0) {
-//            for (int i = 0; i < processInfoList.size(); i++) {
-//                ActivityManager.RunningAppProcessInfo processInfo = processInfoList.get(i);
-//                if (processInfo.importance > ConstantStr.IMPORTANCE_VISIBLE) {
-//                    String[] pkgList = processInfo.pkgList;
-//                    for (String pkgName : pkgList) {
-//                        //am.killBackgroundProcesses(pkgName);
-//                        try {
-//                            forceStopPackage.invoke(am, pkgName);
-//                            XpLog.i("clear success");
-//                        } catch (IllegalAccessException e) {
-//                            XpLog.e(e);
-//                        } catch (InvocationTargetException e) {
-//                            XpLog.e(e);
-//                        }
-//                        XpLog.i("clear: " + pkgName);
-//                    }
-//                }
-//            }
-//        }
-//        long afterMen = getAvailabaleMemory(context);
-//        long clearMem = afterMen - beforeMem;
-//        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-//        am.getMemoryInfo(mi);
-//        long totalMem = mi.totalMem / (1024 * 1024);
-//        XpLog.i("========" + clearMem);
+        XpLog.i("clear mem level is " + DataHook.clearMenLevel);
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ArrayList<String> pkgNames = new ArrayList<>();
+        List<ActivityManager.RunningAppProcessInfo> processInfoList = am.getRunningAppProcesses();
+        if (processInfoList != null && processInfoList.size() != 0) {
+            for (int i = 0; i < processInfoList.size(); i++) {
+                ActivityManager.RunningAppProcessInfo processInfo = processInfoList.get(i);
+                if (processInfo.importance > DataHook.clearMenLevel) {
+                    String[] pkgList = processInfo.pkgList;
+                    for (String pkgName : pkgList) {
+                        if (pkgName.contains("com.android")) {
+                            continue;
+                        }
+                        pkgNames.add(pkgName);
+                    }
+                }
+            }
+        }
+        Intent intent = new Intent();
+        intent.setAction(AMHook.ACTION_FORCE_STOP_AC);
+        intent.putStringArrayListExtra("data", pkgNames);
+        context.sendBroadcast(intent);
+        XpLog.i("has send pkgnames to kill");
     }
 
     @Override
     public void onClick(View view) {
         clearBackground(view.getContext());
-    }
-
-    //获取可用内存大小
-    private long getAvailabaleMemory(Context context) {
-        // 获取android当前可用内存大小
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-        am.getMemoryInfo(mi);
-        return mi.availMem / (1024 * 1024);
     }
 }

@@ -288,9 +288,10 @@ public class NavBarHook {
         int iconSize = setting.getIconSize();
         int homePosition = setting.getHomePointPosition();
         boolean rootDown = setting.isRootDown();
+        int clearMemLevel = setting.getClearMenLevel();
         XpLog.i(homePosition + "  " + iconSize);
 
-        updateNavBar(context, list, homePosition, iconSize, rootDown);
+        updateNavBar(context, list, homePosition, iconSize, rootDown, clearMemLevel);
     }
 
     /**
@@ -301,7 +302,9 @@ public class NavBarHook {
      * @param iconSize
      * @param rootDown
      */
-    public static void updateNavBar(Context context, List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown) {
+    public static void updateNavBar(Context context, List<ShortCut> shortCutData,
+                                    int homePointPosition, int iconSize, boolean rootDown
+            , int clearMemLevel) {
         btnFuncFactory.clearAllBtn();
         if (shortCutData != null && shortCutData.size() != 0) {
             DataHook.shortCutList = shortCutData;
@@ -312,6 +315,7 @@ public class NavBarHook {
         musicPanel.updateIconSize(iconSize);
         setHomePointPosition(homePointPosition);
         expandStatusBarWithRoot = rootDown;
+        DataHook.clearMenLevel=clearMemLevel;
     }
 
 

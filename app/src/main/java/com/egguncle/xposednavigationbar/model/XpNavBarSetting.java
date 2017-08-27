@@ -47,11 +47,15 @@ public  class XpNavBarSetting implements Parcelable{
     //是否使用root下拉
     private static boolean mRootDown;
 
-    public XpNavBarSetting(List<ShortCut> shortCutData,int homePointPosition,int iconSize,boolean rootDown){
+    //清理内存等级
+    private int mClearMenLevel;
+
+    public XpNavBarSetting(List<ShortCut> shortCutData,int homePointPosition,int iconSize,boolean rootDown,int clearMenLevel){
         mShortCutData=shortCutData;
         mHomePointPosition=homePointPosition;
         mIconSize=iconSize;
         mRootDown=rootDown;
+        mClearMenLevel=clearMenLevel;
     }
 
 
@@ -60,6 +64,7 @@ public  class XpNavBarSetting implements Parcelable{
         mHomePointPosition = in.readInt();
         mIconSize = in.readInt();
         mRootDown=in.readByte()!=0;
+        mClearMenLevel=in.readInt();
     }
 
     public static final Creator<XpNavBarSetting> CREATOR = new Creator<XpNavBarSetting>() {
@@ -91,6 +96,8 @@ public  class XpNavBarSetting implements Parcelable{
         return mRootDown;
     }
 
+    public int getClearMenLevel(){return mClearMenLevel;}
+
 
     @Override
     public int describeContents() {
@@ -103,5 +110,6 @@ public  class XpNavBarSetting implements Parcelable{
         dest.writeInt(mHomePointPosition);
         dest.writeInt(mIconSize);
         dest.writeByte((byte)(mRootDown ?1:0));
+        dest.writeInt(mClearMenLevel);
     }
 }

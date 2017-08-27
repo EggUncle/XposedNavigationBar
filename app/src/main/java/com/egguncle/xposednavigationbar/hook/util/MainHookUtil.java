@@ -40,6 +40,7 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     private final static String TAG = "MainHookUtil";
     private final static String SYSTEM_UI = "com.android.systemui";
+    private final static String ANDROID="android";
     private static String MODULE_PATH;
 
     private static int BTN_BG_RES_ID;
@@ -48,11 +49,15 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
     public void initZygote(StartupParam startupParam) throws Throwable {
         MODULE_PATH = startupParam.modulePath;
         DataHook.init(startupParam);
+
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        //       XpLog.i(lpparam.packageName);
+        //XpLog.i(lpparam.packageName);
+        if (lpparam.packageName.equals(ANDROID)){
+            AMHook.hook(lpparam);
+        }
         //过滤包名
         if (lpparam.packageName.equals(SYSTEM_UI)) {
             XpLog.i("filter package systemui");

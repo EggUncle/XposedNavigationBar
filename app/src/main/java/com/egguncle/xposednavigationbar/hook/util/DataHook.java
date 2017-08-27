@@ -50,12 +50,15 @@ public class DataHook {
     public static List<ShortCut> shortCutList;
     public static int homePointPosition;
 
+    //内存清理强度
+    public static int clearMenLevel;
+
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
 
         String json = pre.getString(ConstantStr.SHORT_CUT_DATA, "");
         expandStatusBarWithRoot = pre.getBoolean(SPUtil.ROOT_DOWN, false);
-
+        clearMenLevel=pre.getInt(SPUtil.CLEAR_MEM_LEVEL,200);
         //获取主导行栏小点的位置
         homePointPosition = pre.getInt(ConstantStr.HOME_POINT, 0);
         //获取快捷按钮设置数据

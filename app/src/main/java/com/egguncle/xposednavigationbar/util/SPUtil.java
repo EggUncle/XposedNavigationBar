@@ -50,7 +50,7 @@ public class SPUtil {
     public final static int LEFT = 0;
     public final static int RIGHT = 1;
     public final static int DISMISS = 2;
-    private static final String CLEAR_MEM_LEVEL = "clear_mem_level";
+    public static final String CLEAR_MEM_LEVEL = "clear_mem_level";
     private static final String ICON_SIZE = "icon_size";
     private static final String HookHorizontal = "hook_horizontal";
     public static final String ROOT_DOWN = "root_down";
