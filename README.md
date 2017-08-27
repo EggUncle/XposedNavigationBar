@@ -8,7 +8,7 @@
 ## 下载地址
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 ## 历史版本下载地址
-http://repo.xposed.info/node/1281/revisions
+http://repo.xposed.info/module/com.egguncle.xposednavigationbar
 
 ## 更新日志
 
