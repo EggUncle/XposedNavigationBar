@@ -66,7 +66,7 @@ public class QuickNotificationActivity extends Activity {
 
                         Notification.Builder builder = new Notification.Builder(QuickNotificationActivity.this);
                         builder.setContentText(noticeStr)
-                                .setContentTitle("备忘")
+                                .setContentTitle(getResources().getString(R.string.quick_notice))
                                 .setWhen(System.currentTimeMillis())
                                 .setSmallIcon(R.drawable.notice);
                                // .setAutoCancel(true);
