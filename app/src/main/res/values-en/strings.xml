@@ -107,6 +107,7 @@
         \n(2017.8.12)
     </string>
     <string name="paypal_url">paypal.me/songyucheng</string>
+    <string name="not_activated">en...it seems not activated</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>

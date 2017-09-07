@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.LaunchAct;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-10.
@@ -37,8 +38,13 @@ public class BtnLaunchActivity implements LaunchAct,View.OnClickListener {
     }
 
     @Override
-    public void onClick(View view) {
-        launchActivity(view.getContext(),mPkgName);
+    public void onClick(final View view) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                launchActivity(view.getContext(),mPkgName);
+            }
+        });
     }
 
     @Override

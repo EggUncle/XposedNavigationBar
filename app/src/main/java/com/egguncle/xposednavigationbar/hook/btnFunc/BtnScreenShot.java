@@ -18,39 +18,38 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Toast;
 
-import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenShot;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
-import com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity;
 
 import java.io.File;
 import java.io.IOException;
 
-import de.robv.android.xposed.XposedBridge;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by egguncle on 17-6-18.
  */
 
 public class BtnScreenShot implements ScreenShot, View.OnClickListener {
+    private Handler handler =new Handler();
+
     @Override
-    public void onClick(View view) {
-        try {
-            screenshot(view.getContext());
-        } catch (Exception e) {
-            XpLog.i(e.getMessage());
-        }
+    public void onClick(final View view) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    screenshot(view.getContext());
+                } catch (Exception e) {
+                    XpLog.i(e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
@@ -61,8 +60,6 @@ public class BtnScreenShot implements ScreenShot, View.OnClickListener {
         if (!file.exists()) {
             file.mkdirs();
         }
-
-        Handler handler =new Handler();
         long timecurrentTimeMillis = System.currentTimeMillis();
         String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
         try {

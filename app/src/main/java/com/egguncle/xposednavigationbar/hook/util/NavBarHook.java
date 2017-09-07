@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.btnFunc.MusicControllerPanel;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
@@ -48,7 +49,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
@@ -226,7 +226,7 @@ public class NavBarHook {
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     if (DataHook.shortCutList.size() == 0) {
-                        Intent intent = new Intent(ConstantStr.ACTION_INIT_DATA);
+                        Intent intent = new Intent(XpNavBarAction.ACT_INIT_DATA);
                         //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         view.getContext().startActivity(intent);
@@ -257,7 +257,7 @@ public class NavBarHook {
      */
     private static void initBroadcast(Context context) {
         IntentFilter dataFilter = new IntentFilter();
-        dataFilter.addAction(ConstantStr.ACT_NAV_BAR_DATA);
+        dataFilter.addAction(XpNavBarAction.ACT_NAV_BAR_DATA);
         NavbarDataReceiver navbarDataReceiver = new NavBarHook.NavbarDataReceiver();
         context.registerReceiver(navbarDataReceiver, dataFilter);
     }

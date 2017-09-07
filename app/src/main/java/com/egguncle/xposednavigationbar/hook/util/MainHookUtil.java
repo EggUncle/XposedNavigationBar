@@ -21,11 +21,20 @@ package com.egguncle.xposednavigationbar.hook.util;
 
 import android.content.res.XModuleResources;
 
+import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.ui.activity.HomeActivity;
+
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
@@ -40,7 +49,7 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     private final static String TAG = "MainHookUtil";
     private final static String SYSTEM_UI = "com.android.systemui";
-    private final static String ANDROID="android";
+    private final static String ANDROID = "android";
     private static String MODULE_PATH;
 
     private static int BTN_BG_RES_ID;
@@ -55,14 +64,31 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //XpLog.i(lpparam.packageName);
-        if (lpparam.packageName.equals(ANDROID)){
-            AMHook.hook(lpparam);
-        }
-        //过滤包名
-        if (lpparam.packageName.equals(SYSTEM_UI)) {
-            XpLog.i("filter package systemui");
-            PhoneSatatusBarHook.hook(lpparam);
-            NavBarHook.hook(lpparam);
+        switch (lpparam.packageName) {
+            case ANDROID:
+                try {
+                    AMHook.hook(lpparam);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+                break;
+            case SYSTEM_UI:
+                try {
+                    XpLog.i("filter package systemui");
+                    PhoneSatatusBarHook.hook(lpparam);
+                    NavBarHook.hook(lpparam);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+                break;
+            case BuildConfig.APPLICATION_ID:
+                try {
+                    XposedHelpers.findAndHookMethod(HomeActivity.class.getName(), lpparam.classLoader,
+                            "getActivatedVersion", XC_MethodReplacement.returnConstant(BuildConfig.VERSION_CODE));
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+                break;
         }
     }
 
@@ -70,16 +96,18 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
         if (resparam.packageName.equals(SYSTEM_UI)) {
-            XpLog.i("handleInitPackageResources "+SYSTEM_UI);
+            XpLog.i("handleInitPackageResources " + SYSTEM_UI);
             try {
-                XModuleResources xRes = XModuleResources.createInstance(MODULE_PATH,resparam.res);
-                BTN_BG_RES_ID=resparam.res.addResource(xRes, R.drawable.btn_bg);
+                XModuleResources xRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
+                BTN_BG_RES_ID = resparam.res.addResource(xRes, R.drawable.btn_bg);
             } catch (Exception e) {
                 XpLog.e(e);
             }
         }
     }
 
-    public static int getBtnBgResId(){return BTN_BG_RES_ID;}
+    public static int getBtnBgResId() {
+        return BTN_BG_RES_ID;
+    }
 }
 

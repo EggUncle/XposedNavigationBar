@@ -28,6 +28,7 @@ import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearBackground;
 import com.egguncle.xposednavigationbar.hook.util.AMHook;
 import com.egguncle.xposednavigationbar.hook.util.DataHook;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.InvocationTargetException;
@@ -69,7 +70,13 @@ public class BtnClearBackground implements ClearBackground, View.OnClickListener
     }
 
     @Override
-    public void onClick(View view) {
-        clearBackground(view.getContext());
+    public void onClick(final View view) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                clearBackground(view.getContext());
+            }
+        });
+
     }
 }

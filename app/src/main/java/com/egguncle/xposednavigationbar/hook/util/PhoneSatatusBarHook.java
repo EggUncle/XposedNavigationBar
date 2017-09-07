@@ -38,21 +38,16 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 public class PhoneSatatusBarHook {
     //用于获取phonestatusbar对象和clearAllNotifications方法等
     private static Object phoneStatusBar;
-    private static Method clearAllNotificationsMethod;
-    private static WindowManager windowManager;
 
     private final static String PHONE_STATUS_BRA_CLASS = "com.android.systemui.statusbar.phone.PhoneStatusBar";
-    private final static String NOTIFICATION_STACK_SCROLL_LAYOUT =
-            "com.android.systemui.statusbar.stack.NotificationStackScrollLayout";
-    private final static String I_STATUS_BAR_SERVICE = "com.android.internal.statusbar.IStatusBarService";
+//    private final static String NOTIFICATION_STACK_SCROLL_LAYOUT =
+//            "com.android.systemui.statusbar.stack.NotificationStackScrollLayout";
+//    private final static String I_STATUS_BAR_SERVICE = "com.android.internal.statusbar.IStatusBarService";
 
     public static void hook(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //获取清除通知的方法
         Class<?> phoneStatusBarClass =
                 lpparam.classLoader.loadClass(PHONE_STATUS_BRA_CLASS);
-        clearAllNotificationsMethod = phoneStatusBarClass.getDeclaredMethod("clearAllNotifications");
-        clearAllNotificationsMethod.setAccessible(true);
-
 //        Class<?> istatusbarservice = lpparam.classLoader.loadClass(I_STATUS_BAR_SERVICE);
 //        final Method onClearAllNotifications = istatusbarservice.getMethod("onClearAllNotifications", int.class);
 //
@@ -102,8 +97,6 @@ public class PhoneSatatusBarHook {
                         super.afterHookedMethod(param);
                         //在这里获取到PhoneStatusBar对象
                         phoneStatusBar = param.thisObject;
-                        //获取到windowmanager
-                        windowManager = (WindowManager) XposedHelpers.getObjectField(phoneStatusBar, "mWindowManager");
                     }
                 });
 
@@ -111,13 +104,5 @@ public class PhoneSatatusBarHook {
 
     public static Object getPhoneStatusBar() {
         return phoneStatusBar;
-    }
-
-    public static Method getClearAllNotificationsMethod() {
-        return clearAllNotificationsMethod;
-    }
-
-    public static WindowManager getWindowManager() {
-        return windowManager;
     }
 }

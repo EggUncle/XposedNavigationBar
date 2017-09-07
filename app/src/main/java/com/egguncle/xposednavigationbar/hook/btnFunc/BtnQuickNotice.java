@@ -23,12 +23,13 @@ import android.content.Intent;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.QuickNotification;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnQuickNotice implements QuickNotification,View.OnClickListener{
+public class BtnQuickNotice implements QuickNotification, View.OnClickListener {
     //启动快速备忘
     private final static String ACTION_QUICK_NOTICE = "com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity";
 
@@ -41,7 +42,13 @@ public class BtnQuickNotice implements QuickNotification,View.OnClickListener{
     }
 
     @Override
-    public void onClick(View view) {
-        quickNotification(view.getContext());
+    public void onClick(final View view) {
+
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                quickNotification(view.getContext());
+            }
+        });
     }
 }

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScannerQRcode;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 import java.io.IOException;
 
@@ -31,8 +32,13 @@ import java.io.IOException;
 
 public class BtnWeChatScanner implements ScannerQRcode,View.OnClickListener {
     @Override
-    public void onClick(View view) {
-        scanQR(view.getContext());
+    public void onClick(final View view) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                scanQR(view.getContext());
+            }
+        });
     }
 
     @Override

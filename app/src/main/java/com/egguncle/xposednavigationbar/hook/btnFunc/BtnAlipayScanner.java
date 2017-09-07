@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScannerQRcode;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 
@@ -38,15 +39,19 @@ public class BtnAlipayScanner implements ScannerQRcode,View.OnClickListener {
     }
 
     @Override
-    public void scanQR(Context context) {
-        try{
-            Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
-        }catch (Exception e){
-            XpLog.i(e.getMessage());
-        }
-
+    public void scanQR(final Context context) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(intent);
+                }catch (Exception e){
+                    XpLog.i(e.getMessage());
+                }
+            }
+        });
     }
 }

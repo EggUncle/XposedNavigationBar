@@ -22,6 +22,7 @@ import android.content.Intent;
 
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.util.SPUtil;
@@ -63,7 +64,7 @@ public class InitActivity extends BaseActivity {
         int clearMenLevel=spUtil.getClearMemLevel();
         XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,clearMenLevel);
         intent.putExtra("data", setting);
-        intent.setAction(ConstantStr.ACT_NAV_BAR_DATA);
+        intent.setAction(XpNavBarAction.ACT_NAV_BAR_DATA);
         sendBroadcast(intent);
         finish();
     }

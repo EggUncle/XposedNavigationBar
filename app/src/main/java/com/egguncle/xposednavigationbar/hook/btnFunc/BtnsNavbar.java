@@ -25,6 +25,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,39 +44,46 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLong
 
     public final static int BTN_LONG_HOME = 5;
 
+    private Instrumentation mInst;
 
     public int mType;
 
     public BtnsNavbar(int type) {
         this.mType = type;
+        mInst = new Instrumentation();
     }
 
     @Override
     public void onClick(View view) {
-        switch (mType) {
-            case BTN_BACK:
-                goBack();
-                break;
-            case BTN_HOME:
-                goHome();
-                break;
-            case BTN_RECENT:
-                goRecent();
-                break;
-            case BTN_HIDE:
-                hide();
-                break;
-        }
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                switch (mType) {
+                    case BTN_BACK:
+                        goBack();
+                        break;
+                    case BTN_HOME:
+                        goHome();
+                        break;
+                    case BTN_RECENT:
+                        goRecent();
+                        break;
+                    case BTN_HIDE:
+                        hide();
+                        break;
+                }
+            }
+        });
     }
 
     @Override
     public void goBack() {
-        new Thread(new NavBarRunnable(BTN_BACK)).start();
+        mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
     }
 
     @Override
     public void goHome() {
-        new Thread(new NavBarRunnable(BTN_HOME)).start();
+        mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME);
     }
 
     @Override
@@ -129,43 +137,13 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLong
 
     @Override
     public boolean onLongClick(View v) {
-        switch (mType) {
-            case BTN_LONG_HOME: {
-                new Thread(new NavBarRunnable(BTN_LONG_HOME)).start();
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                KeyEvent keyEvent = new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_HOME);
+                mInst.sendKeySync(keyEvent);
             }
-            break;
-        }
+        });
         return true;
-    }
-
-    private class NavBarRunnable implements Runnable {
-        private int mType;
-
-        public NavBarRunnable(int type) {
-            mType = type;
-        }
-
-        @Override
-        public void run() {
-            switch (mType) {
-                case BTN_BACK: {
-                    Instrumentation mInst = new Instrumentation();
-                    mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-                }
-                break;
-                case BTN_HOME: {
-                    Instrumentation mInst = new Instrumentation();
-                    mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME);
-                }
-                break;
-                case BTN_LONG_HOME: {
-                    Instrumentation mInst = new Instrumentation();
-                    KeyEvent keyEvent = new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_HOME);
-                    mInst.sendKeySync(keyEvent);
-                }
-                break;
-            }
-
-        }
     }
 }

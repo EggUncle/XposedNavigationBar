@@ -104,7 +104,7 @@
         \n(2017.8.12)
     </string>
     <string name="paypal_url">paypal.me/songyucheng</string>
-
+    <string name="not_activated">额...模块似乎没有被激活</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>

@@ -37,8 +37,10 @@ import android.view.View;
 
 import android.widget.CheckBox;
 
+import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
@@ -77,6 +79,8 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     void initView() {
+        checkActivated();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fabAddFunc = (FloatingActionButton) findViewById(R.id.fab);
@@ -188,10 +192,10 @@ public class HomeActivity extends BaseActivity {
                 int iconSize = spUtil.getIconSize();
                 int homePosition = spUtil.getHomePointPosition();
                 boolean rootDown = spUtil.getRootDown();
-                int clearMemLevel=spUtil.getClearMemLevel();
-                XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,clearMemLevel);
+                int clearMemLevel = spUtil.getClearMemLevel();
+                XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown, clearMemLevel);
                 intent.putExtra("data", setting);
-                intent.setAction(ConstantStr.ACT_NAV_BAR_DATA);
+                intent.setAction(XpNavBarAction.ACT_NAV_BAR_DATA);
                 sendBroadcast(intent);
                 spUtil.saveShortCut(shortCutList);
                 Snackbar.make(mViewPager, getResources().getString(R.string.save_success), Snackbar.LENGTH_SHORT).show();
@@ -251,10 +255,20 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+    private void checkActivated() {
+        if(getActivatedVersion()!=BuildConfig.VERSION_CODE){
+            new AlertDialog.Builder(this)
+                    .setTitle(android.R.string.dialog_alert_title)
+                    .setMessage(R.string.not_activated)
+                    .setNegativeButton(android.R.string.ok,null)
+                    .show();
+        }
+    }
+
+    private int getActivatedVersion() {
+        return -1;
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

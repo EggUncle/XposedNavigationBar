@@ -44,7 +44,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.egguncle.xposednavigationbar.R;
-import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.model.AppInfo;
 import com.egguncle.xposednavigationbar.ui.adapter.AppActAdapter;
 import com.egguncle.xposednavigationbar.ui.adapter.DialogItemAdapter;
@@ -115,7 +115,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
 //        myItemTouchHelper.attachToRecyclerView(rcvApp);
 
         IntentFilter intentFilter=new IntentFilter();
-        intentFilter.addAction(ConstantStr.ACTION_CLOSE_ACT_PANEL);
+        intentFilter.addAction(XpNavBarAction.ACT_CLOSE_ACT_PANEL);
         receiver=new CloseReceiver();
         registerReceiver(receiver,intentFilter);
     }

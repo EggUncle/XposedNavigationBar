@@ -24,12 +24,14 @@ import android.view.View;
 import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearAllNotifications;
 import com.egguncle.xposednavigationbar.hook.util.PhoneSatatusBarHook;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 
 /**
  * Created by egguncle on 17-6-10.
@@ -43,31 +45,24 @@ public class BtnClearAllNotifications implements ClearAllNotifications, View.OnC
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(final View view) {
         clearAllNotifications(view.getContext());
+//        ScheduledThreadPool.getInstance().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
     }
 
     @Override
     public void clearAllNotifications(Context context) {
         Object mPhoneStatusBar = PhoneSatatusBarHook.getPhoneStatusBar();
-        Method mClearAllNotificationsMethod = PhoneSatatusBarHook.getClearAllNotificationsMethod();
-        if (mClearAllNotificationsMethod == null || mPhoneStatusBar == null) {
-            XpLog.i("method or object is null");
-            return;
-        }
-        try {
-            //反射取到这个清除所有通知的方法
-            mClearAllNotificationsMethod.invoke(mPhoneStatusBar);
-            //方法执行后，不会马上清除所有的消息，而是在通知栏下拉，通知内容变得可见后才清除。
-            //所以在这里调用一次下拉通知栏的方法
-            btnStatusBarController.expandStatusBar(context);
-            //再收起通知栏
-            btnStatusBarController.collapseStatusBar(context);
-
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        XposedHelpers.callMethod(mPhoneStatusBar, "clearAllNotifications");
+        //方法执行后，不会马上清除所有的消息，而是在通知栏下拉，通知内容变得可见后才清除。
+        //所以在这里调用一次下拉通知栏的方法
+        btnStatusBarController.expandStatusBar(context);
+        //再收起通知栏
+        btnStatusBarController.collapseStatusBar(context);
     }
 }

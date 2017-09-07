@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenOff;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,20 +36,24 @@ import java.lang.reflect.Method;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnScreenOff implements ScreenOff, View.OnClickListener,View.OnLongClickListener {
+public class BtnScreenOff implements ScreenOff, View.OnClickListener, View.OnLongClickListener {
 
     @Override
-    public void onClick(View view) {
-        try {
-            screenOff(view.getContext());
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        view.setOnLongClickListener(this);
+    public void onClick(final View view) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    screenOff(view.getContext());
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -61,16 +66,14 @@ public class BtnScreenOff implements ScreenOff, View.OnClickListener,View.OnLong
     @Override
     public boolean onLongClick(View view) {
         //长按呼出关机菜单
-        new Thread(new Runnable() {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {
                 Instrumentation mInst = new Instrumentation();
-                KeyEvent keyEvent=new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER);
+                KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER);
                 mInst.sendKeySync(keyEvent);
             }
-        }).start();
+        });
         return true;
     }
-
-
 }

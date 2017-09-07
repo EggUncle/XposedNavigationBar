@@ -18,17 +18,13 @@
 
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Process;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.hookFunc.StartActPanel;
-
-import de.robv.android.xposed.XposedBridge;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-11.
@@ -41,14 +37,19 @@ public class BtnOpenActPanel implements StartActPanel, View.OnClickListener {
     private static boolean open;
 
     @Override
-    public void onClick(View view) {
-        if (open) {
-            closeActPanel(view.getContext());
-            open = false;
-        } else {
-            openActPanel(view.getContext());
-            open = true;
-        }
+    public void onClick(final View view) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (open) {
+                    closeActPanel(view.getContext());
+                    open = false;
+                } else {
+                    openActPanel(view.getContext());
+                    open = true;
+                }
+            }
+        });
     }
 
     @Override
@@ -61,7 +62,7 @@ public class BtnOpenActPanel implements StartActPanel, View.OnClickListener {
 
     public void closeActPanel(Context context){
         Intent intent=new Intent();
-        intent.setAction(ConstantStr.ACTION_CLOSE_ACT_PANEL);
+        intent.setAction(XpNavBarAction.ACT_CLOSE_ACT_PANEL);
         context.sendBroadcast(intent);
     }
 }

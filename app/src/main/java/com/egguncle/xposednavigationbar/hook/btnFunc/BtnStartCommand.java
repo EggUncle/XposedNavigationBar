@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.StartCommand;
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 import java.io.IOException;
 
@@ -39,7 +40,12 @@ public class BtnStartCommand implements StartCommand,View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        startCommand(mCommand);
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                startCommand(mCommand);
+            }
+        });
     }
 
     @Override
