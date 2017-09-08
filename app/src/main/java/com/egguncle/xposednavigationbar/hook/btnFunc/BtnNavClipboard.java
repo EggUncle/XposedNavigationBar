@@ -29,12 +29,13 @@ import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.util.ArrayList;
 
+import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACTION_CLIPBOARD;
+
 /**
  * Created by egguncle on 17-6-23.
  */
 
 public class BtnNavClipboard implements NavClipboard, View.OnClickListener {
-    private final static String ACTION_CLIPBOARD = "com.egguncle.xposednavigationbar.ui.activity.ClipboardActivity";
 
     @Override
     public void onClick(final View view) {

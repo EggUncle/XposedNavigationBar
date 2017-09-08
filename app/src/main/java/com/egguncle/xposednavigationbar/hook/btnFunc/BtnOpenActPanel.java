@@ -26,14 +26,13 @@ import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.hookFunc.StartActPanel;
 import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
+import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACTION_START_ACT;
+
 /**
  * Created by egguncle on 17-6-11.
  */
 
 public class BtnOpenActPanel implements StartActPanel, View.OnClickListener {
-    //启动快速备忘
-    private final static String ACTION_START_ACT = "com.egguncle.xposednavigationbar.ui.activity.AppShortCutActivity";
-
     private static boolean open;
 
     @Override

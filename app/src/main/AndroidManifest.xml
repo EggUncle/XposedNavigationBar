@@ -81,17 +81,20 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.InitActivity"
+            android:theme="@style/myTransparentTheme">
+            <intent-filter>
+                <action android:name="com.egguncle.xposednavigationbar.ui.activity.InitActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.activity.SelectIconActivity"
             android:theme="@style/myTransparentTheme" />
         <activity
             android:name=".ui.activity.ManualActivity"
             android:parentActivityName=".ui.activity.HomeActivity" />
-        <activity android:name=".ui.activity.InitActivity"  android:theme="@style/myTransparentTheme">
-            <intent-filter>
-                <action android:name="com.egguncle.xposednavigationbar.ui.activity.InitActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter></activity>
     </application>
 
 </manifest>

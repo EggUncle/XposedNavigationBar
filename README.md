@@ -28,7 +28,7 @@ https://github.com/rovo89/XposedBridge/issues/64
 ```java
 activity.getWindow().setNavigationBarColor(colorPrimaryDark);
 ```
-还有就是关于沉浸式状态栏导航栏的实现，这个没有看太多，但是在这个模块上面会有一个很有意思的现象，沉浸以后图标也会变成白色或者黑色，好像是和一个叫ColorMatrixColorFilter(色彩矩阵颜色过滤器)这类东西有关，回头再看看。
+还有就是关于沉浸式状态栏导航栏的实现，这个没有看太多，但是在完美状态栏这个模块上面会有一个很有意思的现象，沉浸以后图标也会变成白色或者黑色，好像是和一个叫ColorMatrixColorFilter(色彩矩阵颜色过滤器)这类东西有关，回头再看看。
 
 ## 支付宝&微信扫一扫 ✓
 支付宝扫一扫：
@@ -79,9 +79,9 @@ adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位
 这样通知栏就完全展开了
 
 ## 通知栏消息清空 ✓
-关于这个功能的实现我写了一篇博客
-
-http://www.jianshu.com/p/d17ce2880753
+关于这个功能的实现
+https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/
+https://egguncle.github.io/2017/08/27/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6%EF%BC%88%E4%BA%8C%EF%BC%89/#more
 
 ## 快速备忘 ✓ 
 弹出对话框以后输入备忘内容，并在通知栏上显示，但是对话框的弹出需要依附一个activity，在Xp框架hook导航栏后，获取的context是systemuiapplication，无法启动对话框，这里用了一个变通的方式解决这个问题：
@@ -129,39 +129,11 @@ http://www.jianshu.com/p/d17ce2880753
 ## 手电筒
 
 ## 三个本来的按钮 ✓ 
-back和home键使用按键模拟，都很简单的实现了，但是recent键没有对应的模拟code，所以使用了反射实现。
+back和home键使用按键模拟，都很简单的实现了，但是recent键没有对应的模拟code，所以使用了XposedHelpers.callMethod直接调用toggleRecentApps来实现的。
 ```java
- public void showRecentlyApp() {
-        Class serviceManagerClass;
-        try {
-            serviceManagerClass = Class.forName("android.os.ServiceManager");
-            Method getService = serviceManagerClass.getMethod("getService",
-                    String.class);
-            IBinder retbinder = (IBinder) getService.invoke(
-                    serviceManagerClass, "statusbar");
-            Class statusBarClass = Class.forName(retbinder
-                    .getInterfaceDescriptor());
-            Object statusBarObject = statusBarClass.getClasses()[0].getMethod(
-                    "asInterface", IBinder.class).invoke(null,
-                    new Object[]{retbinder});
-            Method recentApps = statusBarClass.getMethod("toggleRecentApps");
-            recentApps.setAccessible(true);
-            recentApps.invoke(statusBarObject);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
+  XposedHelpers.callMethod(PhoneSatatusBarHook.getPhoneStatusBar(), "toggleRecentApps");
 ```
+
 
 ## 快捷启动应用 ✓ 
 输入一个包名启动应用

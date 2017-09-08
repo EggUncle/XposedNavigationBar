@@ -19,16 +19,21 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.app.Instrumentation;
+import android.content.Context;
+import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
+import com.egguncle.xposednavigationbar.hook.hookutil.PhoneSatatusBarHook;
 import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import de.robv.android.xposed.XposedHelpers;
 
 /**
  * Created by egguncle on 17-6-21.
@@ -54,36 +59,41 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLong
     }
 
     @Override
-    public void onClick(View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                switch (mType) {
-                    case BTN_BACK:
-                        goBack();
-                        break;
-                    case BTN_HOME:
-                        goHome();
-                        break;
-                    case BTN_RECENT:
-                        goRecent();
-                        break;
-                    case BTN_HIDE:
-                        hide();
-                        break;
-                }
-            }
-        });
+    public void onClick(final View view) {
+        switch (mType) {
+            case BTN_BACK:
+                goBack();
+                break;
+            case BTN_HOME:
+                goHome();
+                break;
+            case BTN_RECENT:
+                goRecent();
+                break;
+            case BTN_HIDE:
+                hide();
+                break;
+        }
     }
 
     @Override
     public void goBack() {
-        mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+            }
+        }).start();
     }
 
     @Override
     public void goHome() {
-        mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME);
+            }
+        }).start();
     }
 
     @Override
@@ -105,34 +115,7 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLong
      * 使用反射实现打开最近任务
      */
     public void showRecentlyApp() {
-        Class serviceManagerClass;
-        try {
-            serviceManagerClass = Class.forName("android.os.ServiceManager");
-            Method getService = serviceManagerClass.getMethod("getService",
-                    String.class);
-            IBinder retbinder = (IBinder) getService.invoke(
-                    serviceManagerClass, "statusbar");
-            Class statusBarClass = Class.forName(retbinder
-                    .getInterfaceDescriptor());
-            Object statusBarObject = statusBarClass.getClasses()[0].getMethod(
-                    "asInterface", IBinder.class).invoke(null,
-                    new Object[]{retbinder});
-            Method recentApps = statusBarClass.getMethod("toggleRecentApps");
-            recentApps.setAccessible(true);
-            recentApps.invoke(statusBarObject);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        XposedHelpers.callMethod(PhoneSatatusBarHook.getPhoneStatusBar(), "toggleRecentApps");
     }
 
     @Override

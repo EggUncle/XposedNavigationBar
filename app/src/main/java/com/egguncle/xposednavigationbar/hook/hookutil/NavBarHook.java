@@ -55,6 +55,8 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACT_INIT_DATA;
+
 /**
  * Created by egguncle on 17-8-14.
  */
@@ -228,10 +230,13 @@ public class NavBarHook {
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     if (DataHook.shortCutList.size() == 0) {
-                        Intent intent = new Intent(XpNavBarAction.ACT_INIT_DATA);
-                        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        view.getContext().startActivity(intent);
+                        try {
+                            Intent intent = new Intent(ACT_INIT_DATA);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            view.getContext().startActivity(intent);
+                        } catch (Exception e) {
+                            XpLog.e(e);
+                        }
                     }
                 }
                 vpXphook.setCurrentItem(2);
