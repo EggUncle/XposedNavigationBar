@@ -16,23 +16,19 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook.util;
+package com.egguncle.xposednavigationbar.hook.hookutil;
 
 
 import android.content.res.XModuleResources;
 
 import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.ui.activity.HomeActivity;
-
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
@@ -63,20 +59,20 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        //XpLog.i(lpparam.packageName);
+      //  XpLog.i(lpparam.packageName);
+        PhoneWindowHook.hook(lpparam.classLoader);
         switch (lpparam.packageName) {
             case ANDROID:
                 try {
-                    AMHook.hook(lpparam);
+                    AMHook.hook(lpparam.classLoader);
                 } catch (Exception e) {
                     XpLog.e(e);
                 }
                 break;
             case SYSTEM_UI:
                 try {
-                    XpLog.i("filter package systemui");
-                    PhoneSatatusBarHook.hook(lpparam);
-                    NavBarHook.hook(lpparam);
+                    PhoneSatatusBarHook.hook(lpparam.classLoader);
+                    NavBarHook.hook(lpparam.classLoader);
                 } catch (Exception e) {
                     XpLog.e(e);
                 }

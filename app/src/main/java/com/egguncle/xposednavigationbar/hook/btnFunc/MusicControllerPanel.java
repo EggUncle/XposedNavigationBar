@@ -19,18 +19,16 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.Space;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
-import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
+import com.egguncle.xposednavigationbar.hook.hookutil.MainHookUtil;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 

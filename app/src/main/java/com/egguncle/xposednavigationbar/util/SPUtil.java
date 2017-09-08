@@ -54,6 +54,7 @@ public class SPUtil {
     private static final String ICON_SIZE = "icon_size";
     private static final String HookHorizontal = "hook_horizontal";
     public static final String ROOT_DOWN = "root_down";
+   // public static final String CHAMELEON_NAVBAR ="chameleon_navbar";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -198,4 +199,13 @@ public class SPUtil {
     public boolean getRootDown() {
         return mSharedPreferences.getBoolean(ROOT_DOWN, false);
     }
+
+//    public void setChameleonNavbar(boolean change){
+//        mEditor.putBoolean(CHAMELEON_NAVBAR,change);
+//        mEditor.commit();
+//    }
+//
+//    public boolean isChameleonNavBar(){
+//        return mSharedPreferences.getBoolean(CHAMELEON_NAVBAR,false);
+//    }
 }

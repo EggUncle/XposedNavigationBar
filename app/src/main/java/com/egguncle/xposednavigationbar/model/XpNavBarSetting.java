@@ -20,6 +20,7 @@ package com.egguncle.xposednavigationbar.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  * 在Nougat上虽然无法直接获取sp内容来进行扩展状态的初始化，但是可以在使用中进行进程间通信来设置扩展功能
  */
 
-public  class XpNavBarSetting implements Parcelable{
+public class XpNavBarSetting implements Parcelable {
     //快捷设置的内容数据
     private List<ShortCut> mShortCutData;
 
@@ -50,12 +51,13 @@ public  class XpNavBarSetting implements Parcelable{
     //清理内存等级
     private int mClearMenLevel;
 
-    public XpNavBarSetting(List<ShortCut> shortCutData,int homePointPosition,int iconSize,boolean rootDown,int clearMenLevel){
-        mShortCutData=shortCutData;
-        mHomePointPosition=homePointPosition;
-        mIconSize=iconSize;
-        mRootDown=rootDown;
-        mClearMenLevel=clearMenLevel;
+
+    public XpNavBarSetting(List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown, int clearMenLevel) {
+        mShortCutData = shortCutData;
+        mHomePointPosition = homePointPosition;
+        mIconSize = iconSize;
+        mRootDown = rootDown;
+        mClearMenLevel = clearMenLevel;
     }
 
 
@@ -63,8 +65,8 @@ public  class XpNavBarSetting implements Parcelable{
         mShortCutData = in.createTypedArrayList(ShortCut.CREATOR);
         mHomePointPosition = in.readInt();
         mIconSize = in.readInt();
-        mRootDown=in.readByte()!=0;
-        mClearMenLevel=in.readInt();
+        mRootDown = in.readByte() != 0;
+        mClearMenLevel = in.readInt();
     }
 
     public static final Creator<XpNavBarSetting> CREATOR = new Creator<XpNavBarSetting>() {
@@ -96,8 +98,9 @@ public  class XpNavBarSetting implements Parcelable{
         return mRootDown;
     }
 
-    public int getClearMenLevel(){return mClearMenLevel;}
-
+    public int getClearMenLevel() {
+        return mClearMenLevel;
+    }
 
     @Override
     public int describeContents() {
@@ -109,7 +112,7 @@ public  class XpNavBarSetting implements Parcelable{
         dest.writeTypedList(mShortCutData);
         dest.writeInt(mHomePointPosition);
         dest.writeInt(mIconSize);
-        dest.writeByte((byte)(mRootDown ?1:0));
+        dest.writeByte((byte) (mRootDown ? 1 : 0));
         dest.writeInt(mClearMenLevel);
     }
 }

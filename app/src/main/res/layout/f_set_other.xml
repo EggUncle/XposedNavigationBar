@@ -104,11 +104,11 @@
         <include layout="@layout/v_split_line" />
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/setting_about_marshmallow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <Switch
                 android:id="@+id/sw_root_down"
@@ -120,20 +120,15 @@
                 android:textSize="@dimen/txt_m" />
 
             <TextView
-                android:paddingBottom="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:text="@string/about_root_expand" />
 
-            <include layout="@layout/v_split_line"
-                />
+            <include layout="@layout/v_split_line" />
         </LinearLayout>
 
     </LinearLayout>
-
-
-
-
 </ScrollView>

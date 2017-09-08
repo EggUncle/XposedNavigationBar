@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook.util;
+package com.egguncle.xposednavigationbar.hook.hookutil;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.widget.Toast;
+
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -47,8 +49,8 @@ public class AMHook {
     private static Context amContext;
     private static ActivityManager am;
 
-    public static void hook(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        final Class<?> amClass = lpparam.classLoader.loadClass(ACTIVITY_MANAGER);
+    public static void hook(ClassLoader classLoader) throws Throwable {
+        final Class<?> amClass = classLoader.loadClass(ACTIVITY_MANAGER);
         Field mContext = amClass.getDeclaredField("mContext");
         mContext.setAccessible(true);
         Method method = amClass.getDeclaredMethod("forceStopPackage", String.class);

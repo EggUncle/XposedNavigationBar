@@ -21,18 +21,14 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearBackground;
-import com.egguncle.xposednavigationbar.hook.util.AMHook;
-import com.egguncle.xposednavigationbar.hook.util.DataHook;
+import com.egguncle.xposednavigationbar.hook.hookutil.AMHook;
+import com.egguncle.xposednavigationbar.hook.hookutil.DataHook;
 import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 

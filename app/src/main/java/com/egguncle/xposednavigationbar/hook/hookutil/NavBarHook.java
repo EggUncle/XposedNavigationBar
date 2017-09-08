@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook.util;
+package com.egguncle.xposednavigationbar.hook.hookutil;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,6 +39,9 @@ import android.widget.LinearLayout;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.btnFunc.MusicControllerPanel;
+import com.egguncle.xposednavigationbar.hook.util.BtnFuncFactory;
+import com.egguncle.xposednavigationbar.hook.util.MyClipBoard;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
@@ -63,13 +66,13 @@ public class NavBarHook {
     private static LinearLayout llExtPage;
     private static MusicControllerPanel musicPanel;
 
-    public static void hook(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public static void hook(ClassLoader classLoader) throws Throwable {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             XpLog.i("hook on Marshmallow");
-            hookNavBarBeforeNougat(lpparam);
+            hookNavBarBeforeNougat(classLoader);
         } else {
             XpLog.i("hook on Nougat");
-            hookNavBarOnNougat(lpparam);
+            hookNavBarOnNougat(classLoader);
         }
     }
 
@@ -77,8 +80,8 @@ public class NavBarHook {
      * hook android 7.0的导航栏
      * 在lineage os上hook资源文件的方法没生效，只能在这里做hook了
      */
-    private static void hookNavBarOnNougat(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        final Class<?> navigationBarInflaterViewClass = lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarInflaterView");
+    private static void hookNavBarOnNougat(ClassLoader classLoader) throws Throwable {
+        final Class<?> navigationBarInflaterViewClass = classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarInflaterView");
         XposedHelpers.findAndHookMethod(navigationBarInflaterViewClass, "onFinishInflate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -93,11 +96,10 @@ public class NavBarHook {
     /**
      * hook android 7.0以下的导航栏
      *
-     * @param lpparam
      * @throws Throwable
      */
-    private static void hookNavBarBeforeNougat(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        final Class<?> navigationBarInflaterViewClass = lpparam.classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
+    private static void hookNavBarBeforeNougat(ClassLoader classLoader) throws Throwable {
+        final Class<?> navigationBarInflaterViewClass = classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
         XposedHelpers.findAndHookMethod(navigationBarInflaterViewClass, "onFinishInflate", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -272,7 +274,7 @@ public class NavBarHook {
                 XpNavBarSetting setting = intent.getParcelableExtra("data");
                 xpNavBarDataAnalysis(context, setting);
             } catch (Exception e) {
-
+                XpLog.e(e);
             }
         }
     }
@@ -289,8 +291,6 @@ public class NavBarHook {
         int homePosition = setting.getHomePointPosition();
         boolean rootDown = setting.isRootDown();
         int clearMemLevel = setting.getClearMenLevel();
-        XpLog.i(homePosition + "  " + iconSize);
-
         updateNavBar(context, list, homePosition, iconSize, rootDown, clearMemLevel);
     }
 
@@ -302,9 +302,12 @@ public class NavBarHook {
      * @param iconSize
      * @param rootDown
      */
-    public static void updateNavBar(Context context, List<ShortCut> shortCutData,
-                                    int homePointPosition, int iconSize, boolean rootDown
-            , int clearMemLevel) {
+    public static void updateNavBar(Context context,
+                                    List<ShortCut> shortCutData,
+                                    int homePointPosition,
+                                    int iconSize,
+                                    boolean rootDown,
+                                    int clearMemLevel) {
         btnFuncFactory.clearAllBtn();
         if (shortCutData != null && shortCutData.size() != 0) {
             DataHook.shortCutList = shortCutData;

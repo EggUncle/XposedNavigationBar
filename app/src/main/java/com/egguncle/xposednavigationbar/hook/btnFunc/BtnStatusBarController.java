@@ -24,16 +24,13 @@ import android.os.SystemClock;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.StatusBarController;
-import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
-import com.egguncle.xposednavigationbar.hook.util.NavBarHook;
+import com.egguncle.xposednavigationbar.hook.hookutil.NavBarHook;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-
-import de.robv.android.xposed.XposedBridge;
 
 /**
  * Created by egguncle on 17-6-10.

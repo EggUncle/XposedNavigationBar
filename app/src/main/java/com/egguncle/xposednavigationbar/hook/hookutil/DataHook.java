@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook.util;
+package com.egguncle.xposednavigationbar.hook.hookutil;
 
 import android.content.res.Resources;
 import android.content.res.XModuleResources;

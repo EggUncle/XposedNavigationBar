@@ -19,18 +19,12 @@
 package com.egguncle.xposednavigationbar.hook.util;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.Space;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -51,11 +45,10 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnsNavbar;
+import com.egguncle.xposednavigationbar.hook.hookutil.MainHookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 /**

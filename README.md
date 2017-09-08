@@ -8,6 +8,8 @@
 http://www.coolapk.com/apk/com.egguncle.xposednavigationbar
 ## 历史版本下载地址
 http://repo.xposed.info/module/com.egguncle.xposednavigationbar
+## 更新日志
+https://github.com/EggUncle/XposedNavigationBar/blob/master/ChangeLog.md
 
 
 # -开发中-
@@ -20,6 +22,13 @@ http://repo.xposed.info/module/com.egguncle.xposednavigationbar
 https://github.com/rovo89/XposedBridge/issues/64
 
 在XposedBridge的项目下有一个关于这个功能的issues，最后一个朋友提到，其实可以自己hook自己的app，给自己的app一个判断是否激活的方法，然后hook这个方法，修改返回值，这样就能在调用的时候判断是不是激活了，因为如果激活成功，就会hook到app里面的这个判断激活的方法。
+
+## 导航栏变色
+这里只是做了变色，实现的方法也很简单，hook了style以及activity等类，然后取到主题颜色，给导航栏设置颜色就行了:
+```java
+activity.getWindow().setNavigationBarColor(colorPrimaryDark);
+```
+还有就是关于沉浸式状态栏导航栏的实现，这个没有看太多，但是在这个模块上面会有一个很有意思的现象，沉浸以后图标也会变成白色或者黑色，好像是和一个叫ColorMatrixColorFilter(色彩矩阵颜色过滤器)这类东西有关，回头再看看。
 
 ## 支付宝&微信扫一扫 ✓
 支付宝扫一扫：

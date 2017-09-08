@@ -39,9 +39,7 @@ import android.widget.CheckBox;
 
 import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
-import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
-import com.egguncle.xposednavigationbar.hook.util.MainHookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.ui.fragment.MomoFragment;

@@ -25,7 +25,7 @@
 #-renamesourcefileattribute SourceFile
 # removes such information by default, so configure it to keep all of it.
 -keep class com.egguncle.xposednavigationbar.model.** { *; } #实体类不参与混淆
--keep class com.egguncle.xposednavigationbar.hook.util.MainHookUtil { *; } #Xp核心功能类不混淆
+-keep class com.egguncle.xposednavigationbar.hook.hookutil.MainHookUtil { *; } #Xp核心功能类不混淆
 ################gson##################
 -keep class com.google.gson.** {*;}
 #-keep class com.google.**{*;}

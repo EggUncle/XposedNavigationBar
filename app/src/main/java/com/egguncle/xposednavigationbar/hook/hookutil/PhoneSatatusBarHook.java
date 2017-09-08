@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook.util;
+package com.egguncle.xposednavigationbar.hook.hookutil;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,10 +44,10 @@ public class PhoneSatatusBarHook {
 //            "com.android.systemui.statusbar.stack.NotificationStackScrollLayout";
 //    private final static String I_STATUS_BAR_SERVICE = "com.android.internal.statusbar.IStatusBarService";
 
-    public static void hook(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public static void hook(ClassLoader classLoader) throws Throwable {
         //获取清除通知的方法
         Class<?> phoneStatusBarClass =
-                lpparam.classLoader.loadClass(PHONE_STATUS_BRA_CLASS);
+                classLoader.loadClass(PHONE_STATUS_BRA_CLASS);
 //        Class<?> istatusbarservice = lpparam.classLoader.loadClass(I_STATUS_BAR_SERVICE);
 //        final Method onClearAllNotifications = istatusbarservice.getMethod("onClearAllNotifications", int.class);
 //
