@@ -19,31 +19,33 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
 
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public interface StatusBarController {
+public abstract class StatusBarController implements View.OnClickListener {
+    private static boolean statusExpand = false;
 
-    /**
-     * 完全展开通知栏
-     */
-    void expandAllStatusBar(Context context);
+    protected abstract void expandAllStatusBar(Context context);
 
-    void expandAllStatusBarWithOutRoot(Context context);
+    protected abstract void expandAllStatusBarWithOutRoot(Context context);
 
-    /**
-     * 展开通知栏(只展开一小部分的那种
-     */
-    void expandStatusBar(Context context);
-    /**
-     * 收起通知栏
-     */
-    void collapseStatusBar(Context context);
+    protected abstract void expandStatusBar(Context context);
 
-    /**
-     * 请求root权限，用于处理android6.0通知栏展开缓慢的问题
-     */
-    boolean requestRoot();
+    protected abstract void collapseStatusBar(Context context);
+
+    protected abstract boolean requestRoot();
+
+    @Override
+    public void onClick(View v) {
+        if (statusExpand) {
+            collapseStatusBar(v.getContext());
+            statusExpand = false;
+        } else {
+            expandAllStatusBar(v.getContext());
+            statusExpand = true;
+        }
+    }
 }

@@ -32,48 +32,24 @@ import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import de.robv.android.xposed.XposedHelpers;
+
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnScreenOff implements ScreenOff, View.OnClickListener, View.OnLongClickListener {
+public class BtnScreenOff extends ScreenOff{
 
     @Override
-    public void onClick(final View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    screenOff(view.getContext());
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void screenOff(Context context) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    protected void screenOff(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        Method goToSleep = pm.getClass().getMethod("goToSleep", long.class);
-        goToSleep.invoke(pm, SystemClock.uptimeMillis());
+        XposedHelpers.callMethod(pm,"goToSleep",SystemClock.uptimeMillis());
     }
 
     @Override
-    public boolean onLongClick(View view) {
-        //长按呼出关机菜单
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                Instrumentation mInst = new Instrumentation();
-                KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER);
-                mInst.sendKeySync(keyEvent);
-            }
-        });
-        return true;
+    protected void showPowerMenu(Context context) {
+        Instrumentation mInst = new Instrumentation();
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER);
+        mInst.sendKeySync(keyEvent);
     }
 }

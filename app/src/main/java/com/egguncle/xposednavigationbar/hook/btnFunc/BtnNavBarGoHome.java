@@ -27,19 +27,13 @@ import com.egguncle.xposednavigationbar.hook.hookFunc.GoHomeNavBar;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnNavBarGoHome implements GoHomeNavBar,View.OnClickListener {
-    private ViewPager mViewPager;
-    public BtnNavBarGoHome(ViewPager viewPager){
-        mViewPager=viewPager;
+public class BtnNavBarGoHome extends GoHomeNavBar {
+    public BtnNavBarGoHome(ViewPager viewPager) {
+        super(viewPager);
     }
 
     @Override
-    public void onClick(View view) {
-        goHomeNavBar(mViewPager);
-    }
-
-    @Override
-    public void goHomeNavBar(ViewPager viewPager) {
+    protected void goHomeNavBar(ViewPager viewPager) {
         viewPager.setCurrentItem(1);
     }
 }

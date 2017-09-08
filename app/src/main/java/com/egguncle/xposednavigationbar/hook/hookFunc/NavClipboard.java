@@ -19,14 +19,26 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-23.
  */
 
-public interface NavClipboard {
-    void getClipboadrData(Context context);
+public abstract class NavClipboard implements View.OnClickListener{
+    protected abstract void getClipboadrData(Context context);
 
-    void showClipboardData();
+    protected abstract void showClipboardData();
 
+    @Override
+    public void onClick(final View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                getClipboadrData(v.getContext());
+            }
+        });
+    }
 }

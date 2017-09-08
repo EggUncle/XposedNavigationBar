@@ -19,12 +19,34 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-11.
  */
 
-public interface StartActPanel {
-    void openActPanel(Context context);
-    void closeActPanel(Context context);
+public abstract class StartActPanel implements View.OnClickListener{
+    private static boolean open;
+
+    protected abstract void openActPanel(Context context);
+
+    protected abstract void closeActPanel(Context context);
+
+    @Override
+    public void onClick(final View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (open) {
+                    closeActPanel(v.getContext());
+                    open = false;
+                } else {
+                    openActPanel(v.getContext());
+                    open = true;
+                }
+            }
+        });
+    }
 }

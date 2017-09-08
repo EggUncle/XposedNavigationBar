@@ -35,22 +35,7 @@ import java.io.IOException;
  * Created by egguncle on 17-6-18.
  */
 
-public class BtnScreenShot implements ScreenShot, View.OnClickListener {
-    private Handler handler =new Handler();
-
-    @Override
-    public void onClick(final View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    screenshot(view.getContext());
-                } catch (Exception e) {
-                    XpLog.i(e.getMessage());
-                }
-            }
-        });
-    }
+public class BtnScreenShot extends ScreenShot{
 
     @Override
     public void screenshot(final Context context) {

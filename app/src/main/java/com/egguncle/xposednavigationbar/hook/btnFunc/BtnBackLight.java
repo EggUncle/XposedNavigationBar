@@ -121,7 +121,6 @@ public class BtnBackLight implements BacklightController,View.OnClickListener {
             Method setBacklightBrightness = pm.getClass().getMethod("setBacklightBrightness", int.class);
             setBacklightBrightness.setAccessible(true);
             setBacklightBrightness.invoke(pm, light);
-
             XpLog.i("=====setBacklightBrightness");
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

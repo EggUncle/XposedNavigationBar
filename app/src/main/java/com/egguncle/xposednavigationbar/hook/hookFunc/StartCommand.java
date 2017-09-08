@@ -18,12 +18,29 @@
 
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
+
 /**
  * Created by egguncle on 17-6-25.
  */
 
-public interface StartCommand {
+public abstract class StartCommand implements View.OnClickListener {
+    private String mCommand;
+    protected abstract void startCommand(String command);
 
-    void startCommand(String command);
+    public StartCommand(String command){
+        mCommand=command;
+    }
 
+    @Override
+    public void onClick(View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                startCommand(mCommand);
+            }
+        });
+    }
 }

@@ -30,47 +30,22 @@ import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
  * Created by egguncle on 17-6-21.
  */
 
-public class BtnMusicController implements MusicController, View.OnClickListener {
-    public final static int PREVIOUS = 1;
-    public final static int START_OR_STOP = 2;
-    public final static int NEXT = 3;
+public class BtnMusicController extends MusicController {
 
-    public int mType;
-    public boolean isPlaying;
-    public Instrumentation mInst;
+    private Instrumentation mInst;
 
     public BtnMusicController(int type) {
-        this.mType = type;
+        super(type);
         mInst = new Instrumentation();
     }
 
     @Override
-    public void onClick(View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                switch (mType) {
-                    case PREVIOUS:
-                        previousMusic();
-                        break;
-                    case START_OR_STOP:
-                        startOrPauseMusic();
-                        break;
-                    case NEXT:
-                        nextMusic();
-                        break;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void nextMusic() {
+    protected void nextMusic() {
         mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_NEXT);
     }
 
     @Override
-    public void startOrPauseMusic() {
+    protected void startOrPauseMusic() {
         if (isPlaying) {
             mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_PAUSE);
             isPlaying = false;
@@ -81,7 +56,7 @@ public class BtnMusicController implements MusicController, View.OnClickListener
     }
 
     @Override
-    public void previousMusic() {
+    protected void previousMusic() {
         mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
     }
 }

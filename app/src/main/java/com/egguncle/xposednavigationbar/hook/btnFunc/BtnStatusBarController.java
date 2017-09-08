@@ -36,28 +36,10 @@ import java.nio.charset.Charset;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnStatusBarController implements StatusBarController, View.OnClickListener {
-    private static boolean statusExpand = false;
-    public final static int FOR_EXPAND = 0;
-    public final static int FOR_NOTIFICATION = 1;
-    private int mType;
-
-    public BtnStatusBarController() {
-    }
+public class BtnStatusBarController extends StatusBarController {
 
     @Override
-    public void onClick(View view) {
-        if (statusExpand) {
-            collapseStatusBar(view.getContext());
-            statusExpand = false;
-        } else {
-            expandAllStatusBar(view.getContext());
-            statusExpand = true;
-        }
-    }
-
-    @Override
-    public void expandAllStatusBar(Context context) {
+    protected void expandAllStatusBar(Context context) {
         if (NavBarHook.isExpandStatusBarWithRoot()) {
             //如果在6.0环境下，尝试申请root权限来解决通知栏展开缓慢的问题
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && requestRoot()) {
@@ -73,7 +55,7 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
     }
 
     @Override
-    public void expandAllStatusBarWithOutRoot(Context context) {
+    protected void expandAllStatusBarWithOutRoot(Context context) {
         try {
             Object statusBarManager = context.getSystemService("statusbar");
             Method expand;
@@ -88,7 +70,7 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
     }
 
     @Override
-    public void expandStatusBar(Context context) {
+    protected void expandStatusBar(Context context) {
         try {
             Object statusBarManager = context.getSystemService("statusbar");
             Method expand;
@@ -100,7 +82,7 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
     }
 
     @Override
-    public void collapseStatusBar(Context context) {
+    protected void collapseStatusBar(Context context) {
         try {
             Object statusBarManager = context.getSystemService("statusbar");
             Method collapse;
@@ -112,7 +94,7 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
     }
 
     @Override
-    public boolean requestRoot() {
+    protected boolean requestRoot() {
         //先申请root权限
         Process process = null;
         boolean result = false;
@@ -127,7 +109,6 @@ public class BtnStatusBarController implements StatusBarController, View.OnClick
                 public void run() {
                     // boolean result = false;
                     DataOutputStream dataOutputStream = null;
-
                     try {
                         dataOutputStream = new DataOutputStream(finalProcess.getOutputStream());
                         // 模拟手势下拉 这个地方模拟点击有写别的rom会点击到别的快捷开关，所以做两次下拉

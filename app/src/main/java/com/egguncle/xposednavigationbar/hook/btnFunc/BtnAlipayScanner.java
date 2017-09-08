@@ -32,26 +32,17 @@ import com.egguncle.xposednavigationbar.hook.util.XpLog;
  * Created by egguncle on 17-6-16.
  */
 
-public class BtnAlipayScanner implements ScannerQRcode,View.OnClickListener {
-    @Override
-    public void onClick(View view) {
-        scanQR(view.getContext());
-    }
+public class BtnAlipayScanner extends ScannerQRcode {
 
     @Override
     public void scanQR(final Context context) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    context.startActivity(intent);
-                }catch (Exception e){
-                    XpLog.i(e.getMessage());
-                }
-            }
-        });
+        try {
+            Uri uri = Uri.parse("alipayqr://platformapi/startapp?saId=10000007");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            XpLog.i(e.getMessage());
+        }
     }
 }

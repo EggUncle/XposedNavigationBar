@@ -19,10 +19,6 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.app.Instrumentation;
-import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -30,8 +26,6 @@ import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
 import com.egguncle.xposednavigationbar.hook.hookutil.PhoneSatatusBarHook;
 import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -40,44 +34,17 @@ import de.robv.android.xposed.XposedHelpers;
  * Android原有的返回、home、最近任务键,以及显示和隐藏
  */
 
-public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLongClickListener {
-    public final static int BTN_BACK = 1;
-    public final static int BTN_HOME = 2;
-    public final static int BTN_RECENT = 3;
-
-    public final static int BTN_HIDE = 4;
-
-    public final static int BTN_LONG_HOME = 5;
+public class BtnsNavbar extends NavBarBtns{
 
     private Instrumentation mInst;
 
-    public int mType;
-
     public BtnsNavbar(int type) {
-        this.mType = type;
+        super(type);
         mInst = new Instrumentation();
     }
 
     @Override
-    public void onClick(final View view) {
-        switch (mType) {
-            case BTN_BACK:
-                goBack();
-                break;
-            case BTN_HOME:
-                goHome();
-                break;
-            case BTN_RECENT:
-                goRecent();
-                break;
-            case BTN_HIDE:
-                hide();
-                break;
-        }
-    }
-
-    @Override
-    public void goBack() {
+    protected void goBack() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,7 +54,7 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLong
     }
 
     @Override
-    public void goHome() {
+    protected void goHome() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -97,36 +64,23 @@ public class BtnsNavbar implements NavBarBtns, View.OnClickListener, View.OnLong
     }
 
     @Override
-    public void goRecent() {
-        showRecentlyApp();
+    protected void longHome() {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_HOME);
+        mInst.sendKeySync(keyEvent);
     }
 
     @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    /**
-     * 使用反射实现打开最近任务
-     */
-    public void showRecentlyApp() {
+    protected void goRecent() {
         XposedHelpers.callMethod(PhoneSatatusBarHook.getPhoneStatusBar(), "toggleRecentApps");
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                KeyEvent keyEvent = new KeyEvent(KeyEvent.FLAG_LONG_PRESS, KeyEvent.KEYCODE_HOME);
-                mInst.sendKeySync(keyEvent);
-            }
-        });
-        return true;
+    protected void hide() {
+
+    }
+
+    @Override
+    protected void show() {
+
     }
 }

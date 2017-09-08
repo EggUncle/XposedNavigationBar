@@ -31,24 +31,12 @@ import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACTION_QU
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnQuickNotice implements QuickNotification, View.OnClickListener {
-
+public class BtnQuickNotice extends QuickNotification{
     @Override
-    public void quickNotification(Context context) {
+    protected void quickNotification(Context context) {
         Intent intent = new Intent(ACTION_QUICK_NOTICE);
-        //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
 
-    @Override
-    public void onClick(final View view) {
-
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                quickNotification(view.getContext());
-            }
-        });
-    }
 }

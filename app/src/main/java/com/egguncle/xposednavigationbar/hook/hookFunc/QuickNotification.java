@@ -19,14 +19,25 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public interface QuickNotification {
-    /**
-     * 快速备忘，在通知栏添加一条通知
-     */
-    void quickNotification(Context context);
+public abstract class QuickNotification implements View.OnClickListener {
+
+    protected abstract void quickNotification(Context context);
+
+    @Override
+    public void onClick(final View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                quickNotification(v.getContext());
+            }
+        });
+    }
 }

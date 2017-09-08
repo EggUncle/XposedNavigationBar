@@ -19,6 +19,9 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -26,11 +29,31 @@ import java.lang.reflect.InvocationTargetException;
  * Created by egguncle on 17-6-10.
  */
 
-public interface ScreenOff {
-    /**
-     * 息屏
-     */
-    void screenOff(Context context)
-            throws InvocationTargetException,
-            IllegalAccessException, NoSuchMethodException;
+public abstract class ScreenOff implements View.OnClickListener, View.OnLongClickListener {
+
+    protected abstract void screenOff(Context context);
+
+    protected abstract void showPowerMenu(Context context);
+
+    @Override
+
+    public void onClick(final View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                screenOff(v.getContext());
+            }
+        });
+    }
+
+    @Override
+    public boolean onLongClick(final View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                showPowerMenu(v.getContext());
+            }
+        });
+        return true;
+    }
 }

@@ -30,26 +30,14 @@ import java.io.IOException;
  * Created by egguncle on 17-6-25.
  */
 
-public class BtnStartCommand implements StartCommand,View.OnClickListener{
-
-    private String mCommand;
+public class BtnStartCommand extends StartCommand{
 
     public BtnStartCommand(String command){
-        mCommand=command;
+        super(command);
     }
 
     @Override
-    public void onClick(View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                startCommand(mCommand);
-            }
-        });
-    }
-
-    @Override
-    public void startCommand(String command) {
+    protected void startCommand(String command) {
         try {
             Log.i("testTag", "startCommand: "+command);
             Process p = Runtime.getRuntime().exec(command);

@@ -19,12 +19,25 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-16.
  * 扫描二维码
  */
 
-public interface ScannerQRcode {
-    void scanQR(Context context);
+public abstract class ScannerQRcode implements View.OnClickListener{
+   protected abstract void scanQR(Context context);
+
+    @Override
+    public void onClick(final View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                scanQR(v.getContext());
+            }
+        });
+    }
 }

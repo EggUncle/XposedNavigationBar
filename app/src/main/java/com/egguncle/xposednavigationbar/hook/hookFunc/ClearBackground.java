@@ -19,16 +19,30 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public interface ClearBackground {
+public abstract class ClearBackground implements View.OnClickListener {
     /**
      * 清理后台 systemuiapplication这个进程没有killbrakground的权限
      * ，去启动透明activity并执行这个方法了
+     *
      * @param context
      */
-     void clearBackground(Context context);
+    protected abstract void clearBackground(Context context);
+
+    @Override
+    public void onClick(final View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                clearBackground(v.getContext());
+            }
+        });
+    }
 }

@@ -30,16 +30,7 @@ import java.io.IOException;
  * Created by egguncle on 17-6-16.
  */
 
-public class BtnWeChatScanner implements ScannerQRcode,View.OnClickListener {
-    @Override
-    public void onClick(final View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                scanQR(view.getContext());
-            }
-        });
-    }
+public class BtnWeChatScanner extends ScannerQRcode{
 
     @Override
     public void scanQR(Context context) {

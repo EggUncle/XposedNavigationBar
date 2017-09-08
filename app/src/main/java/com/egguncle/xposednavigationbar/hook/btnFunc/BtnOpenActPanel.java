@@ -32,35 +32,19 @@ import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACTION_ST
  * Created by egguncle on 17-6-11.
  */
 
-public class BtnOpenActPanel implements StartActPanel, View.OnClickListener {
-    private static boolean open;
+public class BtnOpenActPanel extends StartActPanel {
 
     @Override
-    public void onClick(final View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                if (open) {
-                    closeActPanel(view.getContext());
-                    open = false;
-                } else {
-                    openActPanel(view.getContext());
-                    open = true;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void openActPanel(Context context) {
+    protected void openActPanel(Context context) {
         Intent intent = new Intent(ACTION_START_ACT);
         //使用这种启动标签，可以避免在打开软件本身以后再通过快捷键呼出备忘对话框时仍然显示软件的界面的bug
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
 
-    public void closeActPanel(Context context){
-        Intent intent=new Intent();
+    @Override
+    protected void closeActPanel(Context context) {
+        Intent intent = new Intent();
         intent.setAction(XpNavBarAction.ACT_CLOSE_ACT_PANEL);
         context.sendBroadcast(intent);
     }

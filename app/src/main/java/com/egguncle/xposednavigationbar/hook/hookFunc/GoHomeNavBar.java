@@ -19,11 +19,23 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public interface GoHomeNavBar {
-     void goHomeNavBar(ViewPager viewPager);
+public abstract class GoHomeNavBar implements View.OnClickListener {
+    private ViewPager mViewPager;
+
+    protected abstract void goHomeNavBar(ViewPager viewPager);
+
+    public GoHomeNavBar(ViewPager viewPager) {
+        mViewPager = viewPager;
+    }
+
+    @Override
+    public void onClick(View v) {
+        goHomeNavBar(mViewPager);
+    }
 }

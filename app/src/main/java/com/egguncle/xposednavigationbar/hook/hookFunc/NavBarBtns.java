@@ -18,15 +18,64 @@
 
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
+
 /**
  * Created by egguncle on 17-6-21.
  */
 
-public interface NavBarBtns {
-    void goBack();
-    void goHome();
-    void goRecent();
+public abstract class NavBarBtns implements View.OnClickListener, View.OnLongClickListener {
+    private int mType;
+    public final static int BTN_BACK = 1;
+    public final static int BTN_HOME = 2;
+    public final static int BTN_RECENT = 3;
+    public final static int BTN_HIDE = 4;
+    public final static int BTN_LONG_HOME = 5;
 
-    void hide();
-    void show();
+    protected abstract void goBack();
+
+    protected abstract void goHome();
+
+    protected abstract void longHome();
+
+    protected abstract void goRecent();
+
+    protected abstract void hide();
+
+    protected abstract void show();
+
+    public NavBarBtns(int type) {
+        mType = type;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (mType) {
+            case BTN_BACK:
+                goBack();
+                break;
+            case BTN_HOME:
+                goHome();
+                break;
+            case BTN_RECENT:
+                goRecent();
+                break;
+            case BTN_HIDE:
+                hide();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                longHome();
+            }
+        });
+        return true;
+    }
 }

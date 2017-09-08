@@ -36,10 +36,10 @@ import java.util.List;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnClearBackground implements ClearBackground, View.OnClickListener {
+public class BtnClearBackground extends ClearBackground {
 
     @Override
-    public void clearBackground(Context context) {
+    protected void clearBackground(Context context) {
         XpLog.i("clear mem level is " + DataHook.clearMenLevel);
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ArrayList<String> pkgNames = new ArrayList<>();
@@ -65,14 +65,4 @@ public class BtnClearBackground implements ClearBackground, View.OnClickListener
         XpLog.i("has send pkgnames to kill");
     }
 
-    @Override
-    public void onClick(final View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                clearBackground(view.getContext());
-            }
-        });
-
-    }
 }

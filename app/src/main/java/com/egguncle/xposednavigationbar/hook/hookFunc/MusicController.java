@@ -18,15 +18,49 @@
 
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
-import android.media.MediaPlayer;
-import android.media.session.MediaSession;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-12.
  */
 
-public interface MusicController {
-    void nextMusic();
-    void startOrPauseMusic();
-    void previousMusic();
+public abstract class MusicController implements View.OnClickListener {
+    public final static int PREVIOUS = 1;
+    public final static int START_OR_STOP = 2;
+    public final static int NEXT = 3;
+    protected boolean isPlaying;
+
+    protected abstract void nextMusic();
+
+    protected abstract void startOrPauseMusic();
+
+    protected abstract void previousMusic();
+
+    private int mType;
+
+    public MusicController(int type) {
+        mType = type;
+    }
+
+    @Override
+    public void onClick(View v) {
+        ScheduledThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                switch (mType) {
+                    case PREVIOUS:
+                        previousMusic();
+                        break;
+                    case START_OR_STOP:
+                        startOrPauseMusic();
+                        break;
+                    case NEXT:
+                        nextMusic();
+                        break;
+                }
+            }
+        });
+    }
 }

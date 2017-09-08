@@ -30,23 +30,7 @@ import de.robv.android.xposed.XposedHelpers;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnClearAllNotifications implements ClearAllNotifications, View.OnClickListener {
-    private BtnStatusBarController btnStatusBarController;
-
-    public BtnClearAllNotifications() {
-        btnStatusBarController = new BtnStatusBarController();
-    }
-
-    @Override
-    public void onClick(final View view) {
-        clearAllNotifications(view.getContext());
-//        ScheduledThreadPool.getInstance().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        });
-    }
+public class BtnClearAllNotifications extends ClearAllNotifications{
 
     @Override
     public void clearAllNotifications(Context context) {

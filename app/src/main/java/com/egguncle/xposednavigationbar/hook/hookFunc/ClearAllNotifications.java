@@ -19,16 +19,22 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.view.View;
+
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public interface ClearAllNotifications {
-    /**
-     * 清除所有通知
-     *
-     * @param context
-     */
-    void clearAllNotifications(Context context);
+public abstract class ClearAllNotifications implements View.OnClickListener {
+    protected BtnStatusBarController btnStatusBarController;
+    protected abstract void clearAllNotifications(Context context);
+    public ClearAllNotifications() {
+        btnStatusBarController = new BtnStatusBarController();
+    }
+    @Override
+    public void onClick(View v) {
+        clearAllNotifications(v.getContext());
+    }
 }
