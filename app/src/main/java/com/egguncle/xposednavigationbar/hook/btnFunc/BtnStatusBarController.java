@@ -32,11 +32,15 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 
+import de.robv.android.xposed.XposedHelpers;
+
 /**
  * Created by egguncle on 17-6-10.
  */
 
 public class BtnStatusBarController extends StatusBarController {
+
+    private final static String STATUS_BAR = "statusbar";
 
     @Override
     protected void expandAllStatusBar(Context context) {
@@ -49,48 +53,27 @@ public class BtnStatusBarController extends StatusBarController {
             } else {
                 expandAllStatusBarWithOutRoot(context);
             }
-        }else{
+        } else {
             expandAllStatusBarWithOutRoot(context);
         }
     }
 
     @Override
     protected void expandAllStatusBarWithOutRoot(Context context) {
-        try {
-            Object statusBarManager = context.getSystemService("statusbar");
-            Method expand;
-//            if (Build.VERSION.SDK_INT <= 16) {
-//              由于支持的系统版本为5.0～6.0,所以不对版本做适配
-//            } else {
-            expand = statusBarManager.getClass().getMethod("expandSettingsPanel");
-            expand.invoke(statusBarManager);
-        } catch (Exception localException) {
-            localException.printStackTrace();
-        }
+        Object statusBarManager = context.getSystemService(STATUS_BAR);
+        XposedHelpers.callMethod(statusBarManager, "expandSettingsPanel");
     }
 
     @Override
     protected void expandStatusBar(Context context) {
-        try {
-            Object statusBarManager = context.getSystemService("statusbar");
-            Method expand;
-            expand = statusBarManager.getClass().getMethod("expandNotificationsPanel");
-            expand.invoke(statusBarManager);
-        } catch (Exception localException) {
-            localException.printStackTrace();
-        }
+        Object statusBarManager = context.getSystemService(STATUS_BAR);
+        XposedHelpers.callMethod(statusBarManager, "expandNotificationsPanel");
     }
 
     @Override
     protected void collapseStatusBar(Context context) {
-        try {
-            Object statusBarManager = context.getSystemService("statusbar");
-            Method collapse;
-            collapse = statusBarManager.getClass().getMethod("collapsePanels");
-            collapse.invoke(statusBarManager);
-        } catch (Exception localException) {
-            localException.printStackTrace();
-        }
+            Object statusBarManager = context.getSystemService(STATUS_BAR);
+            XposedHelpers.callMethod(statusBarManager, "collapsePanels");
     }
 
     @Override

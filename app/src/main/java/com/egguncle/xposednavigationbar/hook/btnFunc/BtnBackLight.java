@@ -38,6 +38,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 
 /**
  * Created by egguncle on 17-6-10.
@@ -117,20 +118,21 @@ public class BtnBackLight implements BacklightController,View.OnClickListener {
     @Override
     public void setBackgroundLight(Context context, int light) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        try {
-            Method setBacklightBrightness = pm.getClass().getMethod("setBacklightBrightness", int.class);
-            setBacklightBrightness.setAccessible(true);
-            setBacklightBrightness.invoke(pm, light);
-            XpLog.i("=====setBacklightBrightness");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            XpLog.i(e.getMessage());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            XpLog.i(e.getMessage());
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            XpLog.i(e.getMessage());
-        }
+        XposedHelpers.callMethod(pm,"setBacklightBrightness",light);
+//        try {
+//            Method setBacklightBrightness = pm.getClass().getMethod("setBacklightBrightness", int.class);
+//            setBacklightBrightness.setAccessible(true);
+//            setBacklightBrightness.invoke(pm, light);
+//            XpLog.i("=====setBacklightBrightness");
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//            XpLog.i(e.getMessage());
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//            XpLog.i(e.getMessage());
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//            XpLog.i(e.getMessage());
+//        }
     }
 }
