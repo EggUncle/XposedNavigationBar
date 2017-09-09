@@ -41,7 +41,7 @@ public class SPUtil {
     private static SharedPreferences mSharedPreferences;
     private static SharedPreferences.Editor mEditor;
     private static SPUtil instance;
-    public static final String SP_NAME = "XposedNavigationBar";
+    public static final String SP_NAME = "xpnavbar";
     private static final String TAPS_APPEAR = "taps";
     //在原导航键上添加一个小点，点击后出现扩展的部分
     private static final String HOME_POINT = "home_point";
