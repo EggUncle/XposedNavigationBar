@@ -25,9 +25,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.egguncle.xposednavigationbar.hook.util.XpLog;
-import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
-
 import java.lang.reflect.Field;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -52,9 +49,9 @@ public class PhoneWindowHook {
         }
         Class<?> internalStyleable = XposedHelpers.findClass(CLASS_SYTLE, loader);
         Field internalThemeField = XposedHelpers.findField(internalStyleable, "Theme");
-        Field internalColorPrimaryDarkField = XposedHelpers.findField(internalStyleable, "Theme_colorPrimaryDark");
+        Field internalColorPrimaryDarkField = XposedHelpers.findField(internalStyleable, "Theme_colorPrimary");
         final int[] theme = (int[]) internalThemeField.get(null);
-        final int theme_colorPrimaryDark = internalColorPrimaryDarkField.getInt(null);
+        final int theme_colorPrimary = internalColorPrimaryDarkField.getInt(null);
 
         Class<?> pwClass = loader.loadClass(pwClassPath);
         XposedHelpers.findAndHookMethod(pwClass, "setStatusBarColor", int.class, new XC_MethodHook() {
@@ -70,10 +67,14 @@ public class PhoneWindowHook {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 Activity activity = (Activity) param.thisObject;
                 TypedArray typedArray = activity.getTheme().obtainStyledAttributes(theme);
-                int colorPrimaryDark = typedArray.getColor(theme_colorPrimaryDark, Color.TRANSPARENT);
+                int colorPrimary = typedArray.getColor(theme_colorPrimary, Color.TRANSPARENT);
                 typedArray.recycle();
-                if (colorPrimaryDark != Color.TRANSPARENT && colorPrimaryDark != Color.BLACK)
-                    activity.getWindow().setNavigationBarColor(colorPrimaryDark);
+                if (colorPrimary != Color.TRANSPARENT && colorPrimary != Color.BLACK){
+                    activity.getWindow().setNavigationBarColor(colorPrimary);
+                    activity.getWindow().setStatusBarColor(colorPrimary);
+                }
+
+
             }
         });
     }

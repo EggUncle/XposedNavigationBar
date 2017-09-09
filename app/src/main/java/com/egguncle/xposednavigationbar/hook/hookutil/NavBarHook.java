@@ -69,7 +69,7 @@ public class NavBarHook {
     private static MusicControllerPanel musicPanel;
 
     public static void hook(ClassLoader classLoader) throws Throwable {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             XpLog.i("hook on Marshmallow");
             hookNavBarBeforeNougat(classLoader);
         } else {
