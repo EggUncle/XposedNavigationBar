@@ -119,20 +119,5 @@ public class BtnBackLight implements BacklightController,View.OnClickListener {
     public void setBackgroundLight(Context context, int light) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         XposedHelpers.callMethod(pm,"setBacklightBrightness",light);
-//        try {
-//            Method setBacklightBrightness = pm.getClass().getMethod("setBacklightBrightness", int.class);
-//            setBacklightBrightness.setAccessible(true);
-//            setBacklightBrightness.invoke(pm, light);
-//            XpLog.i("=====setBacklightBrightness");
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//            XpLog.i(e.getMessage());
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//            XpLog.i(e.getMessage());
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//            XpLog.i(e.getMessage());
-//        }
     }
 }

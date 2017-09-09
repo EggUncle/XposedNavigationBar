@@ -25,11 +25,13 @@ import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.ui.activity.HomeActivity;
+import com.egguncle.xposednavigationbar.util.SPUtil;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodReplacement;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -59,8 +61,14 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-      //  XpLog.i(lpparam.packageName);
-        PhoneWindowHook.hook(lpparam.classLoader);
+        XpLog.i(lpparam.packageName);
+//        XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, SPUtil.SP_NAME);
+//        boolean chameleonNavbar = pre.getBoolean(SPUtil.CHAMELEON_NAVBAR, false);
+        boolean chameleonNavbar=DataHook.chameleonNavbar;
+        if (chameleonNavbar) {
+            XpLog.i("hook phone window");
+            PhoneWindowHook.hook(lpparam.classLoader);
+        }
         switch (lpparam.packageName) {
             case ANDROID:
                 try {

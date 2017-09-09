@@ -34,30 +34,24 @@ public class XpNavBarSetting implements Parcelable {
     //快捷设置的内容数据
     private List<ShortCut> mShortCutData;
 
-    //home界面用来呼出的小点的位置
     private int mHomePointPosition;
+    private int mIconSize;
+    private boolean mRootDown;
+    private int mClearMenLevel;
+    private boolean mChameleonNavbar;
 
-    //小点对应的位置 左 右 不显示
+
     public final static int LEFT = 0;
     public final static int RIGHT = 1;
     public final static int DISMISS = 2;
 
-    //图标缩放比例
-    private int mIconSize;
-
-    //是否使用root下拉
-    private static boolean mRootDown;
-
-    //清理内存等级
-    private int mClearMenLevel;
-
-
-    public XpNavBarSetting(List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown, int clearMenLevel) {
+    public XpNavBarSetting(List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown, int clearMenLevel, boolean chameleonNavbar) {
         mShortCutData = shortCutData;
         mHomePointPosition = homePointPosition;
         mIconSize = iconSize;
         mRootDown = rootDown;
         mClearMenLevel = clearMenLevel;
+        mChameleonNavbar = chameleonNavbar;
     }
 
 
@@ -67,6 +61,7 @@ public class XpNavBarSetting implements Parcelable {
         mIconSize = in.readInt();
         mRootDown = in.readByte() != 0;
         mClearMenLevel = in.readInt();
+        mChameleonNavbar = in.readByte() != 0;
     }
 
     public static final Creator<XpNavBarSetting> CREATOR = new Creator<XpNavBarSetting>() {
@@ -94,8 +89,12 @@ public class XpNavBarSetting implements Parcelable {
         return mIconSize;
     }
 
-    public static boolean isRootDown() {
+    public boolean isRootDown() {
         return mRootDown;
+    }
+
+    public boolean isChameleonNavbar() {
+        return mChameleonNavbar;
     }
 
     public int getClearMenLevel() {
@@ -114,5 +113,6 @@ public class XpNavBarSetting implements Parcelable {
         dest.writeInt(mIconSize);
         dest.writeByte((byte) (mRootDown ? 1 : 0));
         dest.writeInt(mClearMenLevel);
+        dest.writeByte((byte) (mChameleonNavbar ? 1 : 0));
     }
 }

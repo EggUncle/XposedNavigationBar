@@ -28,6 +28,7 @@ import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class SPUtil {
     private static SharedPreferences mSharedPreferences;
     private static SharedPreferences.Editor mEditor;
     private static SPUtil instance;
-    private static final String SP_NAME = "XposedNavigationBar";
+    public static final String SP_NAME = "XposedNavigationBar";
     private static final String TAPS_APPEAR = "taps";
     //在原导航键上添加一个小点，点击后出现扩展的部分
     private static final String HOME_POINT = "home_point";
@@ -54,7 +55,7 @@ public class SPUtil {
     private static final String ICON_SIZE = "icon_size";
     private static final String HookHorizontal = "hook_horizontal";
     public static final String ROOT_DOWN = "root_down";
-   // public static final String CHAMELEON_NAVBAR ="chameleon_navbar";
+    public static final String CHAMELEON_NAVBAR ="chameleon_navbar";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -71,9 +72,9 @@ public class SPUtil {
                 //由于xp模块需要读取sp的内容，所以将sp的类型设置为MODE_WORLD_READABLE,但是7.0上不允许使用这个模式，
                 //而且考虑到很多用户是旧版升级上来的，所以这个地方根据系统版本做一个判定
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                    mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_WORLD_READABLE);
+                    mSharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_WORLD_READABLE);
                 } else {
-                    mSharedPreferences = context.getSharedPreferences(SP_NAME, Activity.MODE_PRIVATE);
+                    mSharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
                 }
                 mEditor = mSharedPreferences.edit();
             }
@@ -200,12 +201,12 @@ public class SPUtil {
         return mSharedPreferences.getBoolean(ROOT_DOWN, false);
     }
 
-//    public void setChameleonNavbar(boolean change){
-//        mEditor.putBoolean(CHAMELEON_NAVBAR,change);
-//        mEditor.commit();
-//    }
-//
-//    public boolean isChameleonNavBar(){
-//        return mSharedPreferences.getBoolean(CHAMELEON_NAVBAR,false);
-//    }
+    public void setChameleonNavbar(boolean change){
+        mEditor.putBoolean(CHAMELEON_NAVBAR,change);
+        mEditor.commit();
+    }
+
+    public boolean isChameleonNavBar(){
+        return mSharedPreferences.getBoolean(CHAMELEON_NAVBAR,false);
+    }
 }

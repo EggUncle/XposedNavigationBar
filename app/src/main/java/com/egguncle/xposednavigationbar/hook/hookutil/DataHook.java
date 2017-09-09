@@ -21,7 +21,9 @@ package com.egguncle.xposednavigationbar.hook.hookutil;
 import android.content.res.Resources;
 import android.content.res.XModuleResources;
 
+import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.ShortCutData;
 import com.egguncle.xposednavigationbar.util.SPUtil;
@@ -53,14 +55,19 @@ public class DataHook {
     //内存清理强度
     public static int clearMenLevel;
 
+    public static boolean chameleonNavbar;
+
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
-        XSharedPreferences pre = new XSharedPreferences("com.egguncle.xposednavigationbar", "XposedNavigationBar");
+        XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "XposedNavigationBar");
+        pre.makeWorldReadable();
 
         String json = pre.getString(ConstantStr.SHORT_CUT_DATA, "");
+        XpLog.i("short_cut_data "+json);
         expandStatusBarWithRoot = pre.getBoolean(SPUtil.ROOT_DOWN, false);
         clearMenLevel=pre.getInt(SPUtil.CLEAR_MEM_LEVEL,200);
         //获取主导行栏小点的位置
         homePointPosition = pre.getInt(ConstantStr.HOME_POINT, 0);
+        chameleonNavbar=pre.getBoolean(SPUtil.CHAMELEON_NAVBAR,false);
         //获取快捷按钮设置数据
         Gson gson = new Gson();
         //在第一次激活重新启动的时候，可能因为没有设置任何快捷按钮，导致这里报错

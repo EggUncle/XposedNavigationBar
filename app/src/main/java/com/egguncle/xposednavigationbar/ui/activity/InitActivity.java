@@ -62,7 +62,8 @@ public class InitActivity extends BaseActivity {
         int homePosition = spUtil.getHomePointPosition();
         boolean rootDown = spUtil.getRootDown();
         int clearMenLevel=spUtil.getClearMemLevel();
-        XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,clearMenLevel);
+        boolean chameleonNavbar=spUtil.isChameleonNavBar();
+        XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,clearMenLevel,chameleonNavbar);
         intent.putExtra("data", setting);
         intent.setAction(XpNavBarAction.ACT_NAV_BAR_DATA);
         sendBroadcast(intent);

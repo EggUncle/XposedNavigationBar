@@ -47,6 +47,7 @@ import com.egguncle.xposednavigationbar.ui.fragment.SetFunFragment;
 import com.egguncle.xposednavigationbar.ui.fragment.SetOtherFragment;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,7 +173,6 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -191,7 +191,8 @@ public class HomeActivity extends BaseActivity {
                 int homePosition = spUtil.getHomePointPosition();
                 boolean rootDown = spUtil.getRootDown();
                 int clearMemLevel = spUtil.getClearMemLevel();
-                XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown, clearMemLevel);
+                boolean chameleonNavbar = spUtil.isChameleonNavBar();
+                XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown, clearMemLevel, chameleonNavbar);
                 intent.putExtra("data", setting);
                 intent.setAction(XpNavBarAction.ACT_NAV_BAR_DATA);
                 sendBroadcast(intent);
@@ -254,11 +255,11 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void checkActivated() {
-        if(getActivatedVersion()!=BuildConfig.VERSION_CODE){
+        if (getActivatedVersion() != BuildConfig.VERSION_CODE) {
             new AlertDialog.Builder(this)
                     .setTitle(android.R.string.dialog_alert_title)
                     .setMessage(R.string.not_activated)
-                    .setNegativeButton(android.R.string.ok,null)
+                    .setNegativeButton(android.R.string.ok, null)
                     .show();
         }
     }

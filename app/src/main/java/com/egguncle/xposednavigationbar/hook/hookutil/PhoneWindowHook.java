@@ -25,6 +25,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
+import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
+
 import java.lang.reflect.Field;
 
 import de.robv.android.xposed.XC_MethodHook;

@@ -50,6 +50,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     private TextView tvIconSize;
     //  private Switch swHook90;
     private Switch swRootDown;
+    private Switch swChameleonNavbar;
     private LinearLayout settingAboutMarshmallow;
 
     private SPUtil spUtil;
@@ -80,6 +81,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         //  swHook90 = (Switch) findViewById(R.id.sw_hook_90);
         swRootDown = (Switch) view.findViewById(R.id.sw_root_down);
         settingAboutMarshmallow = (LinearLayout) view.findViewById(R.id.setting_about_marshmallow);
+        swChameleonNavbar = (Switch) view.findViewById(R.id.sw_chameleon_navbar);
     }
 
     @Override
@@ -98,6 +100,12 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                 spUtil.setRootDown(isChecked);
             }
         });
+        swChameleonNavbar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                spUtil.setChameleonNavbar(isChecked);
+            }
+        });
     }
 
     @Override
@@ -111,6 +119,8 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         tvIconSize.setText(iconSize + "");
         boolean isRootDown = spUtil.getRootDown();
         swRootDown.setChecked(isRootDown);
+        boolean chameleonNavbar=spUtil.isChameleonNavBar();
+        swChameleonNavbar.setChecked(chameleonNavbar);
     }
 
     @Override

@@ -130,5 +130,17 @@
             <include layout="@layout/v_split_line" />
         </LinearLayout>
 
+        <Switch
+            android:textSize="@dimen/txt_m"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/chameleon_navbar"
+            android:id="@+id/sw_chameleon_navbar"
+            />
+
+        <include layout="@layout/v_split_line" />
+
     </LinearLayout>
 </ScrollView>

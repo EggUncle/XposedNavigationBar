@@ -296,7 +296,8 @@ public class NavBarHook {
         int homePosition = setting.getHomePointPosition();
         boolean rootDown = setting.isRootDown();
         int clearMemLevel = setting.getClearMenLevel();
-        updateNavBar(context, list, homePosition, iconSize, rootDown, clearMemLevel);
+        boolean chameleonNavbar=setting.isChameleonNavbar();
+        updateNavBar(context, list, homePosition, iconSize, rootDown, clearMemLevel,chameleonNavbar);
     }
 
     /**
@@ -312,7 +313,8 @@ public class NavBarHook {
                                     int homePointPosition,
                                     int iconSize,
                                     boolean rootDown,
-                                    int clearMemLevel) {
+                                    int clearMemLevel,
+                                    boolean chameleonNavbar) {
         btnFuncFactory.clearAllBtn();
         if (shortCutData != null && shortCutData.size() != 0) {
             DataHook.shortCutList = shortCutData;
@@ -324,6 +326,8 @@ public class NavBarHook {
         setHomePointPosition(homePointPosition);
         expandStatusBarWithRoot = rootDown;
         DataHook.clearMenLevel = clearMemLevel;
+        DataHook.chameleonNavbar=chameleonNavbar;
+        XpLog.i("====== updateNavBar " + (DataHook.chameleonNavbar ? "true" : "false"));
     }
 
 

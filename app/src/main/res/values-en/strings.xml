@@ -108,6 +108,7 @@
     </string>
     <string name="paypal_url">paypal.me/songyucheng</string>
     <string name="not_activated">en...it seems not activated</string>
+    <string name="chameleon_navbar">chameleon navbar</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>
