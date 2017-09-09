@@ -62,9 +62,8 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         XpLog.i(lpparam.packageName);
-//        XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, SPUtil.SP_NAME);
-//        boolean chameleonNavbar = pre.getBoolean(SPUtil.CHAMELEON_NAVBAR, false);
-        boolean chameleonNavbar=DataHook.chameleonNavbar;
+        XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, SPUtil.SP_NAME);
+        boolean chameleonNavbar = pre.getBoolean(SPUtil.CHAMELEON_NAVBAR, false);
         if (chameleonNavbar) {
             XpLog.i("hook phone window");
             PhoneWindowHook.hook(lpparam.classLoader);

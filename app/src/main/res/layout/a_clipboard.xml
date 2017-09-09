@@ -17,11 +17,10 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.egguncle.xposednavigationbar.ui.activity.ClipboardActivity">
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

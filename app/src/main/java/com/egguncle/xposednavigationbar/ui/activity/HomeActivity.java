@@ -69,7 +69,7 @@ public class HomeActivity extends BaseActivity {
     private SPUtil spUtil;
 
     private ViewPager mViewPager;
-
+    private TabLayout tabLayout;
 
     @Override
     int getLayoutId() {
@@ -83,15 +83,15 @@ public class HomeActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fabAddFunc = (FloatingActionButton) findViewById(R.id.fab);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.container);
-        tabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
     void initVar() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        tabLayout.setupWithViewPager(mViewPager);
         funcs = getResources().getStringArray(R.array.shortcut_names);
         setFunFragment = new SetFunFragment();
         setOtherFragment = new SetOtherFragment();

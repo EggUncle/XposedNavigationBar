@@ -69,7 +69,7 @@ public class NavBarHook {
     private static MusicControllerPanel musicPanel;
 
     public static void hook(ClassLoader classLoader) throws Throwable {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             XpLog.i("hook on Marshmallow");
             hookNavBarBeforeNougat(classLoader);
         } else {
@@ -228,17 +228,6 @@ public class NavBarHook {
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    if (DataHook.shortCutList.size() == 0) {
-                        try {
-                            Intent intent = new Intent(ACT_INIT_DATA);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            view.getContext().startActivity(intent);
-                        } catch (Exception e) {
-                            XpLog.e(e);
-                        }
-                    }
-                }
                 vpXphook.setCurrentItem(2);
             }
         });
