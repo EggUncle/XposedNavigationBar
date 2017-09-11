@@ -33,11 +33,7 @@ public abstract class QuickNotification implements View.OnClickListener {
 
     @Override
     public void onClick(final View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
                 quickNotification(v.getContext());
-            }
-        });
+
     }
 }

@@ -28,13 +28,13 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class ScheduledThreadPool extends ThreadPoolExecutor {
-    private static ScheduledThreadPool instance = new ScheduledThreadPool(8);
-
+//    private static ScheduledThreadPool instance = new ScheduledThreadPool(10);
+//
     public ScheduledThreadPool(int corePoolSize) {
         super(corePoolSize, Integer.MAX_VALUE, 0, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());
     }
-
-    public static ScheduledThreadPool getInstance(){
-        return instance;
-    }
+//
+//    public static ScheduledThreadPool getInstance(){
+//        return instance;
+//    }
 }

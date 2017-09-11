@@ -33,11 +33,11 @@ public abstract class ScannerQRcode implements View.OnClickListener{
 
     @Override
     public void onClick(final View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 scanQR(v.getContext());
             }
-        });
+        }).start();
     }
 }

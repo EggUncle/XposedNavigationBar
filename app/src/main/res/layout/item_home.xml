@@ -15,36 +15,37 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
-    android:foreground="@drawable/card_foreground"
     android:layout_marginTop="@dimen/space_xs"
     android:clickable="true"
-    >
+    android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
-
         <TextView
-            android:layout_marginLeft="@dimen/space_m"
             android:id="@+id/item_tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_m"
             android:layout_weight="1"
             android:textSize="@dimen/txt_m" />
 
         <ImageView
-            android:layout_marginRight="@dimen/space_m"
             android:id="@+id/item_img_delete"
             android:layout_width="@dimen/img_size"
             android:layout_height="@dimen/img_size"
+            android:layout_marginRight="@dimen/space_m"
             android:scaleType="fitXY"
             android:src="@drawable/ic_close" />
 
     </LinearLayout>
-</android.support.v7.widget.CardView>
+
+    <include layout="@layout/v_split_line" />
+</LinearLayout>

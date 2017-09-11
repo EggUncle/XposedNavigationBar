@@ -70,12 +70,12 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
 
     @Override
     public boolean onLongClick(View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 longHome();
             }
-        });
+        }).start();
         return true;
     }
 }

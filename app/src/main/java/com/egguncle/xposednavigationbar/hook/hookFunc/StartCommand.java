@@ -28,19 +28,20 @@ import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 public abstract class StartCommand implements View.OnClickListener {
     private String mCommand;
+
     protected abstract void startCommand(String command);
 
-    public StartCommand(String command){
-        mCommand=command;
+    public StartCommand(String command) {
+        mCommand = command;
     }
 
     @Override
     public void onClick(View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 startCommand(mCommand);
             }
-        });
+        }).start();
     }
 }

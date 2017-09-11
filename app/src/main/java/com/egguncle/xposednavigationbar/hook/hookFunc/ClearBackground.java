@@ -38,11 +38,6 @@ public abstract class ClearBackground implements View.OnClickListener {
 
     @Override
     public void onClick(final View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                clearBackground(v.getContext());
-            }
-        });
+        clearBackground(v.getContext());
     }
 }

@@ -36,7 +36,7 @@ public abstract class ScreenShot implements View.OnClickListener {
 
     @Override
     public void onClick(final View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -45,6 +45,6 @@ public abstract class ScreenShot implements View.OnClickListener {
                     XpLog.i(e.getMessage());
                 }
             }
-        });
+        }).start();
     }
 }

@@ -46,7 +46,7 @@ public abstract class MusicController implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 switch (mType) {
@@ -61,6 +61,6 @@ public abstract class MusicController implements View.OnClickListener {
                         break;
                 }
             }
-        });
+        }).start();
     }
 }

@@ -16,19 +16,19 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:layout_marginTop="@dimen/space_xs"
     android:clickable="true"
-    android:foreground="@drawable/card_foreground">
+    android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-
 
         <TextView
             android:id="@+id/item_tv_momo_content"
@@ -43,10 +43,11 @@
             android:id="@+id/item_tv_momo_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_marginRight="@dimen/space_m"
             android:layout_marginLeft="@dimen/space_m"
+            android:layout_marginRight="@dimen/space_m"
+            android:layout_weight="2"
             android:textSize="@dimen/txt_m" />
-
     </LinearLayout>
-</android.support.v7.widget.CardView>
+
+    <include layout="@layout/v_split_line" />
+</LinearLayout>

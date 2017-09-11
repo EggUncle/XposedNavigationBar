@@ -56,16 +56,16 @@ public class MusicControllerPanel extends LinearLayout {
     public MusicControllerPanel(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setOrientation(HORIZONTAL);
-        this.mContext=context;
+        this.mContext = context;
     }
 
-    public void setData( Map<Integer, byte[]> mapImgRes, int iconScale){
-        this.mMapImgRes=mapImgRes;
-        this.mIconScale=iconScale;
+    public void setData(Map<Integer, byte[]> mapImgRes, int iconScale) {
+        this.mMapImgRes = mapImgRes;
+        this.mIconScale = iconScale;
     }
 
-    public void initPanel(){
-        initView(mContext,mMapImgRes,mIconScale);
+    public void initPanel() {
+        initView(mContext, mMapImgRes, mIconScale);
     }
 
 
@@ -104,34 +104,35 @@ public class MusicControllerPanel extends LinearLayout {
         playBtn.setOnClickListener(new BtnMusicController(BtnMusicController.START_OR_STOP));
         nextBtn.setOnClickListener(new BtnMusicController(BtnMusicController.NEXT));
 
-        Space sp11= new Space(context);
-        Space sp12 = new Space(context);
-        Space sp21= new Space(context);
-        Space sp22 = new Space(context);
-        Space sp31= new Space(context);
-        Space sp32 = new Space(context);
+//        Space sp11= new Space(context);
+//        Space sp12 = new Space(context);
+//        Space sp21= new Space(context);
+//        Space sp22 = new Space(context);
+//        Space sp31= new Space(context);
+//        Space sp32 = new Space(context);
 
-        this.addView(sp11,p);
+        // this.addView(sp11,p);
         this.addView(previousBtn, p);
-        this.addView(sp12,p);
+        //   this.addView(sp12,p);
 
-        this.addView(sp21,p);
+        //  this.addView(sp21,p);
         this.addView(playBtn, p);
-        this.addView(sp22,p);
+        //    this.addView(sp22,p);
 
-        this.addView(sp31,p);
+        //    this.addView(sp31,p);
         this.addView(nextBtn, p);
-        this.addView(sp32,p);
+        //   this.addView(sp32,p);
     }
 
     /**
      * 更新音乐控制面板的图标大小
+     *
      * @param iconScale
      */
-    public void updateIconSize(int iconScale){
+    public void updateIconSize(int iconScale) {
         this.removeAllViews();
-        initView(mContext,mMapImgRes,iconScale);
-        XpLog.i("update musicpanel iconscale:"+iconScale);
+        initView(mContext, mMapImgRes, iconScale);
+        XpLog.i("update musicpanel iconscale:" + iconScale);
     }
 
 }

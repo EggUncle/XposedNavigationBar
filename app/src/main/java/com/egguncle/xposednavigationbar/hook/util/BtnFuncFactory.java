@@ -154,8 +154,8 @@ public class BtnFuncFactory {
         p.gravity = Gravity.CENTER;
 
         ImageView btn = new ImageView(context);
-        Space sp1 = new Space(context);
-        Space sp2 = new Space(context);
+//        Space sp1 = new Space(context);
+//        Space sp2 = new Space(context);
 
         String iconPath = sc.getIconPath();
         Bitmap iconBitmap = null;
@@ -169,20 +169,18 @@ public class BtnFuncFactory {
         btn.setImageBitmap(iconBitmap);
 
         //给按钮设置水波纹点击背景，因为7.0上有一些rom有获取资源的限制所以这个功能暂时只在7.0以下的版本使用
-        //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
         try {
             btn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
         } catch (Exception e) {
             XpLog.e(e);
         }
-        //  }
         btn.setScaleType(ImageView.ScaleType.CENTER);
         btn.setOnClickListener(getBtnFuncOfName(sc));
         btn.setOnLongClickListener(getBtnLongFuncOfName(sc.getCode()));
 
-        line.addView(sp1, p);
+      //  line.addView(sp1, p);
         line.addView(btn, p);
-        line.addView(sp2, p);
+       // line.addView(sp2, p);
     }
 
     public void clearAllBtn() {

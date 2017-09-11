@@ -31,20 +31,16 @@ import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnLaunchActivity implements LaunchAct,View.OnClickListener {
+public class BtnLaunchActivity implements LaunchAct, View.OnClickListener {
     private String mPkgName;
-    public BtnLaunchActivity(String pkgName){
-        mPkgName=pkgName;
+
+    public BtnLaunchActivity(String pkgName) {
+        mPkgName = pkgName;
     }
 
     @Override
     public void onClick(final View view) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                launchActivity(view.getContext(),mPkgName);
-            }
-        });
+        launchActivity(view.getContext(), mPkgName);
     }
 
     @Override

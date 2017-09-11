@@ -38,22 +38,17 @@ public abstract class ScreenOff implements View.OnClickListener, View.OnLongClic
     @Override
 
     public void onClick(final View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                screenOff(v.getContext());
-            }
-        });
+        screenOff(v.getContext());
     }
 
     @Override
     public boolean onLongClick(final View v) {
-        ScheduledThreadPool.getInstance().execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 showPowerMenu(v.getContext());
             }
-        });
+        }).start();
         return true;
     }
 }
