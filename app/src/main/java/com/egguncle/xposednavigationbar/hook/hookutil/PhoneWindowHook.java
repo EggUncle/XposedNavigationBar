@@ -19,13 +19,13 @@
 package com.egguncle.xposednavigationbar.hook.hookutil;
 
 import android.app.Activity;
-import android.content.res.TypedArray;
-import android.graphics.Color;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 
-import java.lang.reflect.Field;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -38,7 +38,6 @@ public class PhoneWindowHook {
 
     private final static String PHONE_WINDOW_M = "com.android.internal.policy.PhoneWindow";
     private final static String PHONE_WINDOW = "com.android.internal.policy.impl.PhoneWindow";
-    private final static String CLASS_SYTLE = "com.android.internal.R.styleable";
 
     public static void hook(ClassLoader loader) throws Throwable {
         String pwClassPath;
@@ -47,12 +46,6 @@ public class PhoneWindowHook {
         } else {
             pwClassPath = PHONE_WINDOW;
         }
-        Class<?> internalStyleable = XposedHelpers.findClass(CLASS_SYTLE, loader);
-        Field internalThemeField = XposedHelpers.findField(internalStyleable, "Theme");
-        Field internalColorPrimaryDarkField = XposedHelpers.findField(internalStyleable, "Theme_colorPrimary");
-        final int[] theme = (int[]) internalThemeField.get(null);
-        final int theme_colorPrimary = internalColorPrimaryDarkField.getInt(null);
-
         Class<?> pwClass = loader.loadClass(pwClassPath);
         XposedHelpers.findAndHookMethod(pwClass, "setStatusBarColor", int.class, new XC_MethodHook() {
             @Override
@@ -66,15 +59,25 @@ public class PhoneWindowHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 Activity activity = (Activity) param.thisObject;
-                TypedArray typedArray = activity.getTheme().obtainStyledAttributes(theme);
-                int colorPrimary = typedArray.getColor(theme_colorPrimary, Color.TRANSPARENT);
-                typedArray.recycle();
-                if (colorPrimary != Color.TRANSPARENT && colorPrimary != Color.BLACK){
-                    activity.getWindow().setNavigationBarColor(colorPrimary);
-                    activity.getWindow().setStatusBarColor(colorPrimary);
-                }
+                    Rect rect = new Rect();
+                    activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                    Bitmap bmp = activity.getWindow().getDecorView().getDrawingCache();
 
+                    int color = bmp.getPixel(rect.top + 3, 1);
+                    int screenHeight=activity.getWindowManager().getDefaultDisplay().getHeight();
+                    Resources resources = activity.getResources();
+                    int resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
+                    int navbarHeight = resources.getDimensionPixelSize(resourceId);
+                    int color2=bmp.getPixel(screenHeight-navbarHeight-3,1);
 
+                    activity.getWindow().setStatusBarColor(color);
+                    activity.getWindow().setNavigationBarColor(color2);
+//                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//                activity.getWindow().getDecorView().setSystemUiVisibility(uiOptions);
             }
         });
     }

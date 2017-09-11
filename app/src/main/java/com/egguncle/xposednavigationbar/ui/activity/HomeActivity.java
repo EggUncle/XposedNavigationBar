@@ -20,6 +20,7 @@ package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -171,6 +172,12 @@ public class HomeActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setFunFragment.setContext(this);
     }
 
     @Override

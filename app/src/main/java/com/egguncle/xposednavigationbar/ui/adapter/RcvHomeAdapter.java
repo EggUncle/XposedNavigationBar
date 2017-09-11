@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,12 +48,14 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
     private Context mContext;
     private CodeToFuncName mCodeToFuncName;
 
-
-
     public RcvHomeAdapter(Context context, List<ShortCut> list) {
         this.mContext = context;
         this.dataList = list;
         this.mCodeToFuncName = CodeToFuncName.getInstance(mContext);
+    }
+
+    public void setContext(Context context) {
+        mContext = context;
     }
 
     @Override
@@ -77,16 +80,18 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
         holder.itemTvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(view.getContext(), SelectIconActivity.class);
-                intent.putExtra("position",position);
-                String iconPath=shortCut.getIconPath();
-                intent.putExtra("iconpath",iconPath);
-                if (view.getContext() instanceof Activity){
-                    if (shortCut.getCode()== ConstantStr.FUNC_COMMAND_CODE){
-                        intent.putExtra("isCommand",true);
-                       intent.putExtra("command",shortCut.getShellStr());
+                Intent intent = new Intent(view.getContext(), SelectIconActivity.class);
+                intent.putExtra("position", position);
+                String iconPath = shortCut.getIconPath();
+                intent.putExtra("iconpath", iconPath);
+                if (mContext instanceof Activity) {
+                    if (shortCut.getCode() == ConstantStr.FUNC_COMMAND_CODE) {
+                        intent.putExtra("isCommand", true);
+                        intent.putExtra("command", shortCut.getShellStr());
                     }
-                    ((Activity) view.getContext()).startActivityForResult(intent,1);
+                    ((Activity) mContext).startActivityForResult(intent, 1);
+                } else {
+                    Log.i(TAG, "onClick: --------this not a activity-------");
                 }
 
             }
@@ -97,8 +102,6 @@ public class RcvHomeAdapter extends RecyclerView.Adapter<RcvHomeAdapter.HomeView
     public int getItemCount() {
         return dataList == null ? 0 : dataList.size();
     }
-
-
 
 
     public class HomeViewHolder extends RecyclerView.ViewHolder {

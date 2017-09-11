@@ -19,6 +19,7 @@
 package com.egguncle.xposednavigationbar.ui.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,20 +51,19 @@ public class SetFunFragment extends BaseFragment {
     private RcvHomeAdapter rcvHomeAdapter;
     private ArrayList<ShortCut> shortCutList;
 
-    //一个被设置和没被设置的处理逻辑
-
-    //  private List<String> notSelectList;
-
     private SPUtil spUtil;
-    private boolean tapsNotAppear;
-
-    private String[] funcs;
-
     private Context mContext;
 
 
     public SetFunFragment() {
         mContext = MyApplication.getContext();
+    }
+
+    public void setContext(Context context){
+        mContext=context;
+        if (rcvHomeAdapter!=null){
+            rcvHomeAdapter.setContext(context);
+        }
     }
 
     @Override
@@ -80,8 +80,6 @@ public class SetFunFragment extends BaseFragment {
 
     @Override
     void initVar() {
-
-        //notSelectList = new ArrayList<>();
         shortCutList = new ArrayList<>();
         rcvHomeAdapter = new RcvHomeAdapter(mContext, shortCutList);
         rcvSetting.setAdapter(rcvHomeAdapter);
@@ -96,7 +94,6 @@ public class SetFunFragment extends BaseFragment {
             shortCutList.addAll(list);
             rcvHomeAdapter.notifyDataSetChanged();
         }
-        funcs = getResources().getStringArray(R.array.shortcut_names);
     }
 
     @Override
