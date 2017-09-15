@@ -61,7 +61,7 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        XpLog.i(lpparam.packageName);
+      //  XpLog.i(lpparam.packageName);
         XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, SPUtil.SP_NAME);
         boolean chameleonNavbar = pre.getBoolean(SPUtil.CHAMELEON_NAVBAR, false);
         if (chameleonNavbar) {
@@ -72,6 +72,7 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
             case ANDROID:
                 try {
                     AMHook.hook(lpparam.classLoader);
+                    PhoneWindowManagerHook.hook(lpparam);
                 } catch (Exception e) {
                     XpLog.e(e);
                 }

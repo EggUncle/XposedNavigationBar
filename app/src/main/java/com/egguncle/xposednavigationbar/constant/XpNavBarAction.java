@@ -24,11 +24,10 @@ package com.egguncle.xposednavigationbar.constant;
 
 public class XpNavBarAction {
     public final static String ACT_NAV_BAR_DATA = "com.egguncle.xpnavbar.navbardata";
-    public final static String ACT_INIT_DATA = "com.egguncle.xposednavigationbar.ui.activity.InitActivity";
-    public final static String CATEGORY_NAVBAR = "android.intent.category.navbar";
     public final static String ACT_CLOSE_ACT_PANEL = "com.egguncle.xpnavbar.closeactpanel";
     public final static String ACT_EXPEND_STATUS_BAR = "com.egguncle.xpnavbar.expendstatusbar";
     public final static String ACTION_CLIPBOARD = "com.egguncle.xposednavigationbar.ui.activity.ClipboardActivity";
     public final static String ACTION_START_ACT = "com.egguncle.xposednavigationbar.ui.activity.AppShortCutActivity";
     public final static String ACTION_QUICK_NOTICE = "com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity";
+    public final static String ACTION_SCREENSHOT="com.egguncle.xposednavigationbar.screenshot";
 }

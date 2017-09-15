@@ -58,7 +58,7 @@ public class DataHook {
     public static boolean chameleonNavbar;
 
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
-        XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "XposedNavigationBar");
+        XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "xpnavbar");
         pre.makeWorldReadable();
 
         String json = pre.getString(ConstantStr.SHORT_CUT_DATA, "");

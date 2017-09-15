@@ -19,10 +19,13 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenShot;
 import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
@@ -39,25 +42,29 @@ public class BtnScreenShot extends ScreenShot{
 
     @Override
     public void screenshot(final Context context) {
-        String screenShotPath = "/sdcard/Pictures/Screenshots";
-        File file = new File(screenShotPath);
-        //如果截图文件夹不存在则创建
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        long timecurrentTimeMillis = System.currentTimeMillis();
-        String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
-        try {
-            Process p = Runtime.getRuntime().exec(cmd);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
-                }
-            },1000);
-        } catch (IOException e) {
-            Toast.makeText(context,"screenShot failed",Toast.LENGTH_SHORT).show();
-            XpLog.i(e.getMessage());
+        if (Build.VERSION.SDK_INT<=Build.VERSION_CODES.M){
+            context.sendBroadcast(new Intent(XpNavBarAction.ACTION_SCREENSHOT));
+        }else{
+            String screenShotPath = "/sdcard/Pictures/Screenshots";
+            File file = new File(screenShotPath);
+            //如果截图文件夹不存在则创建
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            long timecurrentTimeMillis = System.currentTimeMillis();
+            String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
+            try {
+                Process p = Runtime.getRuntime().exec(cmd);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
+                    }
+                },1000);
+            } catch (IOException e) {
+                Toast.makeText(context,"screenShot failed",Toast.LENGTH_SHORT).show();
+                XpLog.i(e.getMessage());
+            }
         }
     }
 }

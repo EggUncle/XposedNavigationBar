@@ -53,9 +53,6 @@ import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
-
-import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACT_INIT_DATA;
 
 /**
  * Created by egguncle on 17-8-14.
