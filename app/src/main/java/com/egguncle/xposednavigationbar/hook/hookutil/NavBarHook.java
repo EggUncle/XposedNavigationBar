@@ -25,6 +25,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -44,7 +45,6 @@ import com.egguncle.xposednavigationbar.hook.util.MyClipBoard;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
-import com.egguncle.xposednavigationbar.ui.adapter.MyViewPagerAdapter;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
@@ -163,14 +163,32 @@ public class NavBarHook {
             btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, DataHook.iconScale);
         }
         //将这些布局都添加到viewpageadapter中
-        List<View> list = new ArrayList<View>();
+        final List<View> list = new ArrayList<View>();
         list.add(musicPanel);
         list.add(llUnderMainNavBar);
         list.add(fmExtPage);
 
+        PagerAdapter pagerAdapter=new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return list.size();
+            }
 
-        MyViewPagerAdapter pagerAdapter = new MyViewPagerAdapter(list);
+            @Override
+            public boolean isViewFromObject(View view, Object object) {
+                return view==object;
+            }
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+                container.addView(list.get(position));
+                return list.get(position);
+            }
 
+            @Override
+            public void destroyItem(ViewGroup container, int position, Object object) {
+                container.removeView(list.get(position));
+            }
+        };
         vpXphook.setAdapter(pagerAdapter);
         vpXphook.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

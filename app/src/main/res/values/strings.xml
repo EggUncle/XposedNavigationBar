@@ -99,10 +99,8 @@
     <string name="tab_set_other">其他设置</string>
     <string name="tab_momo_history">备忘历史</string>
     <string name="about_manual">使用说明</string>
-    <string name="job">
-    </string>
     <string name="paypal_url">paypal.me/songyucheng</string>
-    <string name="not_activated">额...模块似乎没有被激活</string>
+    <string name="not_activated">额...模块似乎没有被激活,如果已经更新请重启</string>
     <string name="chameleon_navbar">导航栏变色(测试)</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>

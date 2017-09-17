@@ -19,6 +19,7 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.app.Instrumentation;
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -70,8 +71,8 @@ public class BtnsNavbar extends NavBarBtns{
     }
 
     @Override
-    protected void goRecent() {
-        XposedHelpers.callMethod(PhoneSatatusBarHook.getPhoneStatusBar(), "toggleRecentApps");
+    protected void goRecent(Context context) {
+       context.sendBroadcast(intent);
     }
 
     @Override

@@ -19,8 +19,11 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 
 /**
@@ -30,8 +33,11 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 public abstract class ClearAllNotifications implements View.OnClickListener {
     protected BtnStatusBarController btnStatusBarController;
     protected abstract void clearAllNotifications(Context context);
+    protected Intent intent;
     public ClearAllNotifications() {
         btnStatusBarController = new BtnStatusBarController();
+        intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+        intent.putExtra(ConstantStr.TYPE,ConstantStr.CLEAR_NOTIFICATIONS);
     }
     @Override
     public void onClick(View v) {

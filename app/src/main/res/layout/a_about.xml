@@ -64,20 +64,12 @@
             android:text="@string/author" />
 
         <TextView
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:gravity="center"
             android:paddingTop="@dimen/space_m"
             android:text="@string/app_github" />
-
-
-        <TextView
-            android:paddingTop="@dimen/space_m"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/job" />
 
         <TextView
             android:id="@+id/tv_market"
@@ -120,6 +112,7 @@
 
 
         <TextView
+            android:layout_marginBottom="@dimen/space_m"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_open_source"

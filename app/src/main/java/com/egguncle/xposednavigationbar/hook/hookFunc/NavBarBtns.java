@@ -18,8 +18,12 @@
 
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
@@ -40,14 +44,18 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
 
     protected abstract void longHome();
 
-    protected abstract void goRecent();
+    protected abstract void goRecent(Context context);
 
     protected abstract void hide();
 
     protected abstract void show();
 
+    protected Intent intent;
+
     public NavBarBtns(int type) {
         mType = type;
+        intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+        intent.putExtra(ConstantStr.TYPE,ConstantStr.RECENT_TASKS);
     }
 
     @Override
@@ -60,7 +68,7 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
                 goHome();
                 break;
             case BTN_RECENT:
-                goRecent();
+                goRecent(v.getContext());
                 break;
             case BTN_HIDE:
                 hide();

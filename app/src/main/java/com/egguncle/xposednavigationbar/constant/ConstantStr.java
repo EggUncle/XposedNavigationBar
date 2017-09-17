@@ -111,5 +111,8 @@ public class ConstantStr {
 
     public static final String ICON_SIZE = "icon_size";
 
+    public static final String TYPE="type";
+    public static final int CLEAR_NOTIFICATIONS=0;
+    public static final int RECENT_TASKS=1;
 
 }

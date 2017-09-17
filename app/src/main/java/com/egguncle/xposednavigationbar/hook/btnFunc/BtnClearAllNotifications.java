@@ -19,8 +19,11 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ClearAllNotifications;
 import com.egguncle.xposednavigationbar.hook.hookutil.PhoneSatatusBarHook;
 
@@ -34,8 +37,7 @@ public class BtnClearAllNotifications extends ClearAllNotifications{
 
     @Override
     public void clearAllNotifications(Context context) {
-        Object mPhoneStatusBar = PhoneSatatusBarHook.getPhoneStatusBar();
-        XposedHelpers.callMethod(mPhoneStatusBar, "clearAllNotifications");
+        context.sendBroadcast(intent);
         //方法执行后，不会马上清除所有的消息，而是在通知栏下拉，通知内容变得可见后才清除。
         //所以在这里调用一次下拉通知栏的方法
         btnStatusBarController.expandStatusBar(context);

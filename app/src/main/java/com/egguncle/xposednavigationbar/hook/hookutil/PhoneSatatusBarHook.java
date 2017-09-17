@@ -18,9 +18,18 @@
 
 package com.egguncle.xposednavigationbar.hook.hookutil;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
+import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -93,16 +102,27 @@ public class PhoneSatatusBarHook {
         XposedHelpers.findAndHookMethod(phoneStatusBarClass,
                 "start", new XC_MethodHook() {
                     @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        super.afterHookedMethod(param);
-                        //在这里获取到PhoneStatusBar对象
-                        phoneStatusBar = param.thisObject;
+                    protected void afterHookedMethod(final MethodHookParam param) throws Throwable {
+                        Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                        BroadcastReceiver screenShotReceiver = new BroadcastReceiver() {
+                            @Override
+                            public void onReceive(Context context, Intent intent) {
+                                int type = intent.getIntExtra(ConstantStr.TYPE, -1);
+                                switch (type) {
+                                    case ConstantStr.CLEAR_NOTIFICATIONS:
+                                        XposedHelpers.callMethod(param.thisObject, "clearAllNotifications");
+                                        break;
+                                    case ConstantStr.RECENT_TASKS:
+                                        XposedHelpers.callMethod(param.thisObject, "toggleRecentApps");
+                                        break;
+                                }
+
+                            }
+                        };
+                        IntentFilter filter = new IntentFilter(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+                        mContext.registerReceiver(screenShotReceiver, filter);
                     }
                 });
 
-    }
-
-    public static Object getPhoneStatusBar() {
-        return phoneStatusBar;
     }
 }

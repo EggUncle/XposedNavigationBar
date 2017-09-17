@@ -30,4 +30,5 @@ public class XpNavBarAction {
     public final static String ACTION_START_ACT = "com.egguncle.xposednavigationbar.ui.activity.AppShortCutActivity";
     public final static String ACTION_QUICK_NOTICE = "com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity";
     public final static String ACTION_SCREENSHOT="com.egguncle.xposednavigationbar.screenshot";
+    public final static String ACTION_PHONE_STATUSBAR="com.egguncle.xposednavigationbar.phonestatusbar";
 }
