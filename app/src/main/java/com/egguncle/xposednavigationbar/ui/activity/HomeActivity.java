@@ -79,7 +79,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     void initView() {
-        checkActivated();
+       // checkActivated();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

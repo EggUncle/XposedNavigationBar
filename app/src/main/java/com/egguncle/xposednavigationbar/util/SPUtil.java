@@ -165,7 +165,7 @@ public class SPUtil {
     }
 
     public int getIconSize() {
-        return mSharedPreferences.getInt(ICON_SIZE, 50);
+        return mSharedPreferences.getInt(ICON_SIZE, 40);
     }
 
     public void setLanguage(String language) {

@@ -78,7 +78,7 @@ public class DataHook {
         }
 
         //获取图片缩放大小
-        iconScale = pre.getInt(ConstantStr.ICON_SIZE, 100);
+        iconScale = pre.getInt(ConstantStr.ICON_SIZE, 40);
         //初始化剪贴板内容集合
 
         //加载图片资源文件

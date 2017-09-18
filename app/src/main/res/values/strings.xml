@@ -105,7 +105,7 @@
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>
-        <item>熄屏</item>
+        <item>电源</item>
         <item>清除通知</item>
         <item>清理内存</item>
         <item>调节声音</item>
