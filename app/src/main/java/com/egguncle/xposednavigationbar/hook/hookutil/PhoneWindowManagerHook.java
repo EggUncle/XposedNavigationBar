@@ -43,10 +43,10 @@ public class PhoneWindowManagerHook {
 
     public static void hook(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         String pwmClassPath;
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-            pwmClassPath=PHONE_WINDOW_MANAGER_M;
-        }else{
-            pwmClassPath=PHONE_WINDOW_MANAGER_L;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            pwmClassPath = PHONE_WINDOW_MANAGER_M;
+        } else {
+            pwmClassPath = PHONE_WINDOW_MANAGER_L;
         }
 
         Class<?> pwmClass = loadPackageParam.classLoader.loadClass(pwmClassPath);
@@ -57,7 +57,16 @@ public class PhoneWindowManagerHook {
                 BroadcastReceiver screenShotReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        XposedHelpers.callMethod(param.thisObject, "takeScreenshot");
+                        try {
+                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                                XposedHelpers.callMethod(param.thisObject, "takeScreenshot", 1);
+                            } else {
+                                XposedHelpers.callMethod(param.thisObject, "takeScreenshot");
+                            }
+                        } catch (Exception e) {
+                            XpLog.e(e);
+                        }
+
                     }
                 };
                 IntentFilter filter = new IntentFilter(XpNavBarAction.ACTION_SCREENSHOT);

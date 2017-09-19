@@ -28,6 +28,8 @@ import android.os.Bundle;
 import android.view.Window;
 
 
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -60,20 +62,25 @@ public class PhoneWindowHook {
         XposedHelpers.findAndHookMethod(Activity.class, "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                Activity activity = (Activity) param.thisObject;
-                Rect rect = new Rect();
-                activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-                Bitmap bmp = activity.getWindow().getDecorView().getDrawingCache();
+                try {
+                    Activity activity = (Activity) param.thisObject;
+                    Rect rect = new Rect();
+                    activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                    Bitmap bmp = activity.getWindow().getDecorView().getDrawingCache();
 
-                int color = bmp.getPixel(rect.top + 3, 1);
-                int screenHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
-                Resources resources = activity.getResources();
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                int navbarHeight = resources.getDimensionPixelSize(resourceId);
-                int color2 = bmp.getPixel(screenHeight - navbarHeight - 3, 1);
+                    int color = bmp.getPixel(rect.top + 3, 1);
+                    int screenHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
+                    Resources resources = activity.getResources();
+                    int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                    int navbarHeight = resources.getDimensionPixelSize(resourceId);
+                    int color2 = bmp.getPixel(screenHeight - navbarHeight - 3, 1);
 
-                activity.getWindow().setStatusBarColor(color);
-                activity.getWindow().setNavigationBarColor(color2);
+                    activity.getWindow().setStatusBarColor(color);
+                    activity.getWindow().setNavigationBarColor(color2);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+
 //                int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 //                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION

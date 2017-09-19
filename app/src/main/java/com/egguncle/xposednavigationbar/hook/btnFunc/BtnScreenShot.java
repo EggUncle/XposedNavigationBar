@@ -38,33 +38,10 @@ import java.io.IOException;
  * Created by egguncle on 17-6-18.
  */
 
-public class BtnScreenShot extends ScreenShot{
+public class BtnScreenShot extends ScreenShot {
 
     @Override
-    public void screenshot(final Context context) {
-        if (Build.VERSION.SDK_INT<=Build.VERSION_CODES.M){
-            context.sendBroadcast(new Intent(XpNavBarAction.ACTION_SCREENSHOT));
-        }else{
-            String screenShotPath = "/sdcard/Pictures/Screenshots";
-            File file = new File(screenShotPath);
-            //如果截图文件夹不存在则创建
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            long timecurrentTimeMillis = System.currentTimeMillis();
-            String cmd = "screencap -p /sdcard/Pictures/Screenshots/" + timecurrentTimeMillis + ".png";
-            try {
-                Process p = Runtime.getRuntime().exec(cmd);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context,"screenShot success",Toast.LENGTH_SHORT).show();
-                    }
-                },1000);
-            } catch (IOException e) {
-                Toast.makeText(context,"screenShot failed",Toast.LENGTH_SHORT).show();
-                XpLog.i(e.getMessage());
-            }
-        }
+    public void screenshot(Context context) {
+        context.sendBroadcast(intent);
     }
 }

@@ -19,32 +19,27 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
-import android.os.Handler;
+import android.content.Intent;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
-import com.egguncle.xposednavigationbar.hook.util.XpLog;
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
+
 
 /**
  * Created by egguncle on 17-6-18.
  */
 
 public abstract class ScreenShot implements View.OnClickListener {
-    protected Handler handler = new Handler();
+    protected Intent intent;
 
     protected abstract void screenshot(Context context);
 
+    public ScreenShot() {
+        intent = new Intent(XpNavBarAction.ACTION_SCREENSHOT);
+    }
+
     @Override
     public void onClick(final View v) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    screenshot(v.getContext());
-                } catch (Exception e) {
-                    XpLog.i(e.getMessage());
-                }
-            }
-        }).start();
+        screenshot(v.getContext());
     }
 }

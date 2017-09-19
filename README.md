@@ -57,7 +57,10 @@ activity.getWindow().setNavigationBarColor(colorPrimaryDark);
 ```
 ## 截图 ✓
 这个实现比较粗暴，使用的shell指令。
+
 (2017-09-15)这个东西的实现现在改成了在phonewindowmanager中hook并注册广播接收器然后在其他地方向其发送广播，使它执行自己的takescreenshot方法，但是这个方法在Nougat上(Nexus5 lineage os 14.1)出现了导致机器重启的情况，所以现在做了版本判断，如果是nougat，则还是使用原来的方案来进行截图。
+
+(2017-09-19)系统自带takescreenshot方法在7.0上和原来的有些不一样，现在做了修复，但是仍然有机器存在软重启的情况，（LG G4 官方自带rom 5.1）可能和受限广播有关系，回头再尝试处理这个问题。
 
 ## 音量调整 ✓
 

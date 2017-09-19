@@ -67,47 +67,44 @@ public class AMHook {
 
                 IntentFilter intentFilter = new IntentFilter();
                 intentFilter.addAction(ACTION_FORCE_STOP_AC);
-                AMHook.AMHookReceiver receiver = new AMHookReceiver();
+                BroadcastReceiver receiver = new BroadcastReceiver(){
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        long beforeMem = getAvailabaleMemory();
+                        ArrayList<String> pkgNames = intent.getStringArrayListExtra("data");
+                        try {
+                            for (String pkgName : pkgNames) {
+                                XpLog.i("kill pkg : " + pkgName);
+                                XposedHelpers.callMethod(am, "forceStopPackage", pkgName);
+                            }
+                        } catch (Exception e) {
+                            XpLog.e(e);
+                        }
+
+                        long afterMen = getAvailabaleMemory();
+                        long clearMem = afterMen - beforeMem;
+                        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+                        am.getMemoryInfo(mi);
+                        long totalMem = mi.totalMem / (1024 * 1024);
+                        XpLog.i("clear mem :" + clearMem + " MB");
+
+                        Toast.makeText(context,"clear mem "+ clearMem+" "+afterMen+"/"+totalMem,Toast.LENGTH_SHORT).show();
+                    }
+
+                    //获取可用内存大小
+                    private long getAvailabaleMemory() {
+                        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+                        am.getMemoryInfo(mi);
+                        return mi.availMem / (1024 * 1024);
+
+                    }
+                };
 
                 amContext.registerReceiver(receiver, intentFilter);
             }
         });
     }
 
-    //增加一个广播接收器用来接收到需要强制停止的app的包名
-    private static class AMHookReceiver extends BroadcastReceiver {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            long beforeMem = getAvailabaleMemory(context);
-            ArrayList<String> pkgNames = intent.getStringArrayListExtra("data");
-            try {
-                for (String pkgName : pkgNames) {
-                    XpLog.i("kill pkg : " + pkgName);
-                    XposedHelpers.callMethod(am, "forceStopPackage", pkgName);
-                }
-            } catch (Exception e) {
-                XpLog.e(e);
-            }
-
-            long afterMen = getAvailabaleMemory(context);
-            long clearMem = afterMen - beforeMem;
-            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-            am.getMemoryInfo(mi);
-            long totalMem = mi.totalMem / (1024 * 1024);
-            XpLog.i("clear mem :" + clearMem + " MB");
-
-            Toast.makeText(context,"clear mem "+ clearMem+" "+afterMen+"/"+totalMem,Toast.LENGTH_SHORT).show();
-        }
-
-        //获取可用内存大小
-        private long getAvailabaleMemory(Context context) {
-            // 获取android当前可用内存大小
-            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-            am.getMemoryInfo(mi);
-            return mi.availMem / (1024 * 1024);
-        }
-    }
 
 }
