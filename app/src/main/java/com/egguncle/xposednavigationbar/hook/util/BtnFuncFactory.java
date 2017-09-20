@@ -45,6 +45,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnsNavbar;
+import com.egguncle.xposednavigationbar.hook.hookFunc.LightAndVolumeController;
 import com.egguncle.xposednavigationbar.hook.hookutil.MainHookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
@@ -56,16 +57,13 @@ import java.util.Map;
  */
 
 public class BtnFuncFactory {
-    private ViewGroup mRootViewGroup;
     private ViewPager mViewPager;
     //用于加载图片资源
     private Map<Integer, byte[]> mMapImgRes;
     private ViewGroup mllExtPage;
 
-    public BtnFuncFactory(ViewGroup rootViewGroup,
-                          ViewPager viewPager, ViewGroup llExtPage,
+    public BtnFuncFactory(ViewPager viewPager, ViewGroup llExtPage,
                           Map<Integer, byte[]> mapImgRes) {
-        mRootViewGroup = rootViewGroup;
         mMapImgRes = mapImgRes;
         mViewPager = viewPager;
         mllExtPage = llExtPage;
@@ -85,9 +83,9 @@ public class BtnFuncFactory {
             case ConstantStr.FUNC_CLEAR_MEM_CODE:
                 return new BtnClearBackground();
             case ConstantStr.FUNC_VOLUME_CODE:
-                return new BtnVolume(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(ConstantStr.FUNC_BACK_CODE)));
+                return new BtnVolume();
             case ConstantStr.FUNC_LIGHT_CODE:
-                return new BtnBackLight(mRootViewGroup, ImageUtil.byte2Bitmap(mMapImgRes.get(ConstantStr.FUNC_BACK_CODE)));
+                return new BtnBackLight();
             case ConstantStr.FUNC_HOME_CODE:
                 return new BtnNavBarGoHome(mViewPager);
             case ConstantStr.FUNC_START_ACTS_CODE:

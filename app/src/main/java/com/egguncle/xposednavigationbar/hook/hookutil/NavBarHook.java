@@ -143,22 +143,11 @@ public class NavBarHook {
 
 
         //viewpage的第二页
-        //整个页面的基础
-        final FrameLayout fmExtPage = new FrameLayout(context);
-        fmExtPage.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return true;
-            }
-        });
-        //扩展出来的主页面的第一层（这里有多层是因为在设置亮度和光线调整的时候需要网上盖一层）
         llExtPage = new LinearLayout(context);
-        // llExtPage.setPadding(0, 0, 0, 0);
-        fmExtPage.addView(llExtPage);
         llExtPage.setOrientation(LinearLayout.HORIZONTAL);
         llExtPage.setGravity(Gravity.CENTER_VERTICAL);
 
-        btnFuncFactory = new BtnFuncFactory(fmExtPage, vpXphook, llExtPage, DataHook.mapImgRes);
+        btnFuncFactory = new BtnFuncFactory(vpXphook, llExtPage, DataHook.mapImgRes);
         for (ShortCut sc : DataHook.shortCutList) {
             btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, DataHook.iconScale);
         }
@@ -166,7 +155,7 @@ public class NavBarHook {
         final List<View> list = new ArrayList<View>();
         list.add(musicPanel);
         list.add(llUnderMainNavBar);
-        list.add(fmExtPage);
+        list.add(llExtPage);
 
         PagerAdapter pagerAdapter=new PagerAdapter() {
             @Override

@@ -19,19 +19,23 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.BacklightController;
+import com.egguncle.xposednavigationbar.hook.hookFunc.LightAndVolumeController;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.InvocationTargetException;
@@ -44,80 +48,16 @@ import de.robv.android.xposed.XposedHelpers;
  * Created by egguncle on 17-6-10.
  */
 
-public class BtnBackLight implements BacklightController,View.OnClickListener {
-    private ViewGroup mRootGroup;
-    private Bitmap mBitmap;
+public class BtnBackLight extends LightAndVolumeController {
+   // private ViewGroup mRootGroup;
 
-    public BtnBackLight(ViewGroup rootGroup,Bitmap bitmap){
-        mRootGroup=rootGroup;
-        mBitmap=bitmap;
+    public BtnBackLight() {
+        super(LightAndVolumeController.LIGHT);
     }
-    
-    @Override
-    public void onClick(final View view) {
-        final ViewGroup  mViewGroup=new LinearLayout(view.getContext());
-        LinearLayout.LayoutParams btnParam =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        btnParam.weight = 1;
-        btnParam.gravity = Gravity.CENTER_VERTICAL;
-        LinearLayout.LayoutParams seekBarParam =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        seekBarParam.weight = 2;
-        seekBarParam.gravity = Gravity.CENTER_VERTICAL;
-
-        mRootGroup.addView(mViewGroup);
-        ImageButton btnBack = new ImageButton(view.getContext());
-        btnBack.setImageBitmap(mBitmap);
-        btnBack.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        btnBack.setBackgroundColor(Color.alpha(255));
-
-        mViewGroup.setBackgroundColor(Color.BLACK);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRootGroup.removeView(mViewGroup);
-            }
-        });
-        SeekBar seekBar = new SeekBar(view.getContext());
-        final int screenMode = Settings.System.getInt(view.getContext().getContentResolver(),
-                Settings.System.SCREEN_BRIGHTNESS_MODE, 1);
-        // 如果当前的屏幕亮度调节调节模式为自动调节，则改为手动调节屏幕亮度
-        if (screenMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
-            Settings.System.putInt(view.getContext().getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-        }
-        //获取当前亮度并设置
-        int nowLight = Settings.System.getInt(view.getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, -1);
-        seekBar.setProgress(nowLight);
-        //亮度最小为30,最大为255
-        seekBar.setMax(225);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                setBackgroundLight(view.getContext(), i + 30);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                //设置回原来的亮度模式
-                Settings.System.putInt(view.getContext().getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS_MODE, screenMode);
-            }
-        });
-        mViewGroup.addView(btnBack, btnParam);
-        mViewGroup.addView(seekBar, seekBarParam);
-    }
-    
-    
 
     @Override
-    public void setBackgroundLight(Context context, int light) {
+    protected void control(Context context, int value) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        XposedHelpers.callMethod(pm,"setBacklightBrightness",light);
+        XposedHelpers.callMethod(pm,"setBacklightBrightness",value);
     }
 }

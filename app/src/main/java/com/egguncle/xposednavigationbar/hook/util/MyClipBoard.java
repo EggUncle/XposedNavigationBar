@@ -33,7 +33,6 @@ public class MyClipBoard {
 
     //剪贴板内容
     private static ArrayList<String> clipboardData = new ArrayList<>();
-    ;
 
     /**
      * 开始监听剪贴板
