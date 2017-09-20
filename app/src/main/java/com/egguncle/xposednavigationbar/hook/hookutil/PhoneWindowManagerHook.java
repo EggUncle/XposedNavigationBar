@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
@@ -40,8 +41,9 @@ public class PhoneWindowManagerHook {
 
     private final static String PHONE_WINDOW_MANAGER_M = "com.android.server.policy.PhoneWindowManager";
     private final static String PHONE_WINDOW_MANAGER_L = "com.android.internal.policy.impl.PhoneWindowManager";
+    public static GesturesListener gesturesListener;
 
-    public static void hook(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
+    public static void hook(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         String pwmClassPath;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             pwmClassPath = PHONE_WINDOW_MANAGER_M;
@@ -53,7 +55,7 @@ public class PhoneWindowManagerHook {
         XposedBridge.hookAllMethods(pwmClass, "init", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(final MethodHookParam param) throws Throwable {
-                Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                final Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
                 BroadcastReceiver screenShotReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
@@ -71,6 +73,33 @@ public class PhoneWindowManagerHook {
                 };
                 IntentFilter filter = new IntentFilter(XpNavBarAction.ACTION_SCREENSHOT);
                 mContext.registerReceiver(screenShotReceiver, filter);
+
+                gesturesListener = new GesturesListener(mContext, new GesturesListener.Callbacks() {
+                    @Override
+                    public void onSwipeFromTop() {
+
+                    }
+
+                    @Override
+                    public void onSwipeFromBottom() {
+                        XpLog.i("-----------------");
+                       // if (XposedHelpers.getBooleanField(param.thisObject, "mNavigationBarOnBottom")) {
+                            Intent intent = new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+                            intent.putExtra(ConstantStr.TYPE, ConstantStr.SHOW_NAVBAR);
+                            mContext.sendBroadcast(intent);
+                       // }
+                    }
+
+                    @Override
+                    public void onSwipeFromRight() {
+
+                    }
+
+                    @Override
+                    public void onDebug() {
+
+                    }
+                });
             }
         });
     }

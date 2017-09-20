@@ -20,7 +20,6 @@ package com.egguncle.xposednavigationbar.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,6 +39,7 @@ import android.widget.CheckBox;
 
 import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
@@ -48,7 +48,6 @@ import com.egguncle.xposednavigationbar.ui.fragment.SetFunFragment;
 import com.egguncle.xposednavigationbar.ui.fragment.SetOtherFragment;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,8 +78,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     void initView() {
-       // checkActivated();
-
+        // checkActivated();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fabAddFunc = (FloatingActionButton) findViewById(R.id.fab);

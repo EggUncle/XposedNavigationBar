@@ -46,7 +46,7 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
 
     protected abstract void goRecent(Context context);
 
-    protected abstract void hide();
+    protected abstract void hide(Context context);
 
     protected abstract void show();
 
@@ -54,8 +54,14 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
 
     public NavBarBtns(int type) {
         mType = type;
-        intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
-        intent.putExtra(ConstantStr.TYPE,ConstantStr.RECENT_TASKS);
+
+        if (type==BTN_RECENT){
+            intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+            intent.putExtra(ConstantStr.TYPE,ConstantStr.RECENT_TASKS);
+        }else if (type==BTN_HIDE){
+            intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+            intent.putExtra(ConstantStr.TYPE,ConstantStr.HIDE_NAVBAR);
+        }
     }
 
     @Override
@@ -71,7 +77,7 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
                 goRecent(v.getContext());
                 break;
             case BTN_HIDE:
-                hide();
+                hide(v.getContext());
                 break;
         }
     }

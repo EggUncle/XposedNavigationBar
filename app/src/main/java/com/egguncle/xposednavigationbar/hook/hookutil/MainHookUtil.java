@@ -61,18 +61,20 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-      //  XpLog.i(lpparam.packageName);
+        //  XpLog.i(lpparam.packageName);
         XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, SPUtil.SP_NAME);
         boolean chameleonNavbar = pre.getBoolean(SPUtil.CHAMELEON_NAVBAR, false);
         if (chameleonNavbar) {
             XpLog.i("hook phone window");
             PhoneWindowHook.hook(lpparam.classLoader);
         }
+
         switch (lpparam.packageName) {
             case ANDROID:
                 try {
                     AMHook.hook(lpparam.classLoader);
                     PhoneWindowManagerHook.hook(lpparam);
+                    PointerEventDispatcherHook.hook(lpparam.classLoader);
                 } catch (Exception e) {
                     XpLog.e(e);
                 }
@@ -85,14 +87,14 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
                     XpLog.e(e);
                 }
                 break;
-            case BuildConfig.APPLICATION_ID:
-                try {
-                    XposedHelpers.findAndHookMethod(HomeActivity.class.getName(), lpparam.classLoader,
-                            "getActivatedVersion", XC_MethodReplacement.returnConstant(BuildConfig.VERSION_CODE));
-                } catch (Exception e) {
-                    XpLog.e(e);
-                }
-                break;
+//            case BuildConfig.APPLICATION_ID:
+//                try {
+//                    XposedHelpers.findAndHookMethod(HomeActivity.class.getName(), lpparam.classLoader,
+//                            "getActivatedVersion", XC_MethodReplacement.returnConstant(BuildConfig.VERSION_CODE));
+//                } catch (Exception e) {
+//                    XpLog.e(e);
+//                }
+//                break;
         }
     }
 

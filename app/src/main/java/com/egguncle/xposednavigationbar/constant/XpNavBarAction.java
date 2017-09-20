@@ -31,4 +31,5 @@ public class XpNavBarAction {
     public final static String ACTION_QUICK_NOTICE = "com.egguncle.xposednavigationbar.ui.activity.QuickNotificationActivity";
     public final static String ACTION_SCREENSHOT="com.egguncle.xposednavigationbar.screenshot";
     public final static String ACTION_PHONE_STATUSBAR="com.egguncle.xposednavigationbar.phonestatusbar";
+    public final static String ACTION_FORCE_STOP_AC = "com.egguncle.xpnavbar.forcestoppackage";
 }

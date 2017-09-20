@@ -36,6 +36,8 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
+import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACTION_FORCE_STOP_AC;
+
 /**
  * Created by egguncle on 17-8-26.
  * 对ActivityManager 进行hook 获取它的里面的mContext这个属性，
@@ -44,7 +46,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class AMHook {
     private final static String ACTIVITY_MANAGER = "android.app.ActivityManager";
-    public final static String ACTION_FORCE_STOP_AC = "com.egguncle.xpnavbar.forcestoppackage";
 
     private static Context amContext;
     private static ActivityManager am;

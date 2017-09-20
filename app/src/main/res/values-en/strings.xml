@@ -49,6 +49,7 @@
         \nXposed: https://github.com/rovo89/Xposed
         \nlitepal: https://github.com/LitePalFramework/LitePal
         \ngson: https://github.com/google/gson
+        \nHideableNavBar: https://github.com/ztc1997/HideableNavBar
     </string>
     <string name="about_app">
         About&amp;Donate
@@ -126,6 +127,6 @@
         <item>recent</item>
         <item>clipboard(beta)</item>
         <item>command(beta)</item>
-        <!--<item>hide navbar</item>-->
+        <item>hide navbar(beta)</item>
     </string-array>
 </resources>

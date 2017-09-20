@@ -32,6 +32,8 @@ import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACTION_FORCE_STOP_AC;
+
 /**
  * Created by egguncle on 17-6-10.
  */
@@ -59,7 +61,7 @@ public class BtnClearBackground extends ClearBackground {
             }
         }
         Intent intent = new Intent();
-        intent.setAction(AMHook.ACTION_FORCE_STOP_AC);
+        intent.setAction(ACTION_FORCE_STOP_AC);
         intent.putStringArrayListExtra("data", pkgNames);
         context.sendBroadcast(intent);
         XpLog.i("has send pkgnames to kill");

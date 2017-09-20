@@ -114,5 +114,6 @@ public class ConstantStr {
     public static final String TYPE="type";
     public static final int CLEAR_NOTIFICATIONS=0;
     public static final int RECENT_TASKS=1;
-
+    public static final int SHOW_NAVBAR =2;
+    public static final int HIDE_NAVBAR=3;
 }

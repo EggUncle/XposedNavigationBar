@@ -74,8 +74,6 @@ public class BtnFuncFactory {
 
     public View.OnClickListener getBtnFuncOfName(ShortCut sc) {
         switch (sc.getCode()) {
-//            case ConstantStr.BACK:
-//                break;
             case ConstantStr.FUNC_DOWN_CODE:
                 return new BtnStatusBarController();
             case ConstantStr.FUNC_QUICK_NOTICE_CODE:

@@ -28,17 +28,10 @@ import android.view.WindowManager;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
-import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * Created by egguncle on 17-8-14.
@@ -115,6 +108,22 @@ public class PhoneSatatusBarHook {
                                     case ConstantStr.RECENT_TASKS:
                                         XposedHelpers.callMethod(param.thisObject, "toggleRecentApps");
                                         break;
+                                    case ConstantStr.HIDE_NAVBAR: {
+                                        View navbarView = (View) XposedHelpers.getObjectField(param.thisObject, "mNavigationBarView");
+                                        if (navbarView.isAttachedToWindow()) {
+                                            WindowManager wm = (WindowManager) XposedHelpers.getObjectField(param.thisObject, "mWindowManager");
+                                            wm.removeView(navbarView);
+                                        }
+                                    }
+                                    break;
+                                    case ConstantStr.SHOW_NAVBAR: {
+                                        View navbarView = (View) XposedHelpers.getObjectField(param.thisObject, "mNavigationBarView");
+                                        if (!navbarView.isAttachedToWindow()) {
+                                            WindowManager wm = (WindowManager) XposedHelpers.getObjectField(param.thisObject, "mWindowManager");
+                                            wm.addView(navbarView, (ViewGroup.LayoutParams) XposedHelpers.callMethod(param.thisObject, "getNavigationBarLayoutParams"));
+                                        }
+                                    }
+                                    break;
                                 }
 
                             }

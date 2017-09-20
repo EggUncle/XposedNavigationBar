@@ -47,6 +47,7 @@
         \nXposed: https://github.com/rovo89/Xposed
         \nlitepal: https://github.com/LitePalFramework/LitePal
         \ngson: https://github.com/google/gson
+        \nHideableNavBar: https://github.com/ztc1997/HideableNavBar
     </string>
     <string name="about_app">
         关于&amp;捐赠
@@ -123,6 +124,6 @@
         <item>最近任务键</item>
         <item>剪贴板(测试)</item>
         <item>shell指令(测试)</item>
-        <!--<item>隐藏导航栏</item>-->
+        <item>隐藏导航栏(测试)</item>
     </string-array>
 </resources>

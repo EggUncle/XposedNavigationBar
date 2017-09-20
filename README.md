@@ -176,6 +176,10 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
 这个功能参考了这篇博客http://blog.csdn.net/dliyuedong/article/details/49360807 实际使用xposed以后的情况大体相同，只是呼出导航栏直接调用调用了addNavigationBar()方法。
 这个功能的实现遇到了一些问题，在监听手势的时候获取到的addnavigationbar的method和phonebar都是null，本来想获取SystemGesturesPointerEventListener中的mContext来发送广播，但是在genymotion虚拟机上反射获取关于这个类的信息后发现并没有mContext,这个属性在5.1的源码中也没有发现，但是在一加一的cm13中发现了，而且addnavigationbar这个方法，在具有实体按键的rom中似乎没有（测试机器一加一，cm13,使用设置中调用出的虚拟导航栏，可能使用了别的方法并不是而且addnavigationbar这个方法）。总之调用这两个方法来隐藏和呼出的通用性不高，暂时不使用这个方案，在其他开发者实现的隐藏呼出导航栏的模块中，看到了类似直接调整导航栏高度的思路，以后可能会使用这种思路来实现这个功能。
 
+(2017-09-20)现在这个功能的实现还是按照了之前使用windowmanager remove navbarview的思路，添加导航栏参考了这个实现https://github.com/ztc1997/HideableNavBar
+
+部分机器上没有addnavigationbar的无参方法，所以直接按照方法里的内容实现了addnavigationbar的功能
+
 
 ## 踩到的一些小坑
 获取上下文对象可以通过在hook资源时拿到某个view，再getContext

@@ -76,8 +76,8 @@ public class BtnsNavbar extends NavBarBtns{
     }
 
     @Override
-    protected void hide() {
-
+    protected void hide(Context context) {
+        context.sendBroadcast(intent);
     }
 
     @Override
