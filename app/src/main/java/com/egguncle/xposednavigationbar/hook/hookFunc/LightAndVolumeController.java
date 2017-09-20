@@ -49,6 +49,9 @@ public abstract class LightAndVolumeController implements View.OnClickListener {
     private Bitmap backBitmap;
     private Bitmap funcBitmap;
 
+    private static ViewGroup lightPanel;
+    private static ViewGroup volumePanel;
+
     protected abstract void control(Context context, int value);
 
     private int mType;
@@ -70,7 +73,31 @@ public abstract class LightAndVolumeController implements View.OnClickListener {
         showDialog(v.getContext());
     }
 
-    protected void showDialog(final Context context) {
+    protected void showDialog(Context context) {
+        final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        int h = getNavbarHeight(context);
+        int w = WindowManager.LayoutParams.MATCH_PARENT;
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(w, h, WindowManager.LayoutParams.TYPE_TOAST, 0, PixelFormat.TRANSLUCENT);
+        layoutParams.gravity = Gravity.BOTTOM;
+
+        ViewGroup viewGroup;
+        if (mType == LIGHT) {
+            viewGroup = getLightPanel(context);
+        } else {
+            viewGroup = getVolumePanel(context);
+        }
+
+        if (lightPanel != null && lightPanel.isAttachedToWindow()) {
+            wm.removeView(lightPanel);
+        }
+        if (volumePanel != null && volumePanel.isAttachedToWindow()) {
+            wm.removeView(volumePanel);
+        }
+
+        wm.addView(viewGroup, layoutParams);
+    }
+
+    private ViewGroup getPanel(Context context, int type) {
         final ViewGroup mViewGroup = new LinearLayout(context);
         LinearLayout.LayoutParams btnParam =
                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -86,7 +113,7 @@ public abstract class LightAndVolumeController implements View.OnClickListener {
         btnBack.setScaleType(ImageView.ScaleType.FIT_CENTER);
         btnBack.setBackgroundColor(Color.alpha(255));
 
-        SeekBar seekBar = getSeekBar(context, mType);
+        SeekBar seekBar = getSeekBar(context, type);
 
         ImageButton btnFunc = new ImageButton(context);
         btnFunc.setImageBitmap(funcBitmap);
@@ -97,14 +124,7 @@ public abstract class LightAndVolumeController implements View.OnClickListener {
         mViewGroup.addView(seekBar, seekBarParam);
         mViewGroup.addView(btnFunc, btnParam);
 
-        int h = getNavbarHeight(context);
-        int w = WindowManager.LayoutParams.MATCH_PARENT;
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(w, h, WindowManager.LayoutParams.TYPE_TOAST, 0, PixelFormat.TRANSLUCENT);
-        layoutParams.gravity = Gravity.BOTTOM;
-
         final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-
-        wm.addView(mViewGroup, layoutParams);
         mViewGroup.setBackgroundColor(Color.BLACK);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +132,23 @@ public abstract class LightAndVolumeController implements View.OnClickListener {
                 wm.removeView(mViewGroup);
             }
         });
+
+        return mViewGroup;
+    }
+
+    private synchronized ViewGroup getVolumePanel(Context context) {
+        if (lightPanel == null) {
+            lightPanel = getPanel(context, VOLUME);
+
+        }
+        return lightPanel;
+    }
+
+    private synchronized ViewGroup getLightPanel(Context context) {
+        if (volumePanel == null) {
+            volumePanel = getPanel(context, LIGHT);
+        }
+        return volumePanel;
     }
 
     private int getNavbarHeight(Context context) {
