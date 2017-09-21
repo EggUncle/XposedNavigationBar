@@ -101,8 +101,10 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
     //获取drawable等资源的方法，Lineage OS无效
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
+        if (BTN_BG_RES_ID != 0) {
+            return;
+        }
         if (resparam.packageName.equals(SYSTEM_UI)) {
-            XpLog.i("handleInitPackageResources " + SYSTEM_UI);
             try {
                 XModuleResources xRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
                 BTN_BG_RES_ID = resparam.res.addResource(xRes, R.drawable.btn_bg);

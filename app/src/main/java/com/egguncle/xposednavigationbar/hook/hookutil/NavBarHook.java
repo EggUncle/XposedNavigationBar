@@ -320,7 +320,6 @@ public class NavBarHook {
         expandStatusBarWithRoot = rootDown;
         DataHook.clearMenLevel = clearMemLevel;
         DataHook.chameleonNavbar=chameleonNavbar;
-        XpLog.i("====== updateNavBar " + (DataHook.chameleonNavbar ? "true" : "false"));
     }
 
 

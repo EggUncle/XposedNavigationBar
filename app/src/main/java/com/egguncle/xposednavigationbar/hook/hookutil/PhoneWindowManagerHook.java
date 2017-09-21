@@ -26,6 +26,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.view.WindowManager;
 
+import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
@@ -66,18 +67,30 @@ public class PhoneWindowManagerHook {
                 Resources resources = mContext.getResources();
                 int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 navbarH = resources.getDimensionPixelSize(resourceId);
-                if (navbarH==0){
-                    navbarH=200;
+                if (navbarH == 0) {
+                    navbarH = 200;
                 }
 
                 BroadcastReceiver screenShotReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         try {
-                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                                XposedHelpers.callMethod(param.thisObject, "takeScreenshot", 1);
-                            } else {
-                                XposedHelpers.callMethod(param.thisObject, "takeScreenshot");
+                            int type = intent.getIntExtra(ConstantStr.TYPE, -1);
+                            switch (type) {
+                                case ConstantStr.TAKE_SCREENSHOT:
+                                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                                        XposedHelpers.callMethod(param.thisObject, "takeScreenshot", 1);
+                                    } else {
+                                        XposedHelpers.callMethod(param.thisObject, "takeScreenshot");
+                                    }
+                                    break;
+                                case ConstantStr.HIDE_NAVBAR: {
+                                    setNavBarDimensions(param.thisObject, 0);
+                                }
+                                break;
+//                                case ConstantStr.SHOW_NAVBAR: {
+//                                   setNavBarDimensions(param.thisObject,navbarH);
+//                                }
                             }
                         } catch (Exception e) {
                             XpLog.e(e);
@@ -85,7 +98,7 @@ public class PhoneWindowManagerHook {
 
                     }
                 };
-                IntentFilter filter = new IntentFilter(XpNavBarAction.ACTION_SCREENSHOT);
+                IntentFilter filter = new IntentFilter(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
                 mContext.registerReceiver(screenShotReceiver, filter);
 
                 gesturesListener = new GesturesListener(mContext, new GesturesListener.Callbacks() {
@@ -96,11 +109,7 @@ public class PhoneWindowManagerHook {
 
                     @Override
                     public void onSwipeFromBottom() {
-                        // if (XposedHelpers.getBooleanField(param.thisObject, "mNavigationBarOnBottom")) {
-                        Intent intent = new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
-                        intent.putExtra(ConstantStr.TYPE, ConstantStr.SHOW_NAVBAR);
-                        mContext.sendBroadcast(intent);
-                        // }
+                        setNavBarDimensions(param.thisObject, navbarH);
                     }
 
                     @Override
@@ -115,6 +124,27 @@ public class PhoneWindowManagerHook {
                 });
             }
         });
+    }
+
+    public static void setNavBarDimensions(Object sPhoneWindowManager, int hp) {
+        int[] navigationBarHeightForRotation;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            navigationBarHeightForRotation = (int[]) XposedHelpers.getObjectField(
+                    sPhoneWindowManager, "mNavigationBarHeightForRotation");
+        } else {
+            navigationBarHeightForRotation = (int[]) XposedHelpers.getObjectField(
+                    sPhoneWindowManager, "mNavigationBarHeightForRotationDefault");
+        }
+
+        final int portraitRotation = XposedHelpers.getIntField(sPhoneWindowManager, "mPortraitRotation");
+        final int upsideDownRotation = XposedHelpers.getIntField(sPhoneWindowManager, "mUpsideDownRotation");
+        if (navigationBarHeightForRotation[portraitRotation] == hp)
+            return;
+
+        navigationBarHeightForRotation[portraitRotation] =
+                navigationBarHeightForRotation[upsideDownRotation] =
+                        hp;
+        XposedHelpers.callMethod(sPhoneWindowManager, "updateRotation", false);
     }
 
 }

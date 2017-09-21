@@ -103,6 +103,7 @@
     <string name="paypal_url">paypal.me/songyucheng</string>
     <string name="not_activated">额...模块似乎没有被激活,如果已经更新请重启</string>
     <string name="chameleon_navbar">导航栏变色(测试)</string>
+    <string name="chameleon_tip">这个功能目前不够稳定，可能导致某些应用无法打开</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>

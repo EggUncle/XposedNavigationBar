@@ -24,7 +24,7 @@ package com.egguncle.xposednavigationbar.constant;
  */
 
 public class ConstantStr {
-    public final static String PKG_NAME="com.egguncle.xposednavigationbar";
+    public final static String PKG_NAME = "com.egguncle.xposednavigationbar";
     public final static String SHORT_CUT_DATA = "short_cut_data";
 
     public final static String BACK = "back";
@@ -39,39 +39,39 @@ public class ConstantStr {
     public final static String VOLUME = "volume";
     public final static String SMALL_POINT = "small_point";
     public final static String HOME = "home";
-    public final static String START_ACTS="start_acts";
-    public final static String NEXT_PLAY="ic_next";
-    public final static String PLAY_MUSIC="ic_play";
-    public final static String PLAY_PREVIOUS="ic_previous";
+    public final static String START_ACTS = "start_acts";
+    public final static String NEXT_PLAY = "ic_next";
+    public final static String PLAY_MUSIC = "ic_play";
+    public final static String PLAY_PREVIOUS = "ic_previous";
 
     public final static String CLOCK = "clock";
 
-    public final static int FUNC_BACK_CODE=-2;
-    public final static int FUNC_SMALL_POINT_CODE=-1;
+    public final static int FUNC_BACK_CODE = -2;
+    public final static int FUNC_SMALL_POINT_CODE = -1;
     public final static int FUNC_DOWN_CODE = 0;
     public final static int FUNC_QUICK_NOTICE_CODE = 1;
     public final static int FUNC_SCREEN_OFF_CODE = 2;
-    public final static int FUNC_CLEAR_NOTIFICATION_CODE= 3;
+    public final static int FUNC_CLEAR_NOTIFICATION_CODE = 3;
     public final static int FUNC_CLEAR_MEM_CODE = 4;
     public final static int FUNC_VOLUME_CODE = 5;
     public final static int FUNC_LIGHT_CODE = 6;
     public final static int FUNC_HOME_CODE = 7;
-    public final static int FUNC_START_ACTS_CODE=8;
-    public final static int FUNC_PREVIOUS_PLAY_CODE =9;
-    public final static int FUNC_PLAY_MUSIC_CODE=10;
-    public final static int FUNC_NEXT_PLAY_CODE=11;
-    public final static int FUNC_WECHAT_SACNNER_CODE=12;
-    public final static int FUNC_ALIPAY_SACNNER_CODE=13;
-    public final static int FUNC_SCREEN_SHOT_CODE=14;
+    public final static int FUNC_START_ACTS_CODE = 8;
+    public final static int FUNC_PREVIOUS_PLAY_CODE = 9;
+    public final static int FUNC_PLAY_MUSIC_CODE = 10;
+    public final static int FUNC_NEXT_PLAY_CODE = 11;
+    public final static int FUNC_WECHAT_SACNNER_CODE = 12;
+    public final static int FUNC_ALIPAY_SACNNER_CODE = 13;
+    public final static int FUNC_SCREEN_SHOT_CODE = 14;
     //Android自带的三个按钮
-    public final static int FUNC_NAV_BACK_CODE=15;
-    public final static int FUNC_NAV_HOME_CODE=16;
-    public final static int FUNC_NAV_RECENT_CODE=17;
+    public final static int FUNC_NAV_BACK_CODE = 15;
+    public final static int FUNC_NAV_HOME_CODE = 16;
+    public final static int FUNC_NAV_RECENT_CODE = 17;
 
-    public final static int FUNC_CLIPBOARD_CODE=18;
-    public final static int FUNC_COMMAND_CODE=19;
+    public final static int FUNC_CLIPBOARD_CODE = 18;
+    public final static int FUNC_COMMAND_CODE = 19;
 
-    public final static int FUNC_NAV_HIDE_CODE=20;
+    public final static int FUNC_NAV_HIDE_CODE = 20;
 
 //    public final static String FUNC_DOWN = "下拉通知栏";
 //    public final static String FUNC_QUICK_NOTICE = "快速备忘";
@@ -111,9 +111,10 @@ public class ConstantStr {
 
     public static final String ICON_SIZE = "icon_size";
 
-    public static final String TYPE="type";
-    public static final int CLEAR_NOTIFICATIONS=0;
-    public static final int RECENT_TASKS=1;
-    public static final int SHOW_NAVBAR =2;
-    public static final int HIDE_NAVBAR=3;
+    public static final String TYPE = "type";
+    public static final int CLEAR_NOTIFICATIONS = 0;
+    public static final int RECENT_TASKS = 1;
+    public static final int SHOW_NAVBAR = 2;
+    public static final int HIDE_NAVBAR = 3;
+    public static final int TAKE_SCREENSHOT = 4;
 }

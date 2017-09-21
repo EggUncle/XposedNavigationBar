@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 
 
@@ -35,7 +36,8 @@ public abstract class ScreenShot implements View.OnClickListener {
     protected abstract void screenshot(Context context);
 
     public ScreenShot() {
-        intent = new Intent(XpNavBarAction.ACTION_SCREENSHOT);
+        intent = new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
+        intent.putExtra(ConstantStr.TYPE,ConstantStr.TAKE_SCREENSHOT);
     }
 
     @Override

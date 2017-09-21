@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -101,8 +102,6 @@ public class PhoneSatatusBarHook {
                             @Override
                             public void onReceive(Context context, Intent intent) {
                                 int type = intent.getIntExtra(ConstantStr.TYPE, -1);
-                                View navbarView = (View) XposedHelpers.getObjectField(param.thisObject, "mNavigationBarView");
-                                WindowManager wm = (WindowManager) XposedHelpers.getObjectField(param.thisObject, "mWindowManager");
                                 switch (type) {
                                     case ConstantStr.CLEAR_NOTIFICATIONS:
                                         XposedHelpers.callMethod(param.thisObject, "clearAllNotifications");
@@ -110,22 +109,6 @@ public class PhoneSatatusBarHook {
                                     case ConstantStr.RECENT_TASKS:
                                         XposedHelpers.callMethod(param.thisObject, "toggleRecentApps");
                                         break;
-                                    case ConstantStr.HIDE_NAVBAR: {
-                                        if (navbarView.isAttachedToWindow()) {
-                                            wm.removeViewImmediate(navbarView);
-                                        }
-
-                                    }
-                                    break;
-                                    case ConstantStr.SHOW_NAVBAR: {
-                                        if (!navbarView.isAttachedToWindow()) {
-                                            XposedHelpers.callMethod(param.thisObject,"prepareNavigationBarView");
-                                            wm.addView(navbarView,
-                                                    (ViewGroup.LayoutParams) XposedHelpers.callMethod(param.thisObject,
-                                                            "getNavigationBarLayoutParams"));
-                                        }
-                                    }
-                                    break;
                                 }
 
                             }

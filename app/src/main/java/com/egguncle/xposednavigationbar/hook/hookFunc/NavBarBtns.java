@@ -59,7 +59,7 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
             intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
             intent.putExtra(ConstantStr.TYPE,ConstantStr.RECENT_TASKS);
         }else if (type==BTN_HIDE){
-            intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+            intent=new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
             intent.putExtra(ConstantStr.TYPE,ConstantStr.HIDE_NAVBAR);
         }
     }
