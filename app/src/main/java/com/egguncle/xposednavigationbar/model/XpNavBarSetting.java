@@ -39,19 +39,21 @@ public class XpNavBarSetting implements Parcelable {
     private boolean mRootDown;
     private int mClearMenLevel;
     private boolean mChameleonNavbar;
-
+    private int mNavbarHeight;
 
     public final static int LEFT = 0;
     public final static int RIGHT = 1;
     public final static int DISMISS = 2;
 
-    public XpNavBarSetting(List<ShortCut> shortCutData, int homePointPosition, int iconSize, boolean rootDown, int clearMenLevel, boolean chameleonNavbar) {
+    public XpNavBarSetting(List<ShortCut> shortCutData, int homePointPosition, int iconSize,
+                           boolean rootDown, int clearMenLevel, boolean chameleonNavbar, int navbarHeight) {
         mShortCutData = shortCutData;
         mHomePointPosition = homePointPosition;
         mIconSize = iconSize;
         mRootDown = rootDown;
         mClearMenLevel = clearMenLevel;
         mChameleonNavbar = chameleonNavbar;
+        mNavbarHeight=navbarHeight;
     }
 
 
@@ -62,6 +64,7 @@ public class XpNavBarSetting implements Parcelable {
         mRootDown = in.readByte() != 0;
         mClearMenLevel = in.readInt();
         mChameleonNavbar = in.readByte() != 0;
+        mNavbarHeight=in.readInt();
     }
 
     public static final Creator<XpNavBarSetting> CREATOR = new Creator<XpNavBarSetting>() {
@@ -101,6 +104,8 @@ public class XpNavBarSetting implements Parcelable {
         return mClearMenLevel;
     }
 
+    public int getNavbarHeight(){return mNavbarHeight;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -114,5 +119,6 @@ public class XpNavBarSetting implements Parcelable {
         dest.writeByte((byte) (mRootDown ? 1 : 0));
         dest.writeInt(mClearMenLevel);
         dest.writeByte((byte) (mChameleonNavbar ? 1 : 0));
+        dest.writeInt(mNavbarHeight);
     }
 }

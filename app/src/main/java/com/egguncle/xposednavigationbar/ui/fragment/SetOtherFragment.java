@@ -48,6 +48,8 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     private TextView tvClearMemLevel;
     private LinearLayout btnIconSize;
     private TextView tvIconSize;
+    private LinearLayout btnNavbarHeight;
+    private TextView tvNavbarHeight;
     //  private Switch swHook90;
     private Switch swRootDown;
     private Switch swChameleonNavbar;
@@ -55,6 +57,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
 
     private SPUtil spUtil;
     private Context mContext;
+    private int navbarHeight;
 
     public SetOtherFragment() {
         mContext = MyApplication.getContext();
@@ -82,6 +85,8 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         swRootDown = (Switch) view.findViewById(R.id.sw_root_down);
         settingAboutMarshmallow = (LinearLayout) view.findViewById(R.id.setting_about_marshmallow);
         swChameleonNavbar = (Switch) view.findViewById(R.id.sw_chameleon_navbar);
+        btnNavbarHeight = (LinearLayout) view.findViewById(R.id.btn_navbar_height);
+        tvNavbarHeight = (TextView) view.findViewById(R.id.tv_navbar_height);
     }
 
     @Override
@@ -94,6 +99,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         btnHomePoint.setOnClickListener(this);
         btnClearMemLevel.setOnClickListener(this);
         btnIconSize.setOnClickListener(this);
+        btnNavbarHeight.setOnClickListener(this);
         swRootDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -113,14 +119,12 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         spUtil = SPUtil.getInstance(mContext);
         int homePositon = spUtil.getHomePointPosition();
         tvHomePosition.setText(homePointStr[homePositon]);
-        int clearMemLevel = spUtil.getClearMemLevel();
-        tvClearMemLevel.setText(clearMemLevel + "");
-        int iconSize = spUtil.getIconSize();
-        tvIconSize.setText(iconSize + "");
-        boolean isRootDown = spUtil.getRootDown();
-        swRootDown.setChecked(isRootDown);
-        boolean chameleonNavbar=spUtil.isChameleonNavBar();
-        swChameleonNavbar.setChecked(chameleonNavbar);
+        tvClearMemLevel.setText(spUtil.getClearMemLevel() + "");
+        tvIconSize.setText(spUtil.getIconSize() + "");
+        swRootDown.setChecked(spUtil.getRootDown());
+        swChameleonNavbar.setChecked(spUtil.isChameleonNavBar());
+        navbarHeight = spUtil.getNavbarHeight();
+        tvNavbarHeight.setText(navbarHeight + "%");
     }
 
     @Override
@@ -132,21 +136,21 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_home_point: {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setSingleChoiceItems(homePointStr, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        spUtil.setHomePointPosition(i);
-                        tvHomePosition.setText(homePointStr[i]);
-                    }
-                }).setPositiveButton(R.string.ok, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(getString(R.string.home_point))
+                        .setSingleChoiceItems(homePointStr, 0, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                spUtil.setHomePointPosition(i);
+                                tvHomePosition.setText(homePointStr[i]);
+                            }
+                        }).setPositiveButton(R.string.ok, null);
                 builder.create().show();
             }
             break;
             case R.id.btn_clear_mem_level: {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder
-                        //.setTitle(getResources().getString(R.string.need_reboot))
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(getResources().getString(R.string.clear_mem_level))
                         .setSingleChoiceItems(clearMemLevels, 0, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -185,12 +189,49 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                 });
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setView(dialogView)
+                        .setTitle(getString(R.string.icon_size))
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 int imgSize = skImgSize.getProgress() + 10;
                                 tvIconSize.setText(imgSize + "");
                                 spUtil.setIconSize(imgSize);
+                            }
+                        }).create().show();
+            }
+            break;
+            case R.id.btn_navbar_height: {
+                View dialogView = View.inflate(view.getContext(), R.layout.d_navbar_height, null);
+                SeekBar skNavbarHeight = (SeekBar) dialogView.findViewById(R.id.sk_navbar_height);
+                final TextView tvHeight = (TextView) dialogView.findViewById(R.id.tv_height);
+                tvHeight.setText(navbarHeight+"%");
+                skNavbarHeight.setMax(100);
+                skNavbarHeight.setProgress(navbarHeight-50);
+                skNavbarHeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        tvHeight.setText(progress + 50 + "%");
+                        navbarHeight = progress + 50;
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setView(dialogView)
+                        .setTitle(R.string.navbar_height)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                spUtil.setNavbarHeight(navbarHeight);
+                                tvNavbarHeight.setText(navbarHeight + "%");
                             }
                         }).create().show();
             }

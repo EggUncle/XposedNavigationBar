@@ -57,8 +57,6 @@ public class GesturesListener {
         Resources resources = checkNull("context", context).getResources();
         mSwipeStartThreshold = resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"));
         mSwipeDistanceThreshold = mSwipeStartThreshold;
-        if (DEBUG) log(TAG + "mSwipeStartThreshold=" + mSwipeStartThreshold
-                + " mSwipeDistanceThreshold=" + mSwipeDistanceThreshold);
     }
 
     private static <T> T checkNull(String name, T arg) {
@@ -81,7 +79,6 @@ public class GesturesListener {
                 if (mDebugFireable) {
                     mDebugFireable = event.getPointerCount() < 5;
                     if (!mDebugFireable) {
-                        if (DEBUG) log(TAG + "Firing debug");
                         mCallbacks.onDebug();
                     }
                 }
@@ -91,18 +88,15 @@ public class GesturesListener {
                     final int swipe = detectSwipe(event);
                     mSwipeFireable = swipe == SWIPE_NONE;
                     if (swipe == SWIPE_FROM_TOP) {
-                        if (DEBUG) log(TAG + "Firing onSwipeFromTop");
                         mCallbacks.onSwipeFromTop();
                     } else if (swipe == SWIPE_FROM_BOTTOM) {
-                        if (DEBUG) log(TAG + "Firing onSwipeFromBottom");
                         int y = (int) event.getY();
-                        int navbarH = PhoneWindowManagerHook.navbarH;
+                        int navbarH = 200;
                         int screenH = PhoneWindowManagerHook.screenH;
-                        XpLog.i("y is "+y+"\n navbarH is "+navbarH+"\n screenH is "+screenH);
+                        XpLog.i("y is " + y + "\n navbarH is " + navbarH + "\n screenH is " + screenH);
                         if (y > (screenH - navbarH))
                             mCallbacks.onSwipeFromBottom();
                     } else if (swipe == SWIPE_FROM_RIGHT) {
-                        if (DEBUG) log(TAG + "Firing onSwipeFromRight");
                         mCallbacks.onSwipeFromRight();
                     }
                 }
@@ -113,21 +107,18 @@ public class GesturesListener {
                 mDebugFireable = false;
                 break;
             default:
-                if (DEBUG) log(TAG + "Ignoring " + event);
         }
     }
 
     private void captureDown(MotionEvent event, int pointerIndex) {
         final int pointerId = event.getPointerId(pointerIndex);
         final int i = findIndex(pointerId);
-        if (DEBUG) log(TAG + "pointer " + pointerId +
-                " down pointerIndex=" + pointerIndex + " trackingIndex=" + i);
+
         if (i != UNTRACKED_POINTER) {
             mDownX[i] = event.getX(pointerIndex);
             mDownY[i] = event.getY(pointerIndex);
             mDownTime[i] = event.getEventTime();
-            if (DEBUG) log(TAG + "pointer " + pointerId +
-                    " down x=" + mDownX[i] + " y=" + mDownY[i]);
+
         }
     }
 
@@ -173,8 +164,7 @@ public class GesturesListener {
         final float fromX = mDownX[i];
         final float fromY = mDownY[i];
         final long elapsed = time - mDownTime[i];
-        if (DEBUG) log(TAG + "pointer " + mDownPointerId[i]
-                + " moved (" + fromX + "->" + x + "," + fromY + "->" + y + ") in " + elapsed);
+
         if (fromY <= mSwipeStartThreshold
                 && y > fromY + mSwipeDistanceThreshold
                 && elapsed < SWIPE_TIMEOUT_MS) {

@@ -57,6 +57,8 @@ public class DataHook {
 
     public static boolean chameleonNavbar;
 
+    public static int navbarHeight;
+
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "xpnavbar");
         pre.makeWorldReadable();
@@ -79,7 +81,8 @@ public class DataHook {
 
         //获取图片缩放大小
         iconScale = pre.getInt(ConstantStr.ICON_SIZE, 40);
-        //初始化剪贴板内容集合
+
+        navbarHeight=pre.getInt(SPUtil.NAVBAR_HEIGHT,100);
 
         //加载图片资源文件
         Resources res = XModuleResources.createInstance(startupParam.modulePath, null);

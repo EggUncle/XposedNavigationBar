@@ -157,7 +157,7 @@ public class NavBarHook {
         list.add(llUnderMainNavBar);
         list.add(llExtPage);
 
-        PagerAdapter pagerAdapter=new PagerAdapter() {
+        PagerAdapter pagerAdapter = new PagerAdapter() {
             @Override
             public int getCount() {
                 return list.size();
@@ -165,8 +165,9 @@ public class NavBarHook {
 
             @Override
             public boolean isViewFromObject(View view, Object object) {
-                return view==object;
+                return view == object;
             }
+
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 container.addView(list.get(position));
@@ -289,8 +290,10 @@ public class NavBarHook {
         int homePosition = setting.getHomePointPosition();
         boolean rootDown = setting.isRootDown();
         int clearMemLevel = setting.getClearMenLevel();
-        boolean chameleonNavbar=setting.isChameleonNavbar();
-        updateNavBar(context, list, homePosition, iconSize, rootDown, clearMemLevel,chameleonNavbar);
+        boolean chameleonNavbar = setting.isChameleonNavbar();
+        int navbarHeight = setting.getNavbarHeight();
+        updateNavBar(context, list, homePosition, iconSize,
+                rootDown, clearMemLevel, chameleonNavbar, navbarHeight);
     }
 
     /**
@@ -307,7 +310,8 @@ public class NavBarHook {
                                     int iconSize,
                                     boolean rootDown,
                                     int clearMemLevel,
-                                    boolean chameleonNavbar) {
+                                    boolean chameleonNavbar,
+                                    int navbarHeight) {
         btnFuncFactory.clearAllBtn();
         if (shortCutData != null && shortCutData.size() != 0) {
             DataHook.shortCutList = shortCutData;
@@ -319,7 +323,13 @@ public class NavBarHook {
         setHomePointPosition(homePointPosition);
         expandStatusBarWithRoot = rootDown;
         DataHook.clearMenLevel = clearMemLevel;
-        DataHook.chameleonNavbar=chameleonNavbar;
+        DataHook.chameleonNavbar = chameleonNavbar;
+        DataHook.navbarHeight=navbarHeight;
+
+        Intent intent=new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
+        intent.putExtra(ConstantStr.TYPE,ConstantStr.NAVBAR_H);
+        intent.putExtra(ConstantStr.NAVBAR_HEIGHT,navbarHeight);
+        context.sendBroadcast(intent);
     }
 
 

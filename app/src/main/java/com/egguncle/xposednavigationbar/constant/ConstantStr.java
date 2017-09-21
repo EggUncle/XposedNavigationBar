@@ -117,4 +117,7 @@ public class ConstantStr {
     public static final int SHOW_NAVBAR = 2;
     public static final int HIDE_NAVBAR = 3;
     public static final int TAKE_SCREENSHOT = 4;
+    public static final int NAVBAR_H = 5;
+
+    public static final String NAVBAR_HEIGHT="navbar_height";
 }

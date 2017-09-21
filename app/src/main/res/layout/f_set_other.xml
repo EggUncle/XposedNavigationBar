@@ -155,5 +155,32 @@
 
         <include layout="@layout/v_split_line" />
 
+        <LinearLayout
+            android:id="@+id/btn_navbar_height"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/navbar_height"
+                android:textSize="@dimen/txt_m" />
+
+            <TextView
+                android:id="@+id/tv_navbar_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/txt_m" />
+
+        </LinearLayout>
+
+        <include layout="@layout/v_split_line" />
+
+
     </LinearLayout>
 </ScrollView>

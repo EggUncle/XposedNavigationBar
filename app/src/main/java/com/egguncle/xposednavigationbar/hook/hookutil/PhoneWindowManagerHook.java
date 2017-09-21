@@ -30,8 +30,10 @@ import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
+import com.egguncle.xposednavigationbar.util.SPUtil;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -64,11 +66,11 @@ public class PhoneWindowManagerHook {
                 final Context mContext = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
                 WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
                 screenH = wm.getDefaultDisplay().getHeight();
-                Resources resources = mContext.getResources();
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                final Resources resources = mContext.getResources();
+                final int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 navbarH = resources.getDimensionPixelSize(resourceId);
                 if (navbarH == 0) {
-                    navbarH = 200;
+                    navbarH = 150;
                 }
 
                 BroadcastReceiver screenShotReceiver = new BroadcastReceiver() {
@@ -88,9 +90,12 @@ public class PhoneWindowManagerHook {
                                     setNavBarDimensions(param.thisObject, 0);
                                 }
                                 break;
-//                                case ConstantStr.SHOW_NAVBAR: {
-//                                   setNavBarDimensions(param.thisObject,navbarH);
-//                                }
+                                case ConstantStr.NAVBAR_H: {
+                                    navbarH = resources.getDimensionPixelSize(resourceId);
+                                    navbarH = (int) (navbarH * (((float) intent.getIntExtra(ConstantStr.NAVBAR_HEIGHT, 100) / 100)));
+                                    setNavBarDimensions(param.thisObject, navbarH);
+                                }
+                                break;
                             }
                         } catch (Exception e) {
                             XpLog.e(e);
