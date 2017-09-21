@@ -20,28 +20,34 @@ package com.egguncle.xposednavigationbar.hook.util;
 
 import de.robv.android.xposed.XposedBridge;
 
+import static com.egguncle.xposednavigationbar.BuildConfig.DEBUG;
+
 /**
  * Created by egguncle on 17-8-23.
  */
 
 public class XpLog {
 
-    private final static String TAG="XpNavbar";
+    private final static String TAG = "XpNavbar";
 
-    public static void i(String logContent){
-        XposedBridge.log("[I/" + TAG + "] "+logContent);
+    public static void i(String logContent) {
+        if (DEBUG)
+            XposedBridge.log("[I/" + TAG + "] " + logContent);
     }
 
-    public static void e(String logContent){
-        XposedBridge.log("[E/" + TAG + "] "+logContent);
+    public static void e(String logContent) {
+        if (DEBUG)
+        XposedBridge.log("[E/" + TAG + "] " + logContent);
     }
 
-    public static void e(Throwable e){
-        XposedBridge.log("[E/" + TAG + "] "+e.getMessage());
+    public static void e(Throwable e) {
+        if (DEBUG)
+        XposedBridge.log("[E/" + TAG + "] " + e.getMessage());
     }
 
-    public static void w(String logContent){
-        XposedBridge.log("[W/" + TAG + "] "+logContent);
+    public static void w(String logContent) {
+        if (DEBUG)
+        XposedBridge.log("[W/" + TAG + "] " + logContent);
     }
 
 }

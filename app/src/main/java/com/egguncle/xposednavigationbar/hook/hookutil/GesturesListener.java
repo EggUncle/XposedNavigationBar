@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.MotionEvent;
 
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
+
 import static com.egguncle.xposednavigationbar.BuildConfig.DEBUG;
 import static de.robv.android.xposed.XposedBridge.log;
 
@@ -55,7 +57,7 @@ public class GesturesListener {
         Resources resources = checkNull("context", context).getResources();
         mSwipeStartThreshold = resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"));
         mSwipeDistanceThreshold = mSwipeStartThreshold;
-        if (DEBUG) log(TAG +  "mSwipeStartThreshold=" + mSwipeStartThreshold
+        if (DEBUG) log(TAG + "mSwipeStartThreshold=" + mSwipeStartThreshold
                 + " mSwipeDistanceThreshold=" + mSwipeDistanceThreshold);
     }
 
@@ -93,7 +95,12 @@ public class GesturesListener {
                         mCallbacks.onSwipeFromTop();
                     } else if (swipe == SWIPE_FROM_BOTTOM) {
                         if (DEBUG) log(TAG + "Firing onSwipeFromBottom");
-                        mCallbacks.onSwipeFromBottom();
+                        int y = (int) event.getY();
+                        int navbarH = PhoneWindowManagerHook.navbarH;
+                        int screenH = PhoneWindowManagerHook.screenH;
+                        XpLog.i("y is "+y+"\n navbarH is "+navbarH+"\n screenH is "+screenH);
+                        if (y > (screenH - navbarH))
+                            mCallbacks.onSwipeFromBottom();
                     } else if (swipe == SWIPE_FROM_RIGHT) {
                         if (DEBUG) log(TAG + "Firing onSwipeFromRight");
                         mCallbacks.onSwipeFromRight();
@@ -147,7 +154,7 @@ public class GesturesListener {
                 for (int h = 0; h < historySize; h++) {
                     final long time = move.getHistoricalEventTime(h);
                     final float x = move.getHistoricalX(p, h);
-                    final float y = move.getHistoricalY(p,  h);
+                    final float y = move.getHistoricalY(p, h);
                     final int swipe = detectSwipe(i, time, x, y);
                     if (swipe != SWIPE_NONE) {
                         return swipe;
@@ -188,8 +195,11 @@ public class GesturesListener {
 
     interface Callbacks {
         void onSwipeFromTop();
+
         void onSwipeFromBottom();
+
         void onSwipeFromRight();
+
         void onDebug();
     }
 }

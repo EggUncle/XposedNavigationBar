@@ -101,6 +101,8 @@ public class PhoneSatatusBarHook {
                             @Override
                             public void onReceive(Context context, Intent intent) {
                                 int type = intent.getIntExtra(ConstantStr.TYPE, -1);
+                                View navbarView = (View) XposedHelpers.getObjectField(param.thisObject, "mNavigationBarView");
+                                WindowManager wm = (WindowManager) XposedHelpers.getObjectField(param.thisObject, "mWindowManager");
                                 switch (type) {
                                     case ConstantStr.CLEAR_NOTIFICATIONS:
                                         XposedHelpers.callMethod(param.thisObject, "clearAllNotifications");
@@ -109,18 +111,18 @@ public class PhoneSatatusBarHook {
                                         XposedHelpers.callMethod(param.thisObject, "toggleRecentApps");
                                         break;
                                     case ConstantStr.HIDE_NAVBAR: {
-                                        View navbarView = (View) XposedHelpers.getObjectField(param.thisObject, "mNavigationBarView");
                                         if (navbarView.isAttachedToWindow()) {
-                                            WindowManager wm = (WindowManager) XposedHelpers.getObjectField(param.thisObject, "mWindowManager");
-                                            wm.removeView(navbarView);
+                                            wm.removeViewImmediate(navbarView);
                                         }
+
                                     }
                                     break;
                                     case ConstantStr.SHOW_NAVBAR: {
-                                        View navbarView = (View) XposedHelpers.getObjectField(param.thisObject, "mNavigationBarView");
                                         if (!navbarView.isAttachedToWindow()) {
-                                            WindowManager wm = (WindowManager) XposedHelpers.getObjectField(param.thisObject, "mWindowManager");
-                                            wm.addView(navbarView, (ViewGroup.LayoutParams) XposedHelpers.callMethod(param.thisObject, "getNavigationBarLayoutParams"));
+                                            XposedHelpers.callMethod(param.thisObject,"prepareNavigationBarView");
+                                            wm.addView(navbarView,
+                                                    (ViewGroup.LayoutParams) XposedHelpers.callMethod(param.thisObject,
+                                                            "getNavigationBarLayoutParams"));
                                         }
                                     }
                                     break;
