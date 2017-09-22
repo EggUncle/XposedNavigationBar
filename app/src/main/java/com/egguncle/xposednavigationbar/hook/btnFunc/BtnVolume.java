@@ -19,22 +19,9 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.media.AudioManager;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.LightAndVolumeController;
-import com.egguncle.xposednavigationbar.hook.hookFunc.VolumeController;
-import com.egguncle.xposednavigationbar.hook.util.XpLog;
-
-import de.robv.android.xposed.XposedBridge;
 
 /**
  * Created by egguncle on 17-6-10.

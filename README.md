@@ -1,4 +1,7 @@
 # XposedNavigationBar
+
+![app_icon](https://github.com/EggUncle/Demo/blob/master/markdownimg/ic_launcher.png?raw=true)
+
 基于Xposed框架实现的导航栏功能拓展模块
 在导航栏中实现一个左划菜单，实现多种快捷功能
 代码基于GPL3.0协议开源
@@ -87,12 +90,12 @@ adb shell input swipe 100 1 100 500 300   模拟滑动事件 在x 100 y 1的位
 https://egguncle.github.io/2017/07/08/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6/
 https://egguncle.github.io/2017/08/27/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%89noticafition%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A2%E7%A9%B6%EF%BC%88%E4%BA%8C%EF%BC%89/#more
 
-## 快速备忘 ✓ 
+## 快速备忘 ✓
 弹出对话框以后输入备忘内容，并在通知栏上显示，但是对话框的弹出需要依附一个activity，在Xp框架hook导航栏后，获取的context是systemuiapplication，无法启动对话框，这里用了一个变通的方式解决这个问题：
 
 启动一个全透明背景的activity，并在这上面去显示对话框，这样看起来就有一种在桌面上凭空打开对话框的方法。
 
-## 息屏 ✓ 
+## 息屏 ✓
 这个功能的实现比较简单，阅读源码后发现gotosleep这个方法被hide了，解决方法也很简单，直接通过反射去调用即可。
 有朋友说需要长按电源键呼出关机等功能，先记下来。
 
@@ -132,14 +135,14 @@ https://egguncle.github.io/2017/08/27/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%8
 
 ## 手电筒
 
-## 三个本来的按钮 ✓ 
+## 三个本来的按钮 ✓
 back和home键使用按键模拟，都很简单的实现了，但是recent键没有对应的模拟code，所以使用了XposedHelpers.callMethod直接调用toggleRecentApps来实现的。
 ```java
   XposedHelpers.callMethod(PhoneSatatusBarHook.getPhoneStatusBar(), "toggleRecentApps");
 ```
 
 
-## 快捷启动应用 ✓ 
+## 快捷启动应用 ✓
 输入一个包名启动应用
 ```java
   public void launchActivity(Context context, String pkgName) {
@@ -149,7 +152,7 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
     }
 ```
 
-## 快捷启动一些快捷方式 ✓ 
+## 快捷启动一些快捷方式 ✓
 如绿色守护休眠并关屏等等，目前发现一个问题，如果被设置为快捷启动的app被冰箱冻结了，就无法启动并且会报错，是由于app被停用了，解决方法是root后通过pm enable packageName命令即可解冻（这个解决方案来源于一个酷安小伙伴的提示，原理应该和冰箱是一样的）
 
 ## 显示时间
@@ -212,3 +215,19 @@ Toast不能直接在子线程中使用，因为在其内部实现中使用了Han
 最近在做Android N上的适配，由于以前的快捷按钮设置的数据是用sharedpreference存储的，但是 N 禁止了sp的MODE_WORLD_READABLE模式，所以在尝试使用其他的方法，检索源码后发现这个模式检测是在contextimpl中的checkmode做的，目前将这个方法替换为空，即什么都不执行，这样虽然没报错，但是仍然没有获取到内容,检索源码以后没有在这个地方发现类似uid类的限制，可能在更深层次做了限制导致无法访问。可能要替换其他的方案做设置的保存，然后再等等7.0完整的框架发布后看看。
 
 关于sp在7.0上的问题做了一些妥协，7.0上的模块无法在开机后自动完成设置，需要手动设置一次（这个手动可以在系统启动的时候启动模块对应的一个activity或者是别的来进行一次初始化操作来避免手动设置，但是无法直接在systemuiapplication去通过读取sp来初始化了），但是这样有一个好处就是因为这个原因现在所有设置都是动态设置的了，不需要重启再生效。（这个方案现在进行了一次修改，在扩展数据为空的时候点击导航栏的小点会启动一个透明的activity，给systemuiapplication发送包含扩展数据广播来扩展数据，不需要用户进入app再次点按钮了。(2017-09-09 这个方案现在有了变动，现在是将targetSdkVersion调整至23来避免这个7.0新特性的影响)
+
+# Licence
+```
+Navigation bar function expansion module
+Copyright (C) 2017 egguncle cicadashadow@gmail.com
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+```

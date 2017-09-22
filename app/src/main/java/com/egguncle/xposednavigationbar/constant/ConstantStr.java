@@ -73,19 +73,6 @@ public class ConstantStr {
 
     public final static int FUNC_NAV_HIDE_CODE = 20;
 
-//    public final static String FUNC_DOWN = "下拉通知栏";
-//    public final static String FUNC_QUICK_NOTICE = "快速备忘";
-//    public final static String FUNC_SCREEN_OFF = "息屏";
-//    public final static String FUNC_CLEAR_NOTIFICATION = "清除通知";
-//    public final static String FUNC_CLEAR_MEM = "清理内存";
-//    public final static String FUNC_VOLUME = "调节声音";
-//    public final static String FUNC_LIGHT = "调节亮度";
-//    public final static String FUNC_HOME = "回到主导航栏";
-//    public final static String FUNC_START_ACTS="快捷启动应用菜单";
-//    public final static String FUNC_NEXT_PLAY="下一曲";
-//    public final static String FUN_PREVIOUS_PLAY="上一曲";
-//    public final static String FUNC_PLAY_MUSIC="音乐开始&暂停";
-
     public static final String HOME_POINT = "home_point";
     public static final String LEFT = "left";
     public static final String RIGHT = "right";

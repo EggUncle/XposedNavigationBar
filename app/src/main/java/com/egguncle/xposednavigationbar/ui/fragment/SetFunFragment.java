@@ -20,11 +20,14 @@ package com.egguncle.xposednavigationbar.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.egguncle.xposednavigationbar.MyApplication;
 import com.egguncle.xposednavigationbar.R;
@@ -49,7 +52,7 @@ public class SetFunFragment extends BaseFragment {
     private View parentView;
 
     private RcvHomeAdapter rcvHomeAdapter;
-    private ArrayList<ShortCut> shortCutList;
+    private static ArrayList<ShortCut> shortCutList;
 
     private SPUtil spUtil;
     private Context mContext;
@@ -59,9 +62,9 @@ public class SetFunFragment extends BaseFragment {
         mContext = MyApplication.getContext();
     }
 
-    public void setContext(Context context){
-        mContext=context;
-        if (rcvHomeAdapter!=null){
+    public void setContext(Context context) {
+        mContext = context;
+        if (rcvHomeAdapter != null) {
             rcvHomeAdapter.setContext(context);
         }
     }
@@ -121,16 +124,14 @@ public class SetFunFragment extends BaseFragment {
     }
 
     public void coverData(List<Integer> data) {
-        //将设置的都加到select中，remove notselect中对应内容
         for (Integer code : data) {
             Log.i(TAG, "onClick: " + code);
             addToShortCutList(code);
-            //   notSelectList.remove(s);
         }
         rcvHomeAdapter.notifyDataSetChanged();
     }
 
-    public  ArrayList<ShortCut> getShortCutCodes(){
+    public ArrayList<ShortCut> getShortCutCodes() {
         return shortCutList;
     }
 
@@ -151,9 +152,6 @@ public class SetFunFragment extends BaseFragment {
                 Collections.swap(shortCutList, srcPosition, targetPosition);
                 // 更新UI中的Item的位置，主要是给用户看到交互效果
                 rcvHomeAdapter.notifyItemMoved(srcPosition, targetPosition);
-//                for (ShortCut sc : shortCutList) {
-//                    Log.i(TAG, "onMove: " + sc.getName());
-//                }
                 Log.i(TAG, "onMove: ---");
                 return true;
             }

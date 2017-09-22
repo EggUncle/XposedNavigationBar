@@ -83,7 +83,7 @@ public class SPUtil {
      *
      * @param list
      */
-    public void saveShortCut(ArrayList<ShortCut> list) {
+    public synchronized void saveShortCut(ArrayList<ShortCut> list) {
         ShortCutData data = new ShortCutData();
         data.setData(list);
         Gson gson = new Gson();
@@ -98,7 +98,7 @@ public class SPUtil {
      *
      * @return
      */
-    public ArrayList<ShortCut> getAllShortCutData() {
+    public synchronized ArrayList<ShortCut> getAllShortCutData() {
         Gson gson = new Gson();
         ArrayList<ShortCut> list = new ArrayList<>();
         String data = mSharedPreferences.getString(SHORT_CUT_DATA, "");
@@ -106,7 +106,9 @@ public class SPUtil {
             return null;
         }
         List<ShortCut> saveData = gson.fromJson(data, ShortCutData.class).getData();
-        list.addAll(saveData);
+        if (saveData!=null){
+            list.addAll(saveData);
+        }
         return list;
     }
 

@@ -46,7 +46,7 @@ public class ShortCut implements Parcelable{
     //如果是shell快捷指令，则应该还有一个指令内容
     private String shellStr;
 
-    public ShortCut(){};
+    public ShortCut(){}
 
     protected ShortCut(Parcel in) {
         code = in.readInt();

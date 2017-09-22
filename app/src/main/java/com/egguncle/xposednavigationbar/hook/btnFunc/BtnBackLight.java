@@ -19,29 +19,10 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.os.PowerManager;
-import android.provider.Settings;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 
-import com.egguncle.xposednavigationbar.hook.hookFunc.BacklightController;
 import com.egguncle.xposednavigationbar.hook.hookFunc.LightAndVolumeController;
-import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 /**
@@ -49,7 +30,6 @@ import de.robv.android.xposed.XposedHelpers;
  */
 
 public class BtnBackLight extends LightAndVolumeController {
-   // private ViewGroup mRootGroup;
 
     public BtnBackLight() {
         super(LightAndVolumeController.LIGHT);
