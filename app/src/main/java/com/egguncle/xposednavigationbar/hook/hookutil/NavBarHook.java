@@ -60,11 +60,10 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class NavBarHook {
     private static BtnFuncFactory btnFuncFactory;
-    private static LinearLayout llUnderMainNavBar;
-    private static boolean expandStatusBarWithRoot;
-    private static LinearLayout llExtPage;
-    private static MusicControllerPanel musicPanel;
-    private static ViewPager vpXphook;
+
+    private static MusicControllerPanel musicControllerPanel;
+    private static LinearLayout exNavbar;
+    private static LinearLayout onHomeNavbar;
 
     public static void hook(ClassLoader classLoader) throws Throwable {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
@@ -88,7 +87,7 @@ public class NavBarHook {
                 super.afterHookedMethod(param);
                 FrameLayout navbar = (FrameLayout) XposedHelpers.getObjectField(param.thisObject, "mRot0");
                 FrameLayout navbarBtns = (FrameLayout) navbar.getChildAt(0);
-                hookNavBarFunc(navbar, navbarBtns);
+                hookNavBar(navbar, navbarBtns);
             }
         });
     }
@@ -110,50 +109,38 @@ public class NavBarHook {
                 ViewGroup rootView = (ViewGroup) mRotatedViews[Surface.ROTATION_0];
                 ViewGroup navBtnsRot0 = (ViewGroup) mRotatedViews[Surface.ROTATION_0]
                         .findViewById(res.getIdentifier("nav_buttons", "id", "com.android.systemui"));
-                hookNavBarFunc(rootView, navBtnsRot0);
+                hookNavBar(rootView, navBtnsRot0);
             }
         });
     }
 
-    /**
-     * 基础的hook方法
-     *
-     * @param rootView
-     * @param navbarView
-     */
-    private static void hookNavBarFunc(ViewGroup rootView, final ViewGroup navbarView) {
+    private static void hookNavBar(ViewGroup rootView, ViewGroup navbarView) {
         Context context = rootView.getContext();
+        ViewPager vpXpHook = new ViewPager(context);
 
-        //初始化剪贴板监听
-        MyClipBoard.startListenClipboard(context);
-        //初始化广播接收器
+        exNavbar = new LinearLayout(context);
+        musicControllerPanel = new MusicControllerPanel(context);
+        onHomeNavbar = new LinearLayout(context);
+
+        initExNavbar(vpXpHook, exNavbar);
+        initHomeNavbar(onHomeNavbar, vpXpHook);
+        initMusicPanel(musicControllerPanel);
+        initVpHook(vpXpHook, navbarView, exNavbar, musicControllerPanel, onHomeNavbar);
+
         initBroadcast(context);
+        initClipBoardListener(context);
 
-        LinearLayout parentView = new LinearLayout(context);
-        //加入一个viewpager，第一页为空，是导航栏本身的功能
-        vpXphook = new ViewPager(context);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
+        rootView.addView(vpXpHook, 0, params);
+    }
 
-        parentView.addView(vpXphook);
-
-        //初始化左边的整个音乐面板
-        musicPanel = new MusicControllerPanel(context);
-        musicPanel.setData(DataHook.mapImgRes, DataHook.iconScale);
-        musicPanel.initPanel();
-
-        initHomePoint(context, vpXphook);
-
-
-        //viewpage的第二页
-        llExtPage = new LinearLayout(context);
-        llExtPage.setOrientation(LinearLayout.HORIZONTAL);
-        llExtPage.setGravity(Gravity.CENTER_VERTICAL);
-
-        addBtnToNavbar();
-        //将这些布局都添加到viewpageadapter中
+    private static void initVpHook(final ViewPager vpXpHook, final ViewGroup navbarView,
+                                   final ViewGroup exNavbar, ViewGroup musicPanel, ViewGroup onHomeNavbar) {
         final List<View> list = new ArrayList<View>();
         list.add(musicPanel);
-        list.add(llUnderMainNavBar);
-        list.add(llExtPage);
+        list.add(onHomeNavbar);
+        list.add(exNavbar);
 
         PagerAdapter pagerAdapter = new PagerAdapter() {
             @Override
@@ -177,8 +164,8 @@ public class NavBarHook {
                 container.removeView(list.get(position));
             }
         };
-        vpXphook.setAdapter(pagerAdapter);
-        vpXphook.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        vpXpHook.setAdapter(pagerAdapter);
+        vpXpHook.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -187,15 +174,13 @@ public class NavBarHook {
             @Override
             public void onPageSelected(int position) {
                 if (position == 1) {
-                    //当移动到第一页的时候，显示出导航栏，上升动画
                     XpLog.i("apper NavigationBar");
                     navbarView.setVisibility(View.VISIBLE);
                 } else {
-                    //当移动到非第一页的时候，隐藏导航栏本身的功能，来实现自己的一些功能。
                     XpLog.i("hide NavigationBar");
                     navbarView.setVisibility(View.GONE);
-                    if (llExtPage.getChildCount() == 0) {
-                        vpXphook.setCurrentItem(1);
+                    if (exNavbar.getChildCount() == 0) {
+                        vpXpHook.setCurrentItem(1);
                     }
                 }
             }
@@ -205,145 +190,109 @@ public class NavBarHook {
 
             }
         });
-        vpXphook.setCurrentItem(1);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
-        rootView.addView(parentView, 0, params);
+        vpXpHook.setCurrentItem(1);
     }
 
-    /**
-     */
-    private static void addBtnToNavbar(){
-        btnFuncFactory = new BtnFuncFactory(vpXphook, llExtPage);
-        for (ShortCut sc : DataHook.shortCutList) {
-            btnFuncFactory.createBtnAndSetFunc(llExtPage, sc, DataHook.iconScale);
-        }
-    }
+    private static void initHomeNavbar(LinearLayout homeNavbar, final ViewPager vp) {
+        XpLog.i("initHomeNavbar");
+        Context context = homeNavbar.getContext();
 
-    /**
-     * 初始化主导航栏上面的小点
-     */
-    private static void initHomePoint(Context context, final ViewPager vpXphook) {
-        //第一个界面，与原本的导航栏重合，实际在导航栏的下层
-        llUnderMainNavBar = new LinearLayout(context);
-        //用于呼出整个扩展导航栏的一个小点
         ImageButton btnCall = new ImageButton(context);
         btnCall.setImageBitmap(ImageUtil.byte2Bitmap(DataHook.mapImgRes.get(ConstantStr.FUNC_SMALL_POINT_CODE)));
         btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
         btnCall.setBackgroundColor(Color.alpha(255));
-        LinearLayout.LayoutParams line1Params = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        llUnderMainNavBar.addView(btnCall, line1Params);
-        setHomePointPosition(DataHook.homePointPosition);
+        homeNavbar.addView(btnCall, params);
 
-        //点击这个按钮，跳转到扩展部分
+        setHomePointPosition(homeNavbar);
+
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vpXphook.setCurrentItem(2);
+                vp.setCurrentItem(2);
             }
         });
-
     }
 
-    public static void setHomePointPosition(int position) {
-        ImageButton pointbtn = (ImageButton) llUnderMainNavBar.getChildAt(0);
+    private static void initMusicPanel(LinearLayout musicPanel) {
+        Context context = musicPanel.getContext();
+        musicControllerPanel = new MusicControllerPanel(context);
+        musicControllerPanel.initPanel();
+    }
+
+    private static void initExNavbar(ViewPager vpXpHook, LinearLayout exNavbar) {
+        btnFuncFactory = new BtnFuncFactory(vpXpHook, exNavbar);
+        for (ShortCut sc : DataHook.shortCutList) {
+            btnFuncFactory.createBtnAndSetFunc(exNavbar, sc);
+        }
+    }
+
+    private static void initBroadcast(Context context) {
+        IntentFilter dataFilter = new IntentFilter();
+        dataFilter.addAction(XpNavBarAction.ACT_NAV_BAR_DATA);
+        BroadcastReceiver navbarDataReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                try {
+                    XpNavBarSetting setting = intent.getParcelableExtra("data");
+                    updateNavbarData(context, setting);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+            }
+        };
+        context.registerReceiver(navbarDataReceiver, dataFilter);
+    }
+
+
+    private static void initClipBoardListener(Context context) {
+        MyClipBoard.startListenClipboard(context);
+    }
+
+    public static void setHomePointPosition(LinearLayout homeNavbar) {
+        int position = DataHook.homePointPosition;
+        ImageButton pointbtn = (ImageButton) homeNavbar.getChildAt(0);
         if (position == SPUtil.LEFT) {
-            llUnderMainNavBar.setGravity(Gravity.LEFT);
+            homeNavbar.setGravity(Gravity.LEFT);
         } else if (position == SPUtil.RIGHT) {
-            llUnderMainNavBar.setGravity(Gravity.RIGHT);
+            homeNavbar.setGravity(Gravity.RIGHT);
         } else if (position == SPUtil.DISMISS) {
             pointbtn.setVisibility(View.GONE);
         }
     }
 
-
-    /**
-     * 初始化广播，用于进程间通信
-     *
-     * @param context
-     */
-    private static void initBroadcast(Context context) {
-        IntentFilter dataFilter = new IntentFilter();
-        dataFilter.addAction(XpNavBarAction.ACT_NAV_BAR_DATA);
-        NavbarDataReceiver navbarDataReceiver = new NavBarHook.NavbarDataReceiver();
-        context.registerReceiver(navbarDataReceiver, dataFilter);
-    }
-
-    private static class NavbarDataReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //在更新以后有些用户没有进行重启，而直接进行了新功能的添加，app部分得到了更新，
-            //但是hook部分的更新需要重启后才生效，所以这里做一个异常捕获操作
-            try {
-                XpNavBarSetting setting = intent.getParcelableExtra("data");
-                xpNavBarDataAnalysis(context, setting);
-            } catch (Exception e) {
-                XpLog.e(e);
-            }
-        }
-    }
-
-    /**
-     * 解析xpnvbarsetting的内容
-     *
-     * @param context
-     * @param setting
-     */
-    public static void xpNavBarDataAnalysis(Context context, XpNavBarSetting setting) {
-        List<ShortCut> list = setting.getShortCutData();
-        int iconSize = setting.getIconSize();
+    private static void updateNavbarData(Context context, XpNavBarSetting setting) {
+        List<ShortCut> shortCutData = setting.getShortCutData();
+        int iconScale = setting.getIconSize();
         int homePosition = setting.getHomePointPosition();
         boolean rootDown = setting.isRootDown();
         int clearMemLevel = setting.getClearMenLevel();
         boolean chameleonNavbar = setting.isChameleonNavbar();
         int navbarHeight = setting.getNavbarHeight();
-        updateNavBar(context, list, homePosition, iconSize,
-                rootDown, clearMemLevel, chameleonNavbar, navbarHeight);
-    }
 
-    /**
-     * 根据获取到的数据来更新导航栏
-     *
-     * @param shortCutData
-     * @param homePointPosition
-     * @param iconSize
-     * @param rootDown
-     */
-    public static void updateNavBar(Context context,
-                                    List<ShortCut> shortCutData,
-                                    int homePointPosition,
-                                    int iconSize,
-                                    boolean rootDown,
-                                    int clearMemLevel,
-                                    boolean chameleonNavbar,
-                                    int navbarHeight) {
+        setHomePointPosition(onHomeNavbar);
+        DataHook.rootDown = rootDown;
+        DataHook.iconScale = iconScale;
+        DataHook.clearMenLevel = clearMemLevel;
+        DataHook.chameleonNavbar = chameleonNavbar;
+        DataHook.navbarHeight = navbarHeight;
+        DataHook.homePointPosition = homePosition;
+        musicControllerPanel.updateIconSize();
+
         btnFuncFactory.clearAllBtn();
         if (shortCutData != null && shortCutData.size() != 0) {
             DataHook.shortCutList = shortCutData;
             for (ShortCut sc : shortCutData) {
-                btnFuncFactory.createBtnAndSetFunc(llExtPage, sc, iconSize);
+                btnFuncFactory.createBtnAndSetFunc(exNavbar, sc);
             }
         }
-        musicPanel.updateIconSize(iconSize);
-        setHomePointPosition(homePointPosition);
-        expandStatusBarWithRoot = rootDown;
-        DataHook.clearMenLevel = clearMemLevel;
-        DataHook.chameleonNavbar = chameleonNavbar;
-        DataHook.navbarHeight=navbarHeight;
 
-        if (DataHook.navbarHeight!=navbarHeight){
-            Intent intent=new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
-            intent.putExtra(ConstantStr.TYPE,ConstantStr.NAVBAR_H);
-            intent.putExtra(ConstantStr.NAVBAR_HEIGHT,navbarHeight);
+        if (DataHook.navbarHeight != navbarHeight) {
+            Intent intent = new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
+            intent.putExtra(ConstantStr.TYPE, ConstantStr.NAVBAR_H);
+            intent.putExtra(ConstantStr.NAVBAR_HEIGHT, navbarHeight);
             context.sendBroadcast(intent);
         }
     }
-
-
-    public static boolean isExpandStatusBarWithRoot() {
-        return expandStatusBarWithRoot;
-    }
-
 }

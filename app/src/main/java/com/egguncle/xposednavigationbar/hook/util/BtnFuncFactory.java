@@ -64,9 +64,18 @@ public class BtnFuncFactory {
     private ViewGroup mllExtPage;
 
     public BtnFuncFactory(ViewPager viewPager, ViewGroup llExtPage) {
-        mMapImgRes =  DataHook.mapImgRes;
+        mMapImgRes = DataHook.mapImgRes;
         mViewPager = viewPager;
         mllExtPage = llExtPage;
+
+        if (mMapImgRes == null) {
+            XpLog.i("map img res is null");
+        }
+    }
+
+    public BtnFuncFactory(ViewGroup exNavbar) {
+        mllExtPage = exNavbar;
+        mMapImgRes = DataHook.mapImgRes;
     }
 
 
@@ -141,9 +150,9 @@ public class BtnFuncFactory {
      *
      * @param line
      * @param sc
-     * @param iconsize
      */
-    public void createBtnAndSetFunc(LinearLayout line, ShortCut sc, int iconsize) {
+    public void createBtnAndSetFunc(LinearLayout line, ShortCut sc) {
+        int iconScale = DataHook.iconScale;
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
@@ -151,17 +160,15 @@ public class BtnFuncFactory {
 
         Context context = line.getContext();
         ImageView btn = new ImageView(context);
-//        Space sp1 = new Space(context);
-//        Space sp2 = new Space(context);
 
         String iconPath = sc.getIconPath();
         Bitmap iconBitmap = null;
         if (iconPath != null) {
-            iconBitmap = ImageUtil.zoomBitmap(iconPath, iconsize);
+            iconBitmap = ImageUtil.zoomBitmap(iconPath, iconScale);
         }
         if (iconBitmap == null) {
             iconBitmap = ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
-            iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconsize);
+            iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconScale);
         }
         btn.setImageBitmap(iconBitmap);
 
@@ -175,9 +182,7 @@ public class BtnFuncFactory {
         btn.setOnClickListener(getBtnFuncOfName(sc));
         btn.setOnLongClickListener(getBtnLongFuncOfName(sc.getCode()));
 
-        //  line.addView(sp1, p);
         line.addView(btn, p);
-        // line.addView(sp2, p);
     }
 
     public void clearAllBtn() {

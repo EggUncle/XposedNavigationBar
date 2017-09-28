@@ -59,17 +59,20 @@ public class DataHook {
 
     public static int navbarHeight;
 
+    public static boolean rootDown;
+
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "xpnavbar");
         pre.makeWorldReadable();
 
         String json = pre.getString(ConstantStr.SHORT_CUT_DATA, "");
-        XpLog.i("short_cut_data "+json);
+        XpLog.i("short_cut_data " + json);
         expandStatusBarWithRoot = pre.getBoolean(SPUtil.ROOT_DOWN, false);
-        clearMenLevel=pre.getInt(SPUtil.CLEAR_MEM_LEVEL,200);
+        clearMenLevel = pre.getInt(SPUtil.CLEAR_MEM_LEVEL, 200);
         //获取主导行栏小点的位置
         homePointPosition = pre.getInt(ConstantStr.HOME_POINT, 0);
-        chameleonNavbar=pre.getBoolean(SPUtil.CHAMELEON_NAVBAR,false);
+        chameleonNavbar = pre.getBoolean(SPUtil.CHAMELEON_NAVBAR, false);
+        rootDown = pre.getBoolean(SPUtil.ROOT_DOWN, false);
         //获取快捷按钮设置数据
         Gson gson = new Gson();
         //在第一次激活重新启动的时候，可能因为没有设置任何快捷按钮，导致这里报错
@@ -82,7 +85,7 @@ public class DataHook {
         //获取图片缩放大小
         iconScale = pre.getInt(ConstantStr.ICON_SIZE, 40);
 
-        navbarHeight=pre.getInt(SPUtil.NAVBAR_HEIGHT,100);
+        navbarHeight = pre.getInt(SPUtil.NAVBAR_HEIGHT, 100);
 
         //加载图片资源文件
         Resources res = XModuleResources.createInstance(startupParam.modulePath, null);

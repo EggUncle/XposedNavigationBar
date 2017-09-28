@@ -28,8 +28,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
+import com.egguncle.xposednavigationbar.hook.hookutil.DataHook;
 import com.egguncle.xposednavigationbar.hook.hookutil.MainHookUtil;
+import com.egguncle.xposednavigationbar.hook.util.BtnFuncFactory;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
+import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
 import java.util.Map;
@@ -41,9 +44,6 @@ import java.util.Map;
  */
 
 public class MusicControllerPanel extends LinearLayout {
-    private Map<Integer, byte[]> mMapImgRes;
-    private int mIconScale;
-    private Context mContext;
 
     public MusicControllerPanel(Context context) {
         this(context, null);
@@ -56,83 +56,30 @@ public class MusicControllerPanel extends LinearLayout {
     public MusicControllerPanel(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setOrientation(HORIZONTAL);
-        this.mContext = context;
-    }
-
-    public void setData(Map<Integer, byte[]> mapImgRes, int iconScale) {
-        this.mMapImgRes = mapImgRes;
-        this.mIconScale = iconScale;
     }
 
     public void initPanel() {
-        initView(mContext, mMapImgRes, mIconScale);
-    }
+        BtnFuncFactory btnFuncFactory = new BtnFuncFactory(this);
 
+        ShortCut scPreMusic = new ShortCut();
+        ShortCut scPlayMusic = new ShortCut();
+        ShortCut scNextMusic = new ShortCut();
 
-    /**
-     * 初始化面板按钮
-     */
-    private void initView(Context context, Map<Integer, byte[]> mapImgRes, int iconScale) {
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        p.weight = 1;
-        p.gravity = Gravity.CENTER;
-        //   XpLog.i("====" + iconScale);
-        //  p.width= (int) (p.width*(iconScale/100.0));
-        ImageView previousBtn = new ImageView(context);
-        ImageView playBtn = new ImageView(context);
-        ImageView nextBtn = new ImageView(context);
+        scPreMusic.setCode(ConstantStr.FUNC_PREVIOUS_PLAY_CODE);
+        scPlayMusic.setCode(ConstantStr.FUNC_PLAY_MUSIC_CODE);
+        scNextMusic.setCode(ConstantStr.FUNC_NEXT_PLAY_CODE);
 
-        previousBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PREVIOUS_PLAY_CODE), iconScale));
-        playBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_PLAY_MUSIC_CODE), iconScale));
-        nextBtn.setImageBitmap(ImageUtil.zoomBitmap(mapImgRes.get(ConstantStr.FUNC_NEXT_PLAY_CODE), iconScale));
-
-        previousBtn.setScaleType(ImageView.ScaleType.CENTER);
-        playBtn.setScaleType(ImageView.ScaleType.CENTER);
-        nextBtn.setScaleType(ImageView.ScaleType.CENTER);
-
-        try {
-            previousBtn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
-            playBtn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
-            nextBtn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
-        } catch (Exception e) {
-            XpLog.e(e);
-        }
-
-
-        previousBtn.setOnClickListener(new BtnMusicController(BtnMusicController.PREVIOUS));
-        playBtn.setOnClickListener(new BtnMusicController(BtnMusicController.START_OR_STOP));
-        nextBtn.setOnClickListener(new BtnMusicController(BtnMusicController.NEXT));
-
-//        Space sp11= new Space(context);
-//        Space sp12 = new Space(context);
-//        Space sp21= new Space(context);
-//        Space sp22 = new Space(context);
-//        Space sp31= new Space(context);
-//        Space sp32 = new Space(context);
-
-        // this.addView(sp11,p);
-        this.addView(previousBtn, p);
-        //   this.addView(sp12,p);
-
-        //  this.addView(sp21,p);
-        this.addView(playBtn, p);
-        //    this.addView(sp22,p);
-
-        //    this.addView(sp31,p);
-        this.addView(nextBtn, p);
-        //   this.addView(sp32,p);
+        btnFuncFactory.createBtnAndSetFunc(this, scPreMusic);
+        btnFuncFactory.createBtnAndSetFunc(this, scPlayMusic);
+        btnFuncFactory.createBtnAndSetFunc(this, scNextMusic);
     }
 
     /**
      * 更新音乐控制面板的图标大小
-     *
-     * @param iconScale
      */
-    public void updateIconSize(int iconScale) {
+    public void updateIconSize() {
         this.removeAllViews();
-        initView(mContext, mMapImgRes, iconScale);
-        XpLog.i("update musicpanel iconscale:" + iconScale);
+        initPanel();
     }
 
 }
