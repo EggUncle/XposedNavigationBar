@@ -24,7 +24,6 @@ import android.view.View;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-21.

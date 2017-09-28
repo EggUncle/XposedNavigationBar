@@ -31,28 +31,30 @@ public class CodeToFuncName {
     private Context mContext;
     private static String[] funcNames;
     private static CodeToFuncName mCodeToFuncName;
-    private CodeToFuncName(Context context){
+
+    private CodeToFuncName(Context context) {
         //避免内存泄漏
-        this.mContext=context.getApplicationContext();
-        funcNames=mContext.getResources().getStringArray(R.array.shortcut_names);
+        this.mContext = context.getApplicationContext();
+        funcNames = mContext.getResources().getStringArray(R.array.shortcut_names);
     }
 
-    public static CodeToFuncName getInstance(Context context){
-        if (mCodeToFuncName==null){
-            mCodeToFuncName=new CodeToFuncName(context);
+    public static CodeToFuncName getInstance(Context context) {
+        if (mCodeToFuncName == null) {
+            mCodeToFuncName = new CodeToFuncName(context);
         }
         return mCodeToFuncName;
     }
 
     /**
      * 通过功能值获得该功能的名字
+     *
      * @param code
      * @return
      */
-    public static String getFuncNameFromCode(int code){
-        if (funcNames.length>code){
+    public String getFuncNameFromCode(int code) {
+        if (funcNames.length > code) {
             return funcNames[code];
-        }else{
+        } else {
             return "";
         }
     }

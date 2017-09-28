@@ -18,6 +18,8 @@
 
 package com.egguncle.xposednavigationbar.ui.activity;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -41,6 +43,8 @@ import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
+import com.egguncle.xposednavigationbar.hook.hookutil.DataHook;
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.model.XpNavBarSetting;
 import com.egguncle.xposednavigationbar.ui.fragment.MomoFragment;

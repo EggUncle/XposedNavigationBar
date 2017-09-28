@@ -64,6 +64,7 @@ public class NavBarHook {
     private static boolean expandStatusBarWithRoot;
     private static LinearLayout llExtPage;
     private static MusicControllerPanel musicPanel;
+    private static ViewPager vpXphook;
 
     public static void hook(ClassLoader classLoader) throws Throwable {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
@@ -130,7 +131,7 @@ public class NavBarHook {
 
         LinearLayout parentView = new LinearLayout(context);
         //加入一个viewpager，第一页为空，是导航栏本身的功能
-        final ViewPager vpXphook = new ViewPager(context);
+        vpXphook = new ViewPager(context);
 
         parentView.addView(vpXphook);
 
@@ -147,10 +148,7 @@ public class NavBarHook {
         llExtPage.setOrientation(LinearLayout.HORIZONTAL);
         llExtPage.setGravity(Gravity.CENTER_VERTICAL);
 
-        btnFuncFactory = new BtnFuncFactory(vpXphook, llExtPage, DataHook.mapImgRes);
-        for (ShortCut sc : DataHook.shortCutList) {
-            btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, DataHook.iconScale);
-        }
+        addBtnToNavbar();
         //将这些布局都添加到viewpageadapter中
         final List<View> list = new ArrayList<View>();
         list.add(musicPanel);
@@ -211,6 +209,15 @@ public class NavBarHook {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                 ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
         rootView.addView(parentView, 0, params);
+    }
+
+    /**
+     */
+    private static void addBtnToNavbar(){
+        btnFuncFactory = new BtnFuncFactory(vpXphook, llExtPage);
+        for (ShortCut sc : DataHook.shortCutList) {
+            btnFuncFactory.createBtnAndSetFunc(llExtPage, sc, DataHook.iconScale);
+        }
     }
 
     /**
@@ -316,7 +323,7 @@ public class NavBarHook {
         if (shortCutData != null && shortCutData.size() != 0) {
             DataHook.shortCutList = shortCutData;
             for (ShortCut sc : shortCutData) {
-                btnFuncFactory.createBtnAndSetFunc(context, llExtPage, sc, iconSize);
+                btnFuncFactory.createBtnAndSetFunc(llExtPage, sc, iconSize);
             }
         }
         musicPanel.updateIconSize(iconSize);
@@ -326,10 +333,12 @@ public class NavBarHook {
         DataHook.chameleonNavbar = chameleonNavbar;
         DataHook.navbarHeight=navbarHeight;
 
-        Intent intent=new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
-        intent.putExtra(ConstantStr.TYPE,ConstantStr.NAVBAR_H);
-        intent.putExtra(ConstantStr.NAVBAR_HEIGHT,navbarHeight);
-        context.sendBroadcast(intent);
+        if (DataHook.navbarHeight!=navbarHeight){
+            Intent intent=new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
+            intent.putExtra(ConstantStr.TYPE,ConstantStr.NAVBAR_H);
+            intent.putExtra(ConstantStr.NAVBAR_HEIGHT,navbarHeight);
+            context.sendBroadcast(intent);
+        }
     }
 
 

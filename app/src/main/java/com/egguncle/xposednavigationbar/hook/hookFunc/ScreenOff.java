@@ -21,10 +21,6 @@ package com.egguncle.xposednavigationbar.hook.hookFunc;
 import android.content.Context;
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
-
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Created by egguncle on 17-6-10.
  */

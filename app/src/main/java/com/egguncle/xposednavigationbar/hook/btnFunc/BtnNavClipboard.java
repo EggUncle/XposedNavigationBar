@@ -20,11 +20,9 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavClipboard;
 import com.egguncle.xposednavigationbar.hook.util.MyClipBoard;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.util.ArrayList;

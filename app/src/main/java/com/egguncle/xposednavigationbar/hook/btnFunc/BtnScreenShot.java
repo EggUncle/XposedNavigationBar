@@ -19,19 +19,8 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Handler;
-import android.view.View;
-import android.widget.Toast;
 
-import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenShot;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
-import com.egguncle.xposednavigationbar.hook.util.XpLog;
-
-import java.io.File;
-import java.io.IOException;
 
 
 /**

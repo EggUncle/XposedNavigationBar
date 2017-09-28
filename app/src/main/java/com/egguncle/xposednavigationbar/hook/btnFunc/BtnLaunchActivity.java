@@ -25,7 +25,6 @@ import android.content.pm.PackageManager;
 import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.LaunchAct;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 /**
  * Created by egguncle on 17-6-10.

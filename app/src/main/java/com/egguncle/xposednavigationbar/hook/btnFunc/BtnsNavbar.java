@@ -21,14 +21,8 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.view.KeyEvent;
-import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
-import com.egguncle.xposednavigationbar.hook.hookutil.PhoneSatatusBarHook;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
-
-
-import de.robv.android.xposed.XposedHelpers;
 
 /**
  * Created by egguncle on 17-6-21.

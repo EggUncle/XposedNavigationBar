@@ -23,14 +23,8 @@ import android.content.Context;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScreenOff;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XposedHelpers;
 

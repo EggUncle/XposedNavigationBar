@@ -21,10 +21,8 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.ScannerQRcode;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 

@@ -20,11 +20,9 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.hookFunc.StartActPanel;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 import static com.egguncle.xposednavigationbar.constant.XpNavBarAction.ACTION_START_ACT;
 

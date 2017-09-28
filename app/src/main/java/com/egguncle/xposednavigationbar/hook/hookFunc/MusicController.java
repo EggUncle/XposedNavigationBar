@@ -20,8 +20,6 @@ package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.view.View;
 
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
-
 /**
  * Created by egguncle on 17-6-12.
  */

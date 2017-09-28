@@ -46,6 +46,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnsNavbar;
 import com.egguncle.xposednavigationbar.hook.hookFunc.LightAndVolumeController;
+import com.egguncle.xposednavigationbar.hook.hookutil.DataHook;
 import com.egguncle.xposednavigationbar.hook.hookutil.MainHookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
@@ -62,9 +63,8 @@ public class BtnFuncFactory {
     private Map<Integer, byte[]> mMapImgRes;
     private ViewGroup mllExtPage;
 
-    public BtnFuncFactory(ViewPager viewPager, ViewGroup llExtPage,
-                          Map<Integer, byte[]> mapImgRes) {
-        mMapImgRes = mapImgRes;
+    public BtnFuncFactory(ViewPager viewPager, ViewGroup llExtPage) {
+        mMapImgRes =  DataHook.mapImgRes;
         mViewPager = viewPager;
         mllExtPage = llExtPage;
     }
@@ -139,16 +139,17 @@ public class BtnFuncFactory {
     /**
      * 创建按钮并且设置对应功能
      *
-     * @param context
      * @param line
      * @param sc
+     * @param iconsize
      */
-    public void createBtnAndSetFunc(Context context, LinearLayout line, ShortCut sc, int iconsize) {
+    public void createBtnAndSetFunc(LinearLayout line, ShortCut sc, int iconsize) {
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.weight = 1;
         p.gravity = Gravity.CENTER;
 
+        Context context = line.getContext();
         ImageView btn = new ImageView(context);
 //        Space sp1 = new Space(context);
 //        Space sp2 = new Space(context);
@@ -160,8 +161,8 @@ public class BtnFuncFactory {
         }
         if (iconBitmap == null) {
             iconBitmap = ImageUtil.byte2Bitmap(mMapImgRes.get(sc.getCode()));
+            iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconsize);
         }
-        iconBitmap = ImageUtil.zommBitmap(iconBitmap, iconsize);
         btn.setImageBitmap(iconBitmap);
 
         //给按钮设置水波纹点击背景，因为7.0上有一些rom有获取资源的限制所以这个功能暂时只在7.0以下的版本使用
@@ -174,9 +175,9 @@ public class BtnFuncFactory {
         btn.setOnClickListener(getBtnFuncOfName(sc));
         btn.setOnLongClickListener(getBtnLongFuncOfName(sc.getCode()));
 
-      //  line.addView(sp1, p);
+        //  line.addView(sp1, p);
         line.addView(btn, p);
-       // line.addView(sp2, p);
+        // line.addView(sp2, p);
     }
 
     public void clearAllBtn() {

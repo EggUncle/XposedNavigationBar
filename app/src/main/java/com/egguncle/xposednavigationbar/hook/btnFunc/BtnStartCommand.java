@@ -19,12 +19,8 @@
 package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.util.Log;
-import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.StartCommand;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
-
-import java.io.IOException;
 
 /**
  * Created by egguncle on 17-6-25.

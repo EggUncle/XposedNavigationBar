@@ -20,10 +20,8 @@ package com.egguncle.xposednavigationbar.hook.btnFunc;
 
 import android.app.Instrumentation;
 import android.view.KeyEvent;
-import android.view.View;
 
 import com.egguncle.xposednavigationbar.hook.hookFunc.MusicController;
-import com.egguncle.xposednavigationbar.hook.util.ScheduledThreadPool;
 
 
 /**
