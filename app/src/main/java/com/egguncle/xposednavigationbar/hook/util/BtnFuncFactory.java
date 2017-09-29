@@ -19,9 +19,10 @@
 package com.egguncle.xposednavigationbar.hook.util;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.drawable.RippleDrawable;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.Space;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +46,7 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnVolume;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnWeChatScanner;
 import com.egguncle.xposednavigationbar.hook.btnFunc.BtnsNavbar;
-import com.egguncle.xposednavigationbar.hook.hookFunc.LightAndVolumeController;
 import com.egguncle.xposednavigationbar.hook.hookutil.DataHook;
-import com.egguncle.xposednavigationbar.hook.hookutil.MainHookUtil;
 import com.egguncle.xposednavigationbar.model.ShortCut;
 import com.egguncle.xposednavigationbar.util.ImageUtil;
 
@@ -62,6 +61,7 @@ public class BtnFuncFactory {
     //用于加载图片资源
     private Map<Integer, byte[]> mMapImgRes;
     private ViewGroup mllExtPage;
+    private RippleDrawable ripple;
 
     public BtnFuncFactory(ViewPager viewPager, ViewGroup llExtPage) {
         mMapImgRes = DataHook.mapImgRes;
@@ -71,11 +71,15 @@ public class BtnFuncFactory {
         if (mMapImgRes == null) {
             XpLog.i("map img res is null");
         }
+        ColorStateList colorStateList = createColorStateList(0xffffffff, 0xffffff00, 0xff0000ff, 0xffff0000);
+        ripple = new RippleDrawable(colorStateList, null, null);
     }
 
     public BtnFuncFactory(ViewGroup exNavbar) {
         mllExtPage = exNavbar;
         mMapImgRes = DataHook.mapImgRes;
+        ColorStateList colorStateList = createColorStateList(0xffffffff, 0xffffff00, 0xff0000ff, 0xffff0000);
+        ripple = new RippleDrawable(colorStateList, null, null);
     }
 
 
@@ -172,12 +176,7 @@ public class BtnFuncFactory {
         }
         btn.setImageBitmap(iconBitmap);
 
-        //给按钮设置水波纹点击背景，因为7.0上有一些rom有获取资源的限制所以这个功能暂时只在7.0以下的版本使用
-        try {
-            btn.setBackground(context.getResources().getDrawable(MainHookUtil.getBtnBgResId(), context.getTheme()));
-        } catch (Exception e) {
-            XpLog.e(e);
-        }
+        btn.setBackground(ripple);
         btn.setScaleType(ImageView.ScaleType.CENTER);
         btn.setOnClickListener(getBtnFuncOfName(sc));
         btn.setOnLongClickListener(getBtnLongFuncOfName(sc.getCode()));
@@ -189,5 +188,16 @@ public class BtnFuncFactory {
         mllExtPage.removeAllViews();
     }
 
-
+    private ColorStateList createColorStateList(int normal, int pressed, int focused, int unable) {
+        int[] colors = new int[]{pressed, focused, normal, focused, unable, normal};
+        int[][] states = new int[6][];
+        states[0] = new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled};
+        states[1] = new int[]{android.R.attr.state_enabled, android.R.attr.state_focused};
+        states[2] = new int[]{android.R.attr.state_enabled};
+        states[3] = new int[]{android.R.attr.state_focused};
+        states[4] = new int[]{android.R.attr.state_window_focused};
+        states[5] = new int[]{};
+        ColorStateList colorList = new ColorStateList(states, colors);
+        return colorList;
+    }
 }
