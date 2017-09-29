@@ -61,7 +61,6 @@ public class BtnFuncFactory {
     //用于加载图片资源
     private Map<Integer, byte[]> mMapImgRes;
     private ViewGroup mllExtPage;
-    private RippleDrawable ripple;
 
     public BtnFuncFactory(ViewPager viewPager, ViewGroup llExtPage) {
         mMapImgRes = DataHook.mapImgRes;
@@ -71,15 +70,11 @@ public class BtnFuncFactory {
         if (mMapImgRes == null) {
             XpLog.i("map img res is null");
         }
-        ColorStateList colorStateList = createColorStateList(0xffffffff, 0xffffff00, 0xff0000ff, 0xffff0000);
-        ripple = new RippleDrawable(colorStateList, null, null);
     }
 
     public BtnFuncFactory(ViewGroup exNavbar) {
         mllExtPage = exNavbar;
         mMapImgRes = DataHook.mapImgRes;
-        ColorStateList colorStateList = createColorStateList(0xffffffff, 0xffffff00, 0xff0000ff, 0xffff0000);
-        ripple = new RippleDrawable(colorStateList, null, null);
     }
 
 
@@ -176,6 +171,8 @@ public class BtnFuncFactory {
         }
         btn.setImageBitmap(iconBitmap);
 
+        ColorStateList colorStateList = createColorStateList(0xffffffff, 0xffffff00, 0xff0000ff, 0xffff0000);
+        RippleDrawable ripple = new RippleDrawable(colorStateList, null, null);
         btn.setBackground(ripple);
         btn.setScaleType(ImageView.ScaleType.CENTER);
         btn.setOnClickListener(getBtnFuncOfName(sc));
