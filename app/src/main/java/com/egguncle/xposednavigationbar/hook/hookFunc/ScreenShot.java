@@ -30,18 +30,18 @@ import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
  * Created by egguncle on 17-6-18.
  */
 
-public abstract class ScreenShot implements View.OnClickListener {
+public abstract class ScreenShot extends VibrateClick {
     protected Intent intent;
 
     protected abstract void screenshot(Context context);
 
     public ScreenShot() {
         intent = new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
-        intent.putExtra(ConstantStr.TYPE,ConstantStr.TAKE_SCREENSHOT);
+        intent.putExtra(ConstantStr.TYPE, ConstantStr.TAKE_SCREENSHOT);
     }
 
     @Override
-    public void onClick(final View v) {
+    void onVibrateClick(View v) {
         screenshot(v.getContext());
     }
 }

@@ -29,7 +29,7 @@ import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
  * Created by egguncle on 17-6-21.
  */
 
-public abstract class NavBarBtns implements View.OnClickListener, View.OnLongClickListener {
+public abstract class NavBarBtns extends VibrateClick implements View.OnLongClickListener {
     private int mType;
     public final static int BTN_BACK = 1;
     public final static int BTN_HOME = 2;
@@ -54,17 +54,17 @@ public abstract class NavBarBtns implements View.OnClickListener, View.OnLongCli
     public NavBarBtns(int type) {
         mType = type;
 
-        if (type==BTN_RECENT){
-            intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
-            intent.putExtra(ConstantStr.TYPE,ConstantStr.RECENT_TASKS);
-        }else if (type==BTN_HIDE){
-            intent=new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
-            intent.putExtra(ConstantStr.TYPE,ConstantStr.HIDE_NAVBAR);
+        if (type == BTN_RECENT) {
+            intent = new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+            intent.putExtra(ConstantStr.TYPE, ConstantStr.RECENT_TASKS);
+        } else if (type == BTN_HIDE) {
+            intent = new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
+            intent.putExtra(ConstantStr.TYPE, ConstantStr.HIDE_NAVBAR);
         }
     }
 
     @Override
-    public void onClick(View v) {
+    void onVibrateClick(View v) {
         switch (mType) {
             case BTN_BACK:
                 goBack();

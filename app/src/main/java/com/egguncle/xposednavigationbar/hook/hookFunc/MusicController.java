@@ -24,7 +24,7 @@ import android.view.View;
  * Created by egguncle on 17-6-12.
  */
 
-public abstract class MusicController implements View.OnClickListener {
+public abstract class MusicController extends VibrateClick {
     public final static int PREVIOUS = 1;
     public final static int START_OR_STOP = 2;
     public final static int NEXT = 3;
@@ -43,7 +43,7 @@ public abstract class MusicController implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    void onVibrateClick(View v) {
         new Thread(new Runnable() {
             @Override
             public void run() {

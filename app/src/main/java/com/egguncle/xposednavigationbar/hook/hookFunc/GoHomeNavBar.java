@@ -25,7 +25,7 @@ import android.view.View;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class GoHomeNavBar implements View.OnClickListener {
+public abstract class GoHomeNavBar extends VibrateClick {
     private ViewPager mViewPager;
 
     protected abstract void goHomeNavBar(ViewPager viewPager);
@@ -35,7 +35,7 @@ public abstract class GoHomeNavBar implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    void onVibrateClick(View v) {
         goHomeNavBar(mViewPager);
     }
 }

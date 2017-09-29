@@ -30,17 +30,21 @@ import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class ClearAllNotifications implements View.OnClickListener {
+public abstract class ClearAllNotifications extends VibrateClick {
     protected BtnStatusBarController btnStatusBarController;
+
     protected abstract void clearAllNotifications(Context context);
+
     protected Intent intent;
+
     public ClearAllNotifications() {
         btnStatusBarController = new BtnStatusBarController();
-        intent=new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
-        intent.putExtra(ConstantStr.TYPE,ConstantStr.CLEAR_NOTIFICATIONS);
+        intent = new Intent(XpNavBarAction.ACTION_PHONE_STATUSBAR);
+        intent.putExtra(ConstantStr.TYPE, ConstantStr.CLEAR_NOTIFICATIONS);
     }
+
     @Override
-    public void onClick(View v) {
+    void onVibrateClick(View v) {
         clearAllNotifications(v.getContext());
     }
 }

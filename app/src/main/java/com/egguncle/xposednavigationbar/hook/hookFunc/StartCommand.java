@@ -24,7 +24,7 @@ import android.view.View;
  * Created by egguncle on 17-6-25.
  */
 
-public abstract class StartCommand implements View.OnClickListener {
+public abstract class StartCommand extends VibrateClick {
     private String mCommand;
 
     protected abstract void startCommand(String command);
@@ -34,7 +34,7 @@ public abstract class StartCommand implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    void onVibrateClick(View v) {
         new Thread(new Runnable() {
             @Override
             public void run() {

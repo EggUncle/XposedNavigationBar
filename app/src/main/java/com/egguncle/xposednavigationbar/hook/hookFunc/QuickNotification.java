@@ -25,13 +25,12 @@ import android.view.View;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class QuickNotification implements View.OnClickListener {
+public abstract class QuickNotification extends VibrateClick {
 
     protected abstract void quickNotification(Context context);
 
     @Override
-    public void onClick(final View v) {
-                quickNotification(v.getContext());
-
+    void onVibrateClick(View v) {
+        quickNotification(v.getContext());
     }
 }

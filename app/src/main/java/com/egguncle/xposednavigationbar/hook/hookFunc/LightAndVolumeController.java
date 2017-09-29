@@ -42,7 +42,7 @@ import com.egguncle.xposednavigationbar.util.ImageUtil;
  * Created by egguncle on 17-9-20.
  */
 
-public abstract class LightAndVolumeController implements View.OnClickListener {
+public abstract class LightAndVolumeController extends VibrateClick {
     public static final int LIGHT = 1;
     public static final int VOLUME = 2;
 
@@ -69,7 +69,7 @@ public abstract class LightAndVolumeController implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    void onVibrateClick(View v) {
         showDialog(v.getContext());
     }
 

@@ -25,15 +25,14 @@ import android.view.View;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class ScreenOff implements View.OnClickListener, View.OnLongClickListener {
+public abstract class ScreenOff extends VibrateClick implements View.OnLongClickListener {
 
     protected abstract void screenOff(Context context);
 
     protected abstract void showPowerMenu(Context context);
 
     @Override
-
-    public void onClick(final View v) {
+    void onVibrateClick(View v) {
         screenOff(v.getContext());
     }
 

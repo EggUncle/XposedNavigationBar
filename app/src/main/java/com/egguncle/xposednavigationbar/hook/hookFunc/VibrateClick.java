@@ -19,23 +19,25 @@
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.view.View;
 
 /**
- * Created by egguncle on 17-6-10.
+ * Created by egguncle on 17-9-29.
  */
 
-public abstract class ClearBackground extends VibrateClick{
-    /**
-     * 清理后台 systemuiapplication这个进程没有killbrakground的权限
-     * ，去启动透明activity并执行这个方法了
-     *
-     * @param context
-     */
-    protected abstract void clearBackground(Context context);
+public abstract class VibrateClick implements View.OnClickListener {
+    private static Vibrator vibrator;
+
+    abstract void onVibrateClick(View v);
 
     @Override
-    void onVibrateClick(View v) {
-        clearBackground(v.getContext());
+    public void onClick(View v) {
+        if (vibrator == null) {
+            Context context = v.getContext();
+            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        }
+        vibrator.vibrate(20);
+        onVibrateClick(v);
     }
 }

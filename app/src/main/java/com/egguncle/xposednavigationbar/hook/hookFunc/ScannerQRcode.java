@@ -26,11 +26,11 @@ import android.view.View;
  * 扫描二维码
  */
 
-public abstract class ScannerQRcode implements View.OnClickListener{
-   protected abstract void scanQR(Context context);
+public abstract class ScannerQRcode extends VibrateClick {
+    protected abstract void scanQR(Context context);
 
     @Override
-    public void onClick(final View v) {
+    void onVibrateClick(final View v) {
         new Thread(new Runnable() {
             @Override
             public void run() {
