@@ -105,6 +105,7 @@
     <string name="chameleon_navbar">导航栏变色(测试)</string>
     <string name="chameleon_tip">这个功能目前不够稳定，可能导致某些应用无法打开</string>
     <string name="navbar_height">导航栏高度</string>
+    <string name="navbar_vibrate">震动</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>
@@ -124,8 +125,8 @@
         <item>返回键</item>
         <item>主页键</item>
         <item>最近任务键</item>
-        <item>剪贴板(测试)</item>
-        <item>shell指令(测试)</item>
-        <item>隐藏导航栏(测试)</item>
+        <item>剪贴板</item>
+        <item>shell指令(暂时停用)</item>
+        <item>隐藏导航栏</item>
     </string-array>
 </resources>

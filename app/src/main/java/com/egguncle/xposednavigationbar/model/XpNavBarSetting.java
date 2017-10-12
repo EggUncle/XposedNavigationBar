@@ -40,20 +40,22 @@ public class XpNavBarSetting implements Parcelable {
     private int mClearMenLevel;
     private boolean mChameleonNavbar;
     private int mNavbarHeight;
+    private boolean mVibrate;
 
     public final static int LEFT = 0;
     public final static int RIGHT = 1;
     public final static int DISMISS = 2;
 
     public XpNavBarSetting(List<ShortCut> shortCutData, int homePointPosition, int iconSize,
-                           boolean rootDown, int clearMenLevel, boolean chameleonNavbar, int navbarHeight) {
+                           boolean rootDown, int clearMenLevel, boolean chameleonNavbar, int navbarHeight, boolean vibrate) {
         mShortCutData = shortCutData;
         mHomePointPosition = homePointPosition;
         mIconSize = iconSize;
         mRootDown = rootDown;
         mClearMenLevel = clearMenLevel;
         mChameleonNavbar = chameleonNavbar;
-        mNavbarHeight=navbarHeight;
+        mNavbarHeight = navbarHeight;
+        mVibrate = vibrate;
     }
 
 
@@ -64,7 +66,8 @@ public class XpNavBarSetting implements Parcelable {
         mRootDown = in.readByte() != 0;
         mClearMenLevel = in.readInt();
         mChameleonNavbar = in.readByte() != 0;
-        mNavbarHeight=in.readInt();
+        mNavbarHeight = in.readInt();
+        mVibrate = in.readByte() != 0;
     }
 
     public static final Creator<XpNavBarSetting> CREATOR = new Creator<XpNavBarSetting>() {
@@ -104,7 +107,13 @@ public class XpNavBarSetting implements Parcelable {
         return mClearMenLevel;
     }
 
-    public int getNavbarHeight(){return mNavbarHeight;}
+    public int getNavbarHeight() {
+        return mNavbarHeight;
+    }
+
+    public boolean isVibrate() {
+        return mVibrate;
+    }
 
     @Override
     public int describeContents() {
@@ -120,5 +129,6 @@ public class XpNavBarSetting implements Parcelable {
         dest.writeInt(mClearMenLevel);
         dest.writeByte((byte) (mChameleonNavbar ? 1 : 0));
         dest.writeInt(mNavbarHeight);
+        dest.writeByte((byte) (mVibrate ? 1 : 0));
     }
 }

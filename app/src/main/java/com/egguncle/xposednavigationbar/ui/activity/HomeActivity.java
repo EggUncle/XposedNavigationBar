@@ -202,8 +202,9 @@ public class HomeActivity extends BaseActivity {
                 int clearMemLevel = spUtil.getClearMemLevel();
                 boolean chameleonNavbar = spUtil.isChameleonNavBar();
                 int navbarHeight = spUtil.getNavbarHeight();
+                boolean vibrate = spUtil.isNavbarVibrate();
                 XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,
-                        clearMemLevel, chameleonNavbar, navbarHeight);
+                        clearMemLevel, chameleonNavbar, navbarHeight, vibrate);
                 intent.putExtra("data", setting);
                 intent.setAction(XpNavBarAction.ACT_NAV_BAR_DATA);
                 sendBroadcast(intent);

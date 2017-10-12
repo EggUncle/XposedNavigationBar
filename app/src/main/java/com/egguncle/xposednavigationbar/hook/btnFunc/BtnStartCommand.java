@@ -34,11 +34,11 @@ public class BtnStartCommand extends StartCommand{
 
     @Override
     protected void startCommand(String command) {
-        try {
-            Log.i("testTag", "startCommand: "+command);
-            Process p = Runtime.getRuntime().exec(command);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Log.i("testTag", "startCommand: "+command);
+//            Process p = Runtime.getRuntime().exec(command);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

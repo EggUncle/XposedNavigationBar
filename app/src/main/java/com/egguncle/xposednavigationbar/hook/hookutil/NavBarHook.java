@@ -270,6 +270,7 @@ public class NavBarHook {
         int clearMemLevel = setting.getClearMenLevel();
         boolean chameleonNavbar = setting.isChameleonNavbar();
         int navbarHeight = setting.getNavbarHeight();
+        boolean vibrate = setting.isVibrate();
 
         setHomePointPosition(onHomeNavbar);
         DataHook.rootDown = rootDown;
@@ -277,6 +278,7 @@ public class NavBarHook {
         DataHook.clearMenLevel = clearMemLevel;
         DataHook.chameleonNavbar = chameleonNavbar;
         DataHook.homePointPosition = homePosition;
+        DataHook.vibrate = vibrate;
         musicControllerPanel.updateIconSize();
 
         btnFuncFactory.clearAllBtn();

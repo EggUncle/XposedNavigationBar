@@ -22,6 +22,8 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.hook.hookutil.DataHook;
+
 /**
  * Created by egguncle on 17-9-29.
  */
@@ -33,11 +35,13 @@ public abstract class VibrateClick implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (vibrator == null) {
-            Context context = v.getContext();
-            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (DataHook.vibrate){
+            if (vibrator == null) {
+                Context context = v.getContext();
+                vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            }
+            vibrator.vibrate(10);
         }
-        vibrator.vibrate(20);
         onVibrateClick(v);
     }
 }

@@ -181,6 +181,15 @@
 
         <include layout="@layout/v_split_line" />
 
+        <Switch
+            android:id="@+id/sw_navbar_vibrate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/navbar_vibrate"
+            android:textSize="@dimen/txt_m" />
 
+        <include layout="@layout/v_split_line" />
     </LinearLayout>
 </ScrollView>

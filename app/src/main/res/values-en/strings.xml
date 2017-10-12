@@ -108,6 +108,7 @@
     <string name="chameleon_navbar">chameleon navbar(beta)</string>
     <string name="chameleon_tip">this function is not enough stable,maybe made some app can not open</string>
     <string name="navbar_height">navbar height</string>
+    <string name="navbar_vibrate">vibrate</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>
@@ -127,8 +128,8 @@
         <item>back</item>
         <item>home</item>
         <item>recent</item>
-        <item>clipboard(beta)</item>
-        <item>command(beta)</item>
-        <item>hide navbar(beta)</item>
+        <item>clipboard</item>
+        <item>command(Disabled)</item>
+        <item>hide navbar</item>
     </string-array>
 </resources>

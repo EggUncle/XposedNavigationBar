@@ -61,6 +61,8 @@ public class DataHook {
 
     public static boolean rootDown;
 
+    public static boolean vibrate;
+
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "xpnavbar");
         pre.makeWorldReadable();
@@ -73,6 +75,7 @@ public class DataHook {
         homePointPosition = pre.getInt(ConstantStr.HOME_POINT, 0);
         chameleonNavbar = pre.getBoolean(SPUtil.CHAMELEON_NAVBAR, false);
         rootDown = pre.getBoolean(SPUtil.ROOT_DOWN, false);
+        vibrate = pre.getBoolean(SPUtil.NAVBAR_VIBRATE, false);
         //获取快捷按钮设置数据
         Gson gson = new Gson();
         //在第一次激活重新启动的时候，可能因为没有设置任何快捷按钮，导致这里报错

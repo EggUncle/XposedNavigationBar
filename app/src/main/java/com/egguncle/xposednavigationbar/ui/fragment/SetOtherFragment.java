@@ -53,6 +53,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     //  private Switch swHook90;
     private Switch swRootDown;
     private Switch swChameleonNavbar;
+    private Switch swVibrate;
     private LinearLayout settingAboutMarshmallow;
 
     private SPUtil spUtil;
@@ -87,6 +88,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         swChameleonNavbar = (Switch) view.findViewById(R.id.sw_chameleon_navbar);
         btnNavbarHeight = (LinearLayout) view.findViewById(R.id.btn_navbar_height);
         tvNavbarHeight = (TextView) view.findViewById(R.id.tv_navbar_height);
+        swVibrate = (Switch) view.findViewById(R.id.sw_navbar_vibrate);
     }
 
     @Override
@@ -112,6 +114,12 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                 spUtil.setChameleonNavbar(isChecked);
             }
         });
+        swVibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                spUtil.setNavbarVibrate(isChecked);
+            }
+        });
     }
 
     @Override
@@ -125,6 +133,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         swChameleonNavbar.setChecked(spUtil.isChameleonNavBar());
         navbarHeight = spUtil.getNavbarHeight();
         tvNavbarHeight.setText(navbarHeight + "%");
+        swVibrate.setChecked(spUtil.isNavbarVibrate());
     }
 
     @Override
@@ -204,9 +213,9 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                 View dialogView = View.inflate(view.getContext(), R.layout.d_navbar_height, null);
                 SeekBar skNavbarHeight = (SeekBar) dialogView.findViewById(R.id.sk_navbar_height);
                 final TextView tvHeight = (TextView) dialogView.findViewById(R.id.tv_height);
-                tvHeight.setText(navbarHeight+"%");
+                tvHeight.setText(navbarHeight + "%");
                 skNavbarHeight.setMax(100);
-                skNavbarHeight.setProgress(navbarHeight-50);
+                skNavbarHeight.setProgress(navbarHeight - 50);
                 skNavbarHeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

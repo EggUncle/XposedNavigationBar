@@ -56,11 +56,11 @@ public class SPUtil {
     private static final String HookHorizontal = "hook_horizontal";
     public static final String ROOT_DOWN = "root_down";
     public static final String CHAMELEON_NAVBAR = "chameleon_navbar";
-    public static final String NAVBAR_HEIGHT="navbar_height";
+    public static final String NAVBAR_HEIGHT = "navbar_height";
+    public static final String NAVBAR_VIBRATE = "navbar_vibrate";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
-
 
     private SPUtil() {
 
@@ -106,7 +106,7 @@ public class SPUtil {
             return null;
         }
         List<ShortCut> saveData = gson.fromJson(data, ShortCutData.class).getData();
-        if (saveData!=null){
+        if (saveData != null) {
             list.addAll(saveData);
         }
         return list;
@@ -207,12 +207,21 @@ public class SPUtil {
         return mSharedPreferences.getBoolean(CHAMELEON_NAVBAR, false);
     }
 
-    public void setNavbarHeight(int height){
+    public void setNavbarHeight(int height) {
         mEditor.putInt(NAVBAR_HEIGHT, height);
         mEditor.commit();
     }
 
-    public int getNavbarHeight(){
-        return mSharedPreferences.getInt(NAVBAR_HEIGHT,100);
+    public int getNavbarHeight() {
+        return mSharedPreferences.getInt(NAVBAR_HEIGHT, 100);
+    }
+
+    public boolean isNavbarVibrate(){
+        return mSharedPreferences.getBoolean(NAVBAR_VIBRATE,false);
+    }
+
+    public void setNavbarVibrate(boolean vibrate){
+        mEditor.putBoolean(NAVBAR_VIBRATE,vibrate);
+        mEditor.commit();
     }
 }
