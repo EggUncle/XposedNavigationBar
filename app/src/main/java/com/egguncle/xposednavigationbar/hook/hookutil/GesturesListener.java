@@ -28,7 +28,6 @@ import static com.egguncle.xposednavigationbar.BuildConfig.DEBUG;
 import static de.robv.android.xposed.XposedBridge.log;
 
 public class GesturesListener {
-    private static final String TAG = GesturesListener.class.getSimpleName() + ": ";
     private static final long SWIPE_TIMEOUT_MS = 500;
     private static final int MAX_TRACKED_POINTERS = 32;  // max per input system
     private static final int UNTRACKED_POINTER = -1;
@@ -93,7 +92,7 @@ public class GesturesListener {
                         int y = (int) event.getY();
                         int navbarH = 200;
                         int screenH = PhoneWindowManagerHook.screenH;
-                        XpLog.i("y is " + y + "\n navbarH is " + navbarH + "\n screenH is " + screenH);
+                       // XpLog.i("y is " + y + "\n navbarH is " + navbarH + "\n screenH is " + screenH);
                         if (y > (screenH - navbarH))
                             mCallbacks.onSwipeFromBottom();
                     } else if (swipe == SWIPE_FROM_RIGHT) {

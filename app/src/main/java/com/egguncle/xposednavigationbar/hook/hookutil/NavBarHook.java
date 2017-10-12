@@ -94,8 +94,6 @@ public class NavBarHook {
 
     /**
      * hook android 7.0以下的导航栏
-     *
-     * @throws Throwable
      */
     private static void hookNavBarBeforeNougat(ClassLoader classLoader) throws Throwable {
         final Class<?> navigationBarInflaterViewClass = classLoader.loadClass("com.android.systemui.statusbar.phone.NavigationBarView");
@@ -133,6 +131,8 @@ public class NavBarHook {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                 ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
         rootView.addView(vpXpHook, 0, params);
+
+        setNavbarHeight(context, DataHook.navbarHeight);
     }
 
     private static void initVpHook(final ViewPager vpXpHook, final ViewGroup navbarView,
@@ -276,7 +276,6 @@ public class NavBarHook {
         DataHook.iconScale = iconScale;
         DataHook.clearMenLevel = clearMemLevel;
         DataHook.chameleonNavbar = chameleonNavbar;
-        DataHook.navbarHeight = navbarHeight;
         DataHook.homePointPosition = homePosition;
         musicControllerPanel.updateIconSize();
 
@@ -289,10 +288,15 @@ public class NavBarHook {
         }
 
         if (DataHook.navbarHeight != navbarHeight) {
-            Intent intent = new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
-            intent.putExtra(ConstantStr.TYPE, ConstantStr.NAVBAR_H);
-            intent.putExtra(ConstantStr.NAVBAR_HEIGHT, navbarHeight);
-            context.sendBroadcast(intent);
+            setNavbarHeight(context, navbarHeight);
+            DataHook.navbarHeight = navbarHeight;
         }
+    }
+
+    private static void setNavbarHeight(Context context, int navbarHeight) {
+        Intent intent = new Intent(XpNavBarAction.ACTION_PHONE_WINDOW_MANAGER);
+        intent.putExtra(ConstantStr.TYPE, ConstantStr.NAVBAR_H);
+        intent.putExtra(ConstantStr.NAVBAR_HEIGHT, navbarHeight);
+        context.sendBroadcast(intent);
     }
 }
