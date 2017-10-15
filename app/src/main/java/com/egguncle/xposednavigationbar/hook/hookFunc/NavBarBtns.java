@@ -24,6 +24,7 @@ import android.view.View;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
+import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
 
 /**
  * Created by egguncle on 17-6-21.
@@ -67,10 +68,20 @@ public abstract class NavBarBtns extends VibrateClick implements View.OnLongClic
     void onVibrateClick(View v) {
         switch (mType) {
             case BTN_BACK:
-                goBack();
+                XpNavbarThreadPool.getInstance().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        goBack();
+                    }
+                });
                 break;
             case BTN_HOME:
-                goHome();
+                XpNavbarThreadPool.getInstance().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        goHome();
+                    }
+                });
                 break;
             case BTN_RECENT:
                 goRecent(v.getContext());
@@ -83,12 +94,12 @@ public abstract class NavBarBtns extends VibrateClick implements View.OnLongClic
 
     @Override
     public boolean onLongClick(View v) {
-        new Thread(new Runnable() {
+        XpNavbarThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {
                 longHome();
             }
-        }).start();
+        });
         return true;
     }
 }

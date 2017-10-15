@@ -32,6 +32,8 @@ import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
+import java.lang.reflect.Method;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
@@ -132,24 +134,24 @@ public class PhoneWindowManagerHook {
     }
 
     public static void setNavBarDimensions(Object sPhoneWindowManager, int hp) {
-            int[] navigationBarHeightForRotation;
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-                navigationBarHeightForRotation = (int[]) XposedHelpers.getObjectField(
-                        sPhoneWindowManager, "mNavigationBarHeightForRotation");
-            } else {
-                navigationBarHeightForRotation = (int[]) XposedHelpers.getObjectField(
-                        sPhoneWindowManager, "mNavigationBarHeightForRotationDefault");
-            }
+        int[] navigationBarHeightForRotation;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            navigationBarHeightForRotation = (int[]) XposedHelpers.getObjectField(
+                    sPhoneWindowManager, "mNavigationBarHeightForRotation");
+        } else {
+            navigationBarHeightForRotation = (int[]) XposedHelpers.getObjectField(
+                    sPhoneWindowManager, "mNavigationBarHeightForRotationDefault");
+        }
 
-            final int portraitRotation = XposedHelpers.getIntField(sPhoneWindowManager, "mPortraitRotation");
-            final int upsideDownRotation = XposedHelpers.getIntField(sPhoneWindowManager, "mUpsideDownRotation");
-            if (navigationBarHeightForRotation[portraitRotation] == hp)
-                return;
+        final int portraitRotation = XposedHelpers.getIntField(sPhoneWindowManager, "mPortraitRotation");
+        final int upsideDownRotation = XposedHelpers.getIntField(sPhoneWindowManager, "mUpsideDownRotation");
+        if (navigationBarHeightForRotation[portraitRotation] == hp)
+            return;
 
-            navigationBarHeightForRotation[portraitRotation] =
-                    navigationBarHeightForRotation[upsideDownRotation] =
-                            hp;
-            XposedHelpers.callMethod(sPhoneWindowManager, "updateRotation", false);
+        navigationBarHeightForRotation[portraitRotation] =
+                navigationBarHeightForRotation[upsideDownRotation] =
+                        hp;
+        XposedHelpers.callMethod(sPhoneWindowManager, "updateRotation", false);
     }
 
 }

@@ -20,6 +20,8 @@ package com.egguncle.xposednavigationbar.hook.hookFunc;
 
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
+
 /**
  * Created by egguncle on 17-6-12.
  */
@@ -44,7 +46,7 @@ public abstract class MusicController extends VibrateClick {
 
     @Override
     void onVibrateClick(View v) {
-        new Thread(new Runnable() {
+        XpNavbarThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {
                 switch (mType) {
@@ -59,6 +61,6 @@ public abstract class MusicController extends VibrateClick {
                         break;
                 }
             }
-        }).start();
+        });
     }
 }

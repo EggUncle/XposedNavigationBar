@@ -21,16 +21,22 @@ package com.egguncle.xposednavigationbar.hook.hookutil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
+
+import java.lang.reflect.Field;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -44,6 +50,7 @@ public class PhoneWindowHook {
 
     private final static String PHONE_WINDOW_M = "com.android.internal.policy.PhoneWindow";
     private final static String PHONE_WINDOW = "com.android.internal.policy.impl.PhoneWindow";
+    private final static String CLASS_SYTLE = "com.android.internal.R.styleable";
 
     public static void hook(ClassLoader loader) throws Throwable {
         String pwClassPath;
@@ -52,6 +59,12 @@ public class PhoneWindowHook {
         } else {
             pwClassPath = PHONE_WINDOW;
         }
+        Class<?> internalStyleable = XposedHelpers.findClass(CLASS_SYTLE, loader);
+        Field internalThemeField = XposedHelpers.findField(internalStyleable, "Theme");
+        Field internalColorPrimaryDarkField = XposedHelpers.findField(internalStyleable, "Theme_colorPrimaryDark");
+        final int[] theme = (int[]) internalThemeField.get(null);
+        final int theme_colorPrimaryDark = internalColorPrimaryDarkField.getInt(null);
+
         Class<?> pwClass = loader.loadClass(pwClassPath);
         XposedHelpers.findAndHookMethod(pwClass, "setStatusBarColor", int.class, new XC_MethodHook() {
             @Override
@@ -64,26 +77,64 @@ public class PhoneWindowHook {
         XposedHelpers.findAndHookMethod(Activity.class, "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                try {
-                    Activity activity = (Activity) param.thisObject;
-                    Rect rect = new Rect();
-                    activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-                    Bitmap bmp = activity.getWindow().getDecorView().getDrawingCache();
-
-                    int color = bmp.getPixel(rect.top + 3, 1);
-                    int screenHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
-                    Resources resources = activity.getResources();
-                    int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                    int navbarHeight = resources.getDimensionPixelSize(resourceId);
-                    int color2 = bmp.getPixel(screenHeight - navbarHeight - 3, 1);
-
-                    activity.getWindow().setStatusBarColor(color);
-                    activity.getWindow().setNavigationBarColor(color2);
-                } catch (Exception e) {
-                    XpLog.e(e);
-                }
+                Activity activity = (Activity) param.thisObject;
+                TypedArray typedArray = activity.getTheme().obtainStyledAttributes(theme);
+                int colorPrimaryDark = typedArray.getColor(theme_colorPrimaryDark, Color.TRANSPARENT);
+                typedArray.recycle();
+                if (colorPrimaryDark != Color.TRANSPARENT && colorPrimaryDark != Color.BLACK)
+                    activity.getWindow().setNavigationBarColor(colorPrimaryDark);
             }
         });
     }
+
+//    private final static String PHONE_WINDOW_M = "com.android.internal.policy.PhoneWindow";
+//    private final static String PHONE_WINDOW = "com.android.internal.policy.impl.PhoneWindow";
+//
+//    public static void hook(ClassLoader loader) throws Throwable {
+//        String pwClassPath;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            pwClassPath = PHONE_WINDOW_M;
+//        } else {
+//            pwClassPath = PHONE_WINDOW;
+//        }
+//        Class<?> pwClass = loader.loadClass(pwClassPath);
+//        XposedHelpers.findAndHookMethod(pwClass, "setStatusBarColor", int.class, new XC_MethodHook() {
+//            @Override
+//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                int color = Integer.valueOf(param.args[0].toString());
+//                ((Window) param.thisObject).setNavigationBarColor(color);
+//            }
+//        });
+//
+////        XposedHelpers.findAndHookMethod(Activity.class, "onResume", new XC_MethodHook() {
+////            @Override
+////            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+////                Activity activity = (Activity) param.thisObject;
+////                    Rect rect = new Rect();
+////                    View decorView = activity.getWindow().getDecorView();
+////                    activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+////
+////                    DisplayMetrics outMetrics = new DisplayMetrics();
+////                    WindowManager windowManager = activity.getWindowManager();
+////                    windowManager.getDefaultDisplay().getMetrics(outMetrics);
+////                    int width = outMetrics.widthPixels;
+////                    int height = outMetrics.heightPixels;
+////                    Bitmap bmp = Bitmap.createBitmap(decorView.getDrawingCache(), 0, 0, width,
+////                            height);
+////                    if (bmp == null) {
+////                        XpLog.e("bmp is null");
+////                    }
+////                   // int color = bmp.getPixel(rect.top + 3, 1);
+////                    int screenHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
+////                    Resources resources = activity.getResources();
+////                    int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+////                    int navbarHeight = resources.getDimensionPixelSize(resourceId);
+////                    int color2 = bmp.getPixel(screenHeight - navbarHeight - 3, 1);
+////
+////                 //   activity.getWindow().setStatusBarColor(color);
+////                    activity.getWindow().setNavigationBarColor(color2);
+////            }
+////        });
+//    }
 
 }

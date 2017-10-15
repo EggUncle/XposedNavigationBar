@@ -16,180 +16,175 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        android:id="@+id/btn_home_point"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="@dimen/item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-        <LinearLayout
-            android:id="@+id/btn_home_point"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/home_point"
-                android:textSize="@dimen/txt_m" />
-
-            <TextView
-                android:id="@+id/tv_home_position"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/txt_m" />
-
-        </LinearLayout>
-
-        <include layout="@layout/v_split_line" />
-
-        <LinearLayout
-            android:id="@+id/btn_clear_mem_level"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/clear_mem_level"
-                android:textSize="@dimen/txt_m" />
-
-            <TextView
-                android:id="@+id/tv_clear_mem_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/txt_m" />
-
-        </LinearLayout>
-
-        <include layout="@layout/v_split_line" />
-
-        <LinearLayout
-            android:id="@+id/btn_icon_size"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/icon_size"
-                android:textSize="@dimen/txt_m" />
-
-            <TextView
-                android:id="@+id/tv_icon_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/txt_m" />
-
-        </LinearLayout>
-
-        <include layout="@layout/v_split_line" />
-
-        <LinearLayout
-            android:id="@+id/setting_about_marshmallow"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_weight="1"
+            android:text="@string/home_point"
+            android:textSize="@dimen/txt_m" />
 
-            <Switch
-                android:id="@+id/sw_root_down"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/item_height"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/root_down"
-                android:textSize="@dimen/txt_m" />
+        <TextView
+            android:id="@+id/tv_home_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/txt_m" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/about_root_expand" />
+    </LinearLayout>
 
-            <include layout="@layout/v_split_line" />
-        </LinearLayout>
+    <include layout="@layout/v_split_line" />
 
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/btn_clear_mem_level"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:text="@string/clear_mem_level"
+            android:textSize="@dimen/txt_m" />
 
-            <Switch
-                android:id="@+id/sw_chameleon_navbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/item_height"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/chameleon_navbar"
-                android:textSize="@dimen/txt_m" />
+        <TextView
+            android:id="@+id/tv_clear_mem_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/txt_m" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/chameleon_tip" />
-        </LinearLayout>
+    </LinearLayout>
 
-        <include layout="@layout/v_split_line" />
+    <include layout="@layout/v_split_line" />
 
-        <LinearLayout
-            android:id="@+id/btn_navbar_height"
+    <LinearLayout
+        android:id="@+id/btn_icon_size"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/icon_size"
+            android:textSize="@dimen/txt_m" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/navbar_height"
-                android:textSize="@dimen/txt_m" />
+        <TextView
+            android:id="@+id/tv_icon_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/txt_m" />
 
-            <TextView
-                android:id="@+id/tv_navbar_height"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/txt_m" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <include layout="@layout/v_split_line" />
 
-        <include layout="@layout/v_split_line" />
+    <LinearLayout
+        android:id="@+id/setting_about_marshmallow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <Switch
-            android:id="@+id/sw_navbar_vibrate"
+            android:id="@+id/sw_root_down"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="@string/navbar_vibrate"
+            android:text="@string/root_down"
             android:textSize="@dimen/txt_m" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/about_root_expand" />
 
         <include layout="@layout/v_split_line" />
     </LinearLayout>
-</ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Switch
+            android:id="@+id/sw_chameleon_navbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/chameleon_navbar"
+            android:textSize="@dimen/txt_m" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/chameleon_tip" />
+    </LinearLayout>
+
+    <include layout="@layout/v_split_line" />
+
+    <LinearLayout
+        android:id="@+id/btn_navbar_height"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/navbar_height"
+            android:textSize="@dimen/txt_m" />
+
+        <TextView
+            android:id="@+id/tv_navbar_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/txt_m" />
+
+    </LinearLayout>
+
+    <include layout="@layout/v_split_line" />
+
+    <Switch
+        android:id="@+id/sw_navbar_vibrate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/navbar_vibrate"
+        android:textSize="@dimen/txt_m" />
+
+    <include layout="@layout/v_split_line" />
+</LinearLayout>

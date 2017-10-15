@@ -21,6 +21,8 @@ package com.egguncle.xposednavigationbar.hook.hookFunc;
 import android.content.Context;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
+
 /**
  * Created by egguncle on 17-6-16.
  * 扫描二维码
@@ -31,11 +33,11 @@ public abstract class ScannerQRcode extends VibrateClick {
 
     @Override
     void onVibrateClick(final View v) {
-        new Thread(new Runnable() {
+        XpNavbarThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {
                 scanQR(v.getContext());
             }
-        }).start();
+        });
     }
 }

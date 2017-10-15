@@ -16,36 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook.hookFunc;
+package com.egguncle.xposednavigationbar.hook.util;
 
-import android.content.Context;
-import android.view.View;
-
-import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Created by egguncle on 17-6-10.
+ * Created by egguncle on 17-10-15.
  */
 
-public abstract class ScreenOff extends VibrateClick implements View.OnLongClickListener {
+public class XpNavbarThreadPool extends ThreadPoolExecutor {
+    private static XpNavbarThreadPool instance = new XpNavbarThreadPool(5);
 
-    protected abstract void screenOff(Context context);
-
-    protected abstract void showPowerMenu(Context context);
-
-    @Override
-    void onVibrateClick(View v) {
-        screenOff(v.getContext());
+    private XpNavbarThreadPool(int corePoolSize) {
+        super(corePoolSize, Integer.MAX_VALUE, 5, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());
     }
 
-    @Override
-    public boolean onLongClick(final View v) {
-        XpNavbarThreadPool.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                showPowerMenu(v.getContext());
-            }
-        });
-        return true;
+    public static XpNavbarThreadPool getInstance() {
+        return instance;
     }
 }

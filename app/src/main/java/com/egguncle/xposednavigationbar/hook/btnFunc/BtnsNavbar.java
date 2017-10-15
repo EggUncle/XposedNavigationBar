@@ -29,7 +29,7 @@ import com.egguncle.xposednavigationbar.hook.hookFunc.NavBarBtns;
  * Android原有的返回、home、最近任务键,以及显示和隐藏
  */
 
-public class BtnsNavbar extends NavBarBtns{
+public class BtnsNavbar extends NavBarBtns {
 
     private Instrumentation mInst;
 
@@ -40,22 +40,12 @@ public class BtnsNavbar extends NavBarBtns{
 
     @Override
     protected void goBack() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-            }
-        }).start();
+        mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
     }
 
     @Override
     protected void goHome() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME);
-            }
-        }).start();
+        mInst.sendKeyDownUpSync(KeyEvent.KEYCODE_HOME);
     }
 
     @Override
@@ -66,7 +56,7 @@ public class BtnsNavbar extends NavBarBtns{
 
     @Override
     protected void goRecent(Context context) {
-       context.sendBroadcast(intent);
+        context.sendBroadcast(intent);
     }
 
     @Override
