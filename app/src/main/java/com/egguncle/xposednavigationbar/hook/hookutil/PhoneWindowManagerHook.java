@@ -26,16 +26,11 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.view.WindowManager;
 
-import com.egguncle.xposednavigationbar.BuildConfig;
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
-import com.egguncle.xposednavigationbar.util.SPUtil;
-
-import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;

@@ -26,7 +26,6 @@ import android.view.View;
  */
 
 public abstract class StatusBarController extends VibrateClick {
-    private static boolean statusExpand = false;
 
     protected abstract void expandAllStatusBar(Context context);
 
@@ -34,18 +33,10 @@ public abstract class StatusBarController extends VibrateClick {
 
     protected abstract void expandStatusBar(Context context);
 
-    protected abstract void collapseStatusBar(Context context);
-
     protected abstract boolean requestRoot();
 
     @Override
     void onVibrateClick(View v) {
-        if (statusExpand) {
-            collapseStatusBar(v.getContext());
-            statusExpand = false;
-        } else {
             expandAllStatusBar(v.getContext());
-            statusExpand = true;
-        }
     }
 }

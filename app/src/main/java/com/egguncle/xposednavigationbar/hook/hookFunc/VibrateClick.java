@@ -36,14 +36,12 @@ public abstract class VibrateClick implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        XpLog.i("----try to vibrate----");
         if (DataHook.vibrate){
             if (vibrator == null) {
                 Context context = v.getContext();
                 vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             }
             vibrator.vibrate(10);
-            XpLog.i("----vibrate----");
         }
         onVibrateClick(v);
     }

@@ -72,12 +72,6 @@ public class BtnStatusBarController extends StatusBarController {
     }
 
     @Override
-    protected void collapseStatusBar(Context context) {
-            Object statusBarManager = context.getSystemService(STATUS_BAR);
-            XposedHelpers.callMethod(statusBarManager, "collapsePanels");
-    }
-
-    @Override
     protected boolean requestRoot() {
         //先申请root权限
         Process process = null;
