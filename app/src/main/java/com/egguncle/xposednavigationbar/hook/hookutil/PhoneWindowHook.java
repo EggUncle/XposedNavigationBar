@@ -20,23 +20,32 @@ package com.egguncle.xposednavigationbar.hook.hookutil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -70,11 +79,11 @@ public class PhoneWindowHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 int color = Integer.valueOf(param.args[0].toString());
-                ((Window) param.thisObject).setNavigationBarColor(color);
+                //((Window) param.thisObject).setNavigationBarColor(color);
             }
         });
 
-        XposedHelpers.findAndHookMethod(Activity.class, "onCreate", Bundle.class, new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(Activity.class, "onResume", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 Activity activity = (Activity) param.thisObject;
@@ -83,6 +92,46 @@ public class PhoneWindowHook {
                 typedArray.recycle();
                 if (colorPrimaryDark != Color.TRANSPARENT && colorPrimaryDark != Color.BLACK)
                     activity.getWindow().setNavigationBarColor(colorPrimaryDark);
+
+                //GRAY = 0.30 RED + 0.59 GREEN + 0.11 BLUE
+                //阀值100   小于100白色大于100灰色
+                //灰度0.6
+//                int colorPrimaryDark = activity.getWindow().getNavigationBarColor();
+//                int red = Color.red(colorPrimaryDark);
+//                int green = Color.green(colorPrimaryDark);
+//                int blue = Color.blue(colorPrimaryDark);
+//
+//                float gray = (float) (0.3 * red + 0.59 * green + 0.11 * blue);
+//                XpLog.i("gray is " + gray);
+//                if (gray > 100) {
+//                    XpLog.i("gray is bigger than 100");
+//                    changeNavbarIconsColor(NavBarHook.rootNavBarView);
+//                }
+            }
+        });
+
+        XposedHelpers.findAndHookMethod(pwClass, "setNavigationBarColor", int.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                int color = (int) param.args[0];
+                int red = Color.red(color);
+                int green = Color.green(color);
+                int blue = Color.blue(color);
+
+                float gray = (float) (0.3 * red + 0.59 * green + 0.11 * blue);
+                XpLog.i("gray is " + gray);
+                if (gray > 100) {
+                    XpLog.i("gray is bigger than 100");
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                    Intent intent=new Intent(XpNavBarAction.ACT_NAV_BAR_COLOR);
+                    intent.putExtra("color",true);
+                    context.sendBroadcast(intent);
+                } else {
+                    Context context = (Context) XposedHelpers.getObjectField(param.thisObject, "mContext");
+                    Intent intent=new Intent(XpNavBarAction.ACT_NAV_BAR_COLOR);
+                    intent.putExtra("color",false);
+                    context.sendBroadcast(intent);
+                }
             }
         });
     }
@@ -136,5 +185,4 @@ public class PhoneWindowHook {
 ////            }
 ////        });
 //    }
-
 }

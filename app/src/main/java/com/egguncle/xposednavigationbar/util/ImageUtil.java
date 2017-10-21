@@ -23,7 +23,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -131,5 +137,36 @@ public class ImageUtil {
         }
 
         return path;
+    }
+
+    public static Bitmap handleImageEffect(Bitmap bm, float lum) {
+        Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        Paint paint = new Paint();
+
+        ColorMatrix lumMatrix = new ColorMatrix();
+        lumMatrix.setScale(lum, lum, lum, 1);
+
+        ColorMatrix imageMatrix = new ColorMatrix();
+        imageMatrix.postConcat(lumMatrix);
+
+        paint.setColorFilter(new ColorMatrixColorFilter(imageMatrix));
+        canvas.drawBitmap(bm, 0, 0, paint);
+
+        return bmp;
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        int w = drawable.getIntrinsicWidth();
+        int h = drawable.getIntrinsicHeight();
+        Bitmap.Config config =
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                        : Bitmap.Config.RGB_565;
+        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, w, h);
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }

@@ -23,7 +23,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -64,6 +72,7 @@ public class NavBarHook {
     private static MusicControllerPanel musicControllerPanel;
     private static LinearLayout exNavbar;
     private static LinearLayout onHomeNavbar;
+    private static ViewGroup rootNavbarView;
 
     public static void hook(ClassLoader classLoader) throws Throwable {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
@@ -113,6 +122,7 @@ public class NavBarHook {
     }
 
     private static void hookNavBar(ViewGroup rootView, ViewGroup navbarView) {
+        rootNavbarView = rootView;
         Context context = rootView.getContext();
         ViewPager vpXpHook = new ViewPager(context);
 
@@ -243,6 +253,23 @@ public class NavBarHook {
             }
         };
         context.registerReceiver(navbarDataReceiver, dataFilter);
+
+        IntentFilter navbarColorFilter = new IntentFilter();
+        navbarColorFilter.addAction(XpNavBarAction.ACT_NAV_BAR_COLOR);
+        BroadcastReceiver navbarColorReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                boolean changeColor = intent.getBooleanExtra("color", false);
+                if (changeColor) {
+                    XpLog.i("change color");
+                    changeNavbarIconsColor(rootNavbarView, 0.6f);
+                } else {
+                    XpLog.i("do not change color");
+                    changeNavbarIconsColor(rootNavbarView, 1.0f);
+                }
+            }
+        };
+        context.registerReceiver(navbarColorReceiver, navbarColorFilter);
     }
 
 
@@ -300,5 +327,26 @@ public class NavBarHook {
         intent.putExtra(ConstantStr.TYPE, ConstantStr.NAVBAR_H);
         intent.putExtra(ConstantStr.NAVBAR_HEIGHT, navbarHeight);
         context.sendBroadcast(intent);
+    }
+
+    private static void changeNavbarIconsColor(ViewGroup navbarView, float scale) {
+        ArrayList<ImageView> iconList = new ArrayList<>();
+        findImgView(iconList, navbarView);
+        for (ImageView icon : iconList) {
+            Bitmap bpIcon = ImageUtil.drawableToBitmap(icon.getDrawable());
+            icon.setImageBitmap(ImageUtil.handleImageEffect(bpIcon, scale));
+        }
+    }
+
+    private static void findImgView(ArrayList<ImageView> list, ViewGroup viewGroup) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+            if (child instanceof ImageView) {
+                list.add((ImageView) child);
+            } else if (child instanceof ViewGroup) {
+                ViewGroup vg = (ViewGroup) child;
+                findImgView(list, vg);
+            }
+        }
     }
 }

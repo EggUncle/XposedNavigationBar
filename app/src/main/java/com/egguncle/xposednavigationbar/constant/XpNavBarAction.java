@@ -32,4 +32,5 @@ public class XpNavBarAction {
     public final static String ACTION_PHONE_WINDOW_MANAGER = "com.egguncle.xposednavigationbar.phonewindowmanager";
     public final static String ACTION_PHONE_STATUSBAR = "com.egguncle.xposednavigationbar.phonestatusbar";
     public final static String ACTION_FORCE_STOP_AC = "com.egguncle.xpnavbar.forcestoppackage";
+    public final static String ACT_NAV_BAR_COLOR="com.egguncle.xpnavbar.navbarcolor";
 }
