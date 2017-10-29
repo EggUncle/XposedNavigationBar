@@ -254,22 +254,22 @@ public class NavBarHook {
         };
         context.registerReceiver(navbarDataReceiver, dataFilter);
 
-        IntentFilter navbarColorFilter = new IntentFilter();
-        navbarColorFilter.addAction(XpNavBarAction.ACT_NAV_BAR_COLOR);
-        BroadcastReceiver navbarColorReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                boolean changeColor = intent.getBooleanExtra("color", false);
-                if (changeColor) {
-                    XpLog.i("change color");
-                    changeNavbarIconsColor(rootNavbarView, 0.6f);
-                } else {
-                    XpLog.i("do not change color");
-                    changeNavbarIconsColor(rootNavbarView, 1.0f);
-                }
-            }
-        };
-        context.registerReceiver(navbarColorReceiver, navbarColorFilter);
+//        IntentFilter navbarColorFilter = new IntentFilter();
+//        navbarColorFilter.addAction(XpNavBarAction.ACT_NAV_BAR_COLOR);
+//        BroadcastReceiver navbarColorReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                boolean changeColor = intent.getBooleanExtra("color", false);
+//                if (changeColor) {
+//                    XpLog.i("change color");
+//                    changeNavbarIconsColor(rootNavbarView, 0.7f);
+//                } else {
+//                    XpLog.i("do not change color");
+//                    changeNavbarIconsColor(rootNavbarView, 1.0f);
+//                }
+//            }
+//        };
+//        context.registerReceiver(navbarColorReceiver, navbarColorFilter);
     }
 
 
