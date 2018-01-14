@@ -58,6 +58,7 @@ public class SPUtil {
     public static final String CHAMELEON_NAVBAR = "chameleon_navbar";
     public static final String NAVBAR_HEIGHT = "navbar_height";
     public static final String NAVBAR_VIBRATE = "navbar_vibrate";
+    public static final String HIDE_APP_ICON = "hide_app_icon";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -216,12 +217,21 @@ public class SPUtil {
         return mSharedPreferences.getInt(NAVBAR_HEIGHT, 100);
     }
 
-    public boolean isNavbarVibrate(){
-        return mSharedPreferences.getBoolean(NAVBAR_VIBRATE,false);
+    public boolean isNavbarVibrate() {
+        return mSharedPreferences.getBoolean(NAVBAR_VIBRATE, false);
     }
 
-    public void setNavbarVibrate(boolean vibrate){
-        mEditor.putBoolean(NAVBAR_VIBRATE,vibrate);
+    public void setNavbarVibrate(boolean vibrate) {
+        mEditor.putBoolean(NAVBAR_VIBRATE, vibrate);
         mEditor.commit();
+    }
+
+    public void setHideAppIcon(boolean hide) {
+        mEditor.putBoolean(HIDE_APP_ICON, hide);
+        mEditor.commit();
+    }
+
+    public boolean isHideAppIcon() {
+        return mSharedPreferences.getBoolean(HIDE_APP_ICON, false);
     }
 }

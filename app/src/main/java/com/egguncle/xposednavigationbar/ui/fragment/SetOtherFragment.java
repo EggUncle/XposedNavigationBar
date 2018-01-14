@@ -18,8 +18,11 @@
 
 package com.egguncle.xposednavigationbar.ui.fragment;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -54,6 +57,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     private Switch swRootDown;
     private Switch swChameleonNavbar;
     private Switch swVibrate;
+    private Switch swHideAppIcon;
     private LinearLayout settingAboutMarshmallow;
 
     private SPUtil spUtil;
@@ -89,6 +93,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         btnNavbarHeight = (LinearLayout) view.findViewById(R.id.btn_navbar_height);
         tvNavbarHeight = (TextView) view.findViewById(R.id.tv_navbar_height);
         swVibrate = (Switch) view.findViewById(R.id.sw_navbar_vibrate);
+        swHideAppIcon = (Switch) view.findViewById(R.id.sw_hide_app_icon);
     }
 
     @Override
@@ -120,6 +125,22 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                 spUtil.setNavbarVibrate(isChecked);
             }
         });
+        swHideAppIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                spUtil.setHideAppIcon(isChecked);
+//                if (isChecked) {
+//                    p.setComponentEnabledSetting(activity.getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+//                } else {
+//                    p.setComponentEnabledSetting(activity.getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+//                }
+//                int mode = isChecked ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED :
+//                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+//                getActivity().getPackageManager().setComponentEnabledSetting(
+//                        new ComponentName(getActivity(), "com.egguncle.xposednavigationbar.ui.activity.HomeAlias"), mode, PackageManager.DONT_KILL_APP);
+
+            }
+        });
     }
 
     @Override
@@ -134,6 +155,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         navbarHeight = spUtil.getNavbarHeight();
         tvNavbarHeight.setText(navbarHeight + "%");
         swVibrate.setChecked(spUtil.isNavbarVibrate());
+        swHideAppIcon.setChecked(spUtil.isHideAppIcon());
     }
 
     @Override

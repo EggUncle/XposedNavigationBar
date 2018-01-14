@@ -106,6 +106,7 @@
     <string name="chameleon_tip">这个功能目前不够稳定，可能导致某些应用无法打开</string>
     <string name="navbar_height">导航栏高度</string>
     <string name="navbar_vibrate">震动</string>
+    <string name="hide_app_icon">隐藏app图标</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>

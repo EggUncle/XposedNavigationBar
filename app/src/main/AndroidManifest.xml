@@ -16,6 +16,7 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.egguncle.xposednavigationbar">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -27,6 +28,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".ui.activity.HomeActivity"
             android:label="@string/app_name"
@@ -37,6 +39,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity-->
+            <!--android:name=".ui.activity.HomeActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:theme="@style/AppTheme.NoActionBar">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+        <!--<activity-alias-->
+            <!--android:name=".HomeAlias"-->
+            <!--android:enabled="true"-->
+            <!--android:targetActivity=".ui.activity.HomeActivity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity-alias>-->
 
         <meta-data
             android:name="xposedmodule"

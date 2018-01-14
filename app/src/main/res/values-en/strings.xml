@@ -64,7 +64,7 @@
     <string name="set_fun_dialog">
         choose "add" button to add new functions，long press and drag the list to adjust order，click the "save" button in the upper right corner to save it。
     </string>
-    <string name="i_know">i know</string>
+    <string name="i_know">get it</string>
     <string name="taps">taps</string>
     <string name="nolonger_apper">nolonger appear</string>
     <string name="taps_too_mang_sc">ten shortcuts at most on one page (╯°Д°）╯︵ /(.□ . \)</string>
@@ -109,6 +109,7 @@
     <string name="chameleon_tip">this function is not enough stable,maybe made some app can not open</string>
     <string name="navbar_height">navbar height</string>
     <string name="navbar_vibrate">vibrate</string>
+    <string name="hide_app_icon">hide icon</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>
