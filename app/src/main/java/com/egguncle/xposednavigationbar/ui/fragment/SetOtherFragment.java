@@ -134,10 +134,10 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
 //                } else {
 //                    p.setComponentEnabledSetting(activity.getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 //                }
-//                int mode = isChecked ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED :
-//                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-//                getActivity().getPackageManager().setComponentEnabledSetting(
-//                        new ComponentName(getActivity(), "com.egguncle.xposednavigationbar.ui.activity.HomeAlias"), mode, PackageManager.DONT_KILL_APP);
+                int mode = isChecked ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED :
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+                getActivity().getPackageManager().setComponentEnabledSetting(
+                        new ComponentName(getActivity(), "com.egguncle.xposednavigationbar.ui.activity.HomeActivity-Alias"), mode, PackageManager.DONT_KILL_APP);
 
             }
         });
