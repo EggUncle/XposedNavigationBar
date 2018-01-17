@@ -185,6 +185,9 @@ back和home键使用按键模拟，都很简单的实现了，但是recent键没
 
 (2017-09-21)现在这个功能参考了https://github.com/ztc1997/HideableNavBar 这个模块的整体的实现思路，通过修改导航栏高度来实现想要的效果，因为原先使用windowmanager remove  addview造成了一些问题。
 
+## 隐藏自己的app图标  ✓
+http://blog.csdn.net/qq_18252605/article/details/74171088
+这个比较简单
 
 ## 踩到的一些小坑
 获取上下文对象可以通过在hook资源时拿到某个view，再getContext

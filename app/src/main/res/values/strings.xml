@@ -107,6 +107,7 @@
     <string name="navbar_height">导航栏高度</string>
     <string name="navbar_vibrate">震动</string>
     <string name="hide_app_icon">隐藏app图标</string>
+    <string name="tip_hide_app_icon">可能需要重启启动器</string>
     <string-array name="shortcut_names">
         <item>下拉通知</item>
         <item>快速备忘</item>
