@@ -131,7 +131,7 @@ https://egguncle.github.io/2017/08/27/Android%E6%B8%85%E9%99%A4%E6%89%80%E6%9C%8
 2461     */
 ```
 该方法需要有系统签名才可以使用，最近会改成这个方法来清理后台。实测后发现systemui并没有使用它的权限，在阻止运行源码中发现他hook的位置是SystemServer,回头hook到这里面去尝试调用这个方法。
-(2017-8-27)hook进了ActivityManager中调用了这个方法，效果拔群，不过因为效果太拔群了，在level为50(最低)的情况下，会误伤很多"com.android.*"中的包，所以这里做了过滤，不杀死这些报名下的进程。
+(2017-8-27)hook进了ActivityManager中调用了这个方法，效果拔群，不过因为效果太拔群了，在level为50(最低)的情况下，会误伤很多"com.android"中的包，所以这里做了过滤，不杀死这些报名下的进程。
 
 ## 手电筒
 
@@ -219,6 +219,14 @@ Toast不能直接在子线程中使用，因为在其内部实现中使用了Han
 
 关于sp在7.0上的问题做了一些妥协，7.0上的模块无法在开机后自动完成设置，需要手动设置一次（这个手动可以在系统启动的时候启动模块对应的一个activity或者是别的来进行一次初始化操作来避免手动设置，但是无法直接在systemuiapplication去通过读取sp来初始化了），但是这样有一个好处就是因为这个原因现在所有设置都是动态设置的了，不需要重启再生效。（这个方案现在进行了一次修改，在扩展数据为空的时候点击导航栏的小点会启动一个透明的activity，给systemuiapplication发送包含扩展数据广播来扩展数据，不需要用户进入app再次点按钮了。(2017-09-09 这个方案现在有了变动，现在是将targetSdkVersion调整至23来避免这个7.0新特性的影响)
 
+关于魔趣单手模式：
+因为魔趣的单手模式也是在导航栏上进行手势滑动来触发，所以这里得适配一下，添加了一个关闭魔趣手势滑动功能的选项。
+在魔趣的github里面的frameworks_base中https://github.com/MoKee/android_frameworks_base
+搜索singhandle,发现两个东西：
+https://github.com/MoKee/android_frameworks_base/blob/77a8c002cd5c9d23bfeeec1a4af0a6a6d378ffc6/services/core/java/com/android/server/wm/SingleHandWindow.java
+https://github.com/MoKee/android_frameworks_base/blob/e56f243136ecdfc654b91baecbdfdd6606b70540/packages/SystemUI/src/com/android/systemui/singlehandmode/SlideTouchEvent.java
+startSingleHandMode这个应该就是触发单手模式的方法，这里进行最简单的处理，即hook这个函数，直接将其替换为空，或者在方法执行前加入判断，如果有在软件中设置关闭这个选项，就不执行这个方法直接return。
+isSupportSingleHand也可以但是这里是在init方法里面，如果禁止以后，再开启可能就要重启了，所以还是在上面做。
 # Licence
 ```
 Navigation bar function expansion module

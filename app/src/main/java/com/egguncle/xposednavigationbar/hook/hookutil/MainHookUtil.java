@@ -19,20 +19,14 @@
 package com.egguncle.xposednavigationbar.hook.hookutil;
 
 
-import android.content.res.XModuleResources;
-
 import com.egguncle.xposednavigationbar.BuildConfig;
-import com.egguncle.xposednavigationbar.R;
 import com.egguncle.xposednavigationbar.hook.util.XpLog;
-import com.egguncle.xposednavigationbar.ui.activity.HomeActivity;
 import com.egguncle.xposednavigationbar.util.SPUtil;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
@@ -80,6 +74,7 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
                 break;
             case SYSTEM_UI:
                 try {
+                    MoKeeUtil.hook(lpparam.classLoader);
                     PhoneSatatusBarHook.hook(lpparam.classLoader);
                     NavBarHook.hook(lpparam.classLoader);
                 } catch (Exception e) {
