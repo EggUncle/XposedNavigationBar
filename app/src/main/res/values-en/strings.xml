@@ -35,7 +35,7 @@
         \n
         It can be used by the model with  navbar，and the module was just be tested in the android and CM ROM，part of functions may not work in other ROMs，If the“system interface stops running” recurred after the module was activated that makes the phone doesn\'t work，please connect your phone to the computer and use the adb instructions“adb uninstall com.egguncle.xposednavigationbar”and then uninstall it。
         \n\n
-        It also can work on Nougat with Xposed for N，now I just test it on Mokee.
+        Because of it has mistake with Mokee rom singlehand mode,so if this mode is active,Mokee singlehand mode woudle be disable.
     </string>
     <string name="version">version</string>
     <string name="author">
