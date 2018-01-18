@@ -40,6 +40,8 @@ public class PointerEventDispatcherHook {
                 try {
                     if (param.args[0] instanceof MotionEvent) {
                         MotionEvent event = (MotionEvent) param.args[0];
+                        //XpLog.i("input x "+event.getX());
+                        //XpLog.i("input y "+event.getY());
                         if ((event.getSource() & InputDevice.SOURCE_CLASS_POINTER) != 0) {
                             PhoneWindowManagerHook.gesturesListener.onPointerEvent(event);
                         }

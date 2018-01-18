@@ -28,14 +28,18 @@ import de.robv.android.xposed.XposedHelpers;
 public class MoKeeUtil {
 
     public static void hook(ClassLoader classLoader) throws Throwable {
-        final Class<?> slideTouchEvent =
-                classLoader.loadClass("com.android.systemui.singlehandmode.SlideTouchEvent");
-        XposedHelpers.findAndHookMethod(slideTouchEvent, "startSingleHandMode", float.class, new XC_MethodReplacement() {
-            @Override
-            protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                return null;
-            }
-        });
+        try {
+            final Class<?> slideTouchEvent =
+                    classLoader.loadClass("com.android.systemui.singlehandmode.SlideTouchEvent");
+            XposedHelpers.findAndHookMethod(slideTouchEvent, "startSingleHandMode", float.class, new XC_MethodReplacement() {
+                @Override
+                protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 
 }
