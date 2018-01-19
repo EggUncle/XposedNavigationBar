@@ -31,10 +31,10 @@ public class MoKeeUtil {
         try {
             final Class<?> slideTouchEvent =
                     classLoader.loadClass("com.android.systemui.singlehandmode.SlideTouchEvent");
-            XposedHelpers.findAndHookMethod(slideTouchEvent, "startSingleHandMode", float.class, new XC_MethodReplacement() {
+            XposedHelpers.findAndHookMethod(slideTouchEvent, "isSupportSingleHand", new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                    return null;
+                    return false;
                 }
             });
         } catch (Exception e) {

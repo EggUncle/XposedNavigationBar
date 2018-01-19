@@ -225,8 +225,8 @@ Toast不能直接在子线程中使用，因为在其内部实现中使用了Han
 搜索singhandle,发现两个东西：
 https://github.com/MoKee/android_frameworks_base/blob/77a8c002cd5c9d23bfeeec1a4af0a6a6d378ffc6/services/core/java/com/android/server/wm/SingleHandWindow.java
 https://github.com/MoKee/android_frameworks_base/blob/e56f243136ecdfc654b91baecbdfdd6606b70540/packages/SystemUI/src/com/android/systemui/singlehandmode/SlideTouchEvent.java
-startSingleHandMode这个应该就是触发单手模式的方法，这里进行最简单的处理，即hook这个函数，直接将其替换为空，或者在方法执行前加入判断，如果有在软件中设置关闭这个选项，就不执行这个方法直接return。
-isSupportSingleHand也可以但是这里是在init方法里面，如果禁止以后，再开启可能就要重启了，所以还是在上面做。
+startSingleHandMode这个应该就是触发单手模式的方法，如果进行最简单的处理，即hook这个函数，直接将其替换为空是可以的，因为单手模式的触发和目前扩展的交互方式冲突比较大，所以现在采取了粗糙一些的方式，就是不给出调整的开关，直接阻止单手模式的开关。
+在init方法里面，有一个isSupportSingleHand的方法来判断是否触发，这里直接让它返回false。
 # Licence
 ```
 Navigation bar function expansion module
