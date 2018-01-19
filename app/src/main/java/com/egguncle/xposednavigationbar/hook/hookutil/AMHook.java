@@ -75,6 +75,9 @@ public class AMHook {
                         ArrayList<String> pkgNames = intent.getStringArrayListExtra("data");
                         try {
                             for (String pkgName : pkgNames) {
+                                if (pkgName.contains("com.android")) {
+                                    continue;
+                                }
                                 XpLog.i("kill pkg : " + pkgName);
                                 XposedHelpers.callMethod(am, "forceStopPackage", pkgName);
                             }
