@@ -69,7 +69,12 @@ public class PhoneSatatusBarHook {
                                         XposedHelpers.callMethod(param.thisObject, "clearAllNotifications");
                                         break;
                                     case ConstantStr.RECENT_TASKS:
-                                        XposedHelpers.callMethod(param.thisObject, "toggleRecentApps");
+                                        //这个地方会导致8.0软重启，暂时这样粗糙的处理一下，慢慢适配
+                                        try {
+                                            XposedHelpers.callMethod(param.thisObject, "toggleRecentApps");
+                                        } catch (Exception e) {
+
+                                        }
                                         break;
                                 }
 
