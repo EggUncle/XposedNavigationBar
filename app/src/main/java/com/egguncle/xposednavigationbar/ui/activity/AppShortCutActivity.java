@@ -114,10 +114,10 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
 //        MyItemTouchHelper myItemTouchHelper = new MyItemTouchHelper(onItemTouchCallbackListener);
 //        myItemTouchHelper.attachToRecyclerView(rcvApp);
 
-        IntentFilter intentFilter=new IntentFilter();
+        IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(XpNavBarAction.ACT_CLOSE_ACT_PANEL);
-        receiver=new CloseReceiver();
-        registerReceiver(receiver,intentFilter);
+        receiver = new CloseReceiver();
+        registerReceiver(receiver, intentFilter);
     }
 
     private void initAction() {
@@ -144,22 +144,19 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
     }
 
     /**
-     * 加载系统应用以外的app
+     * 所有app的信息
      *
      * @return
      */
-    private List<AppInfo> loadAppWithoutSystemApp() {
+    private List<AppInfo> loadAllAppInfo() {
         List<PackageInfo> packageInfoList = getPackageManager().getInstalledPackages(0);
         List<AppInfo> appInfoList = new ArrayList<>();
         for (PackageInfo packageInfo : packageInfoList) {
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                //非系统应用
-                AppInfo appInfo = new AppInfo();
-                appInfo.setLabel(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
-                appInfo.setPackgeName(packageInfo.packageName);
-                appInfo.setType(AppInfo.TYPE_APP);
-                appInfoList.add(appInfo);
-            }
+            AppInfo appInfo = new AppInfo();
+            appInfo.setLabel(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
+            appInfo.setPackgeName(packageInfo.packageName);
+            appInfo.setType(AppInfo.TYPE_APP);
+            appInfoList.add(appInfo);
         }
         return appInfoList;
     }
@@ -271,7 +268,7 @@ public class AppShortCutActivity extends Activity implements View.OnClickListene
                         .create().show();
 
                 //去除已经选中的app
-                List<AppInfo> appDataWithoutSystem = loadAppWithoutSystemApp();
+                List<AppInfo> appDataWithoutSystem = loadAllAppInfo();
                 appDataWithoutSystem.removeAll(selectAppInfos);
                 appInfos.addAll(appDataWithoutSystem);
                 List<AppInfo> notSelectShort = loadAppShortCut();
