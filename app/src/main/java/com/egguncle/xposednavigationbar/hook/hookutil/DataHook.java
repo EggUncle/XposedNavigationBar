@@ -54,16 +54,13 @@ public class DataHook {
 
     //内存清理强度
     public static int clearMenLevel;
-
     public static boolean chameleonNavbar;
-
     public static int navbarHeight;
-
     public static boolean rootDown;
-
     public static boolean vibrate;
-
     public static boolean navbarOpt;
+    public static boolean goHomeAfterClick;
+
 
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "xpnavbar");
@@ -93,6 +90,8 @@ public class DataHook {
         navbarHeight = pre.getInt(SPUtil.NAVBAR_HEIGHT, 100);
 
         navbarOpt = pre.getBoolean(SPUtil.NAVBAR_HEIGHT_OPT, false);
+
+        goHomeAfterClick = pre.getBoolean(SPUtil.GO_HOME_AFTER_CLICK, false);
 
         //加载图片资源文件
         Resources res = XModuleResources.createInstance(startupParam.modulePath, null);

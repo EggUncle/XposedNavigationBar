@@ -204,8 +204,9 @@ public class HomeActivity extends BaseActivity {
                 int navbarHeight = spUtil.getNavbarHeight();
                 boolean vibrate = spUtil.isNavbarVibrate();
                 boolean navbarHeightOpt = spUtil.isNavbarHeightOpt();
+                boolean goHomeAfterClick=spUtil.isGoHomeAfterClick();
                 XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,
-                        clearMemLevel, chameleonNavbar, navbarHeight, vibrate, navbarHeightOpt);
+                        clearMemLevel, chameleonNavbar, navbarHeight, vibrate, navbarHeightOpt,goHomeAfterClick);
                 intent.putExtra("data", setting);
                 intent.setAction(XpNavBarAction.ACT_NAV_BAR_DATA);
                 sendBroadcast(intent);

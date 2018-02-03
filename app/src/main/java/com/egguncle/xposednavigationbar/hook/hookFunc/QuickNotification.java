@@ -25,12 +25,12 @@ import android.view.View;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class QuickNotification extends VibrateClick {
+public abstract class QuickNotification extends NavbarBaseClick {
 
     protected abstract void quickNotification(Context context);
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         quickNotification(v.getContext());
     }
 }

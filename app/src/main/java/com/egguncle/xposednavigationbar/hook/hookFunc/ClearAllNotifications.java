@@ -24,13 +24,12 @@ import android.view.View;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
 import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
-import com.egguncle.xposednavigationbar.hook.btnFunc.BtnStatusBarController;
 
 /**
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class ClearAllNotifications extends VibrateClick {
+public abstract class ClearAllNotifications extends NavbarBaseClick {
 
     protected abstract void clearAllNotifications(Context context);
 
@@ -42,7 +41,7 @@ public abstract class ClearAllNotifications extends VibrateClick {
     }
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         clearAllNotifications(v.getContext());
     }
 }

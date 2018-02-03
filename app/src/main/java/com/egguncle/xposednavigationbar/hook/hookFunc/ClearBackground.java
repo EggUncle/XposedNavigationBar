@@ -25,7 +25,7 @@ import android.view.View;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class ClearBackground extends VibrateClick{
+public abstract class ClearBackground extends NavbarBaseClick{
     /**
      * 清理后台 systemuiapplication这个进程没有killbrakground的权限
      * ，去启动透明activity并执行这个方法了
@@ -35,7 +35,7 @@ public abstract class ClearBackground extends VibrateClick{
     protected abstract void clearBackground(Context context);
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         clearBackground(v.getContext());
     }
 }

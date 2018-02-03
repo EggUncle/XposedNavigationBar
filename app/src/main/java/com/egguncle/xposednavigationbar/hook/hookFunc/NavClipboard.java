@@ -25,13 +25,13 @@ import android.view.View;
  * Created by egguncle on 17-6-23.
  */
 
-public abstract class NavClipboard extends VibrateClick {
+public abstract class NavClipboard extends NavbarBaseClick {
     protected abstract void getClipboadrData(Context context);
 
     protected abstract void showClipboardData();
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         getClipboadrData(v.getContext());
     }
 }

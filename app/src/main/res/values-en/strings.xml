@@ -112,6 +112,7 @@
     <string name="navbar_vibrate">vibrate</string>
     <string name="hide_app_icon">hide launcher icon</string>
     <string name="tip_hide_app_icon">may require launcher restart</string>
+    <string name="go_home_after_click">go home navbar after click</string>
     <string-array name="shortcut_names">
         <item>drop-down notification</item>
         <item>quick memo</item>

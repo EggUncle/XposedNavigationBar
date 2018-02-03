@@ -28,11 +28,11 @@ import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
  * 扫描二维码
  */
 
-public abstract class ScannerQRcode extends VibrateClick {
+public abstract class ScannerQRcode extends NavbarBaseClick {
     protected abstract void scanQR(Context context);
 
     @Override
-    void onVibrateClick(final View v) {
+    void onBaseClick(final View v) {
         XpNavbarThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {

@@ -30,7 +30,7 @@ import com.egguncle.xposednavigationbar.constant.XpNavBarAction;
  * Created by egguncle on 17-6-18.
  */
 
-public abstract class ScreenShot extends VibrateClick {
+public abstract class ScreenShot extends NavbarBaseClick {
     protected Intent intent;
 
     protected abstract void screenshot(Context context);
@@ -41,7 +41,7 @@ public abstract class ScreenShot extends VibrateClick {
     }
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         screenshot(v.getContext());
     }
 }

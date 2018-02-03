@@ -26,7 +26,7 @@ import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
  * Created by egguncle on 17-6-12.
  */
 
-public abstract class MusicController extends VibrateClick {
+public abstract class MusicController extends NavbarBaseClick {
     public final static int PREVIOUS = 1;
     public final static int START_OR_STOP = 2;
     public final static int NEXT = 3;
@@ -45,7 +45,7 @@ public abstract class MusicController extends VibrateClick {
     }
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         XpNavbarThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {

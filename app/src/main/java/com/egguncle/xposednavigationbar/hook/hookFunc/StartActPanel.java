@@ -25,7 +25,7 @@ import android.view.View;
  * Created by egguncle on 17-6-11.
  */
 
-public abstract class StartActPanel extends VibrateClick {
+public abstract class StartActPanel extends NavbarBaseClick {
     private static boolean open;
 
     protected abstract void openActPanel(Context context);
@@ -33,7 +33,7 @@ public abstract class StartActPanel extends VibrateClick {
     protected abstract void closeActPanel(Context context);
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         if (open) {
             closeActPanel(v.getContext());
             open = false;

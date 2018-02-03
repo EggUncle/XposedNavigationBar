@@ -60,6 +60,7 @@ public class SPUtil {
     public static final String NAVBAR_VIBRATE = "navbar_vibrate";
     public static final String HIDE_APP_ICON = "hide_app_icon";
     public static final String NAVBAR_HEIGHT_OPT = "navbar_height_opt";
+    public static final String GO_HOME_AFTER_CLICK="go_home_after_click";
 
     //以json形式存储app的设置信息
     private static final String SHORT_CUT_DATA = "short_cut_data";
@@ -243,5 +244,14 @@ public class SPUtil {
 
     public boolean isNavbarHeightOpt() {
         return mSharedPreferences.getBoolean(NAVBAR_HEIGHT_OPT, false);
+    }
+
+    public void setGoHomeAfterClick(boolean goHome){
+        mEditor.putBoolean(GO_HOME_AFTER_CLICK, goHome);
+        mEditor.commit();
+    }
+
+    public boolean isGoHomeAfterClick(){
+        return mSharedPreferences.getBoolean(GO_HOME_AFTER_CLICK, false);
     }
 }

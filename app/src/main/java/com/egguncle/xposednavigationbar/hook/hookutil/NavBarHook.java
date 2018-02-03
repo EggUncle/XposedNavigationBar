@@ -73,6 +73,7 @@ public class NavBarHook {
     private static LinearLayout exNavbar;
     private static LinearLayout onHomeNavbar;
     private static ViewGroup rootNavbarView;
+    private static ViewPager vpXpHook;
 
     public static void hook(ClassLoader classLoader) throws Throwable {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
@@ -124,7 +125,7 @@ public class NavBarHook {
     private static void hookNavBar(ViewGroup rootView, ViewGroup navbarView) {
         rootNavbarView = rootView;
         Context context = rootView.getContext();
-        ViewPager vpXpHook = new ViewPager(context);
+        vpXpHook = new ViewPager(context);
 
         exNavbar = new LinearLayout(context);
         musicControllerPanel = new MusicControllerPanel(context);
@@ -301,6 +302,7 @@ public class NavBarHook {
         int navbarHeight = setting.getNavbarHeight();
         boolean vibrate = setting.isVibrate();
         boolean navbarHightOpt = setting.isNavbarHeightOpt();
+        boolean goHomeAfterClick = setting.isGoHomeAfterClick();
 
         setHomePointPosition(onHomeNavbar);
         DataHook.rootDown = rootDown;
@@ -310,6 +312,7 @@ public class NavBarHook {
         DataHook.homePointPosition = homePosition;
         DataHook.vibrate = vibrate;
         DataHook.navbarOpt = navbarHightOpt;
+        DataHook.goHomeAfterClick = goHomeAfterClick;
         musicControllerPanel.updateIconSize();
 
         btnFuncFactory.clearAllBtn();
@@ -357,5 +360,9 @@ public class NavBarHook {
                 findImgView(list, vg);
             }
         }
+    }
+
+    public static ViewPager getVpXpHook() {
+        return vpXpHook;
     }
 }

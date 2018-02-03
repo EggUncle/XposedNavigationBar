@@ -25,7 +25,7 @@ import android.view.View;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class StatusBarController extends VibrateClick {
+public abstract class StatusBarController extends NavbarBaseClick {
 
     protected abstract void expandAllStatusBar(Context context);
 
@@ -36,7 +36,7 @@ public abstract class StatusBarController extends VibrateClick {
     protected abstract boolean requestRoot();
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
             expandAllStatusBar(v.getContext());
     }
 }

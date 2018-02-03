@@ -59,6 +59,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     private Switch swVibrate;
     private Switch swHideAppIcon;
     private Switch swNavbarHeight;
+    private Switch swGoHome;
     private LinearLayout settingAboutMarshmallow;
 
     private SPUtil spUtil;
@@ -96,6 +97,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         swVibrate = (Switch) view.findViewById(R.id.sw_navbar_vibrate);
         swHideAppIcon = (Switch) view.findViewById(R.id.sw_hide_app_icon);
         swNavbarHeight = (Switch) view.findViewById(R.id.sw_navbar_height);
+        swGoHome = (Switch) view.findViewById(R.id.sw_go_home);
     }
 
     @Override
@@ -109,6 +111,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         swVibrate.setOnCheckedChangeListener(this);
         swHideAppIcon.setOnCheckedChangeListener(this);
         swNavbarHeight.setOnCheckedChangeListener(this);
+        swGoHome.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -127,7 +130,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         boolean navbarHeightOpt = spUtil.isNavbarHeightOpt();
         swNavbarHeight.setChecked(navbarHeightOpt);
         btnNavbarHeight.setVisibility(navbarHeightOpt ? View.VISIBLE : View.GONE);
-
+        swGoHome.setChecked(spUtil.isGoHomeAfterClick());
         //在Android M 上有一个通知栏下拉动画缓慢的bug，这里为它添加一个设置选项，只有M可见
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             settingAboutMarshmallow.setVisibility(View.VISIBLE);
@@ -279,6 +282,10 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
             break;
             case R.id.sw_root_down: {
                 spUtil.setRootDown(isChecked);
+            }
+            break;
+            case R.id.sw_go_home: {
+                spUtil.setGoHomeAfterClick(isChecked);
             }
             break;
         }

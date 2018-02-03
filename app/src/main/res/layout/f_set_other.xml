@@ -231,6 +231,17 @@
             </LinearLayout>
 
             <include layout="@layout/v_split_line" />
+
+            <Switch
+                android:id="@+id/sw_go_home"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/go_home_after_click"
+                android:textSize="@dimen/txt_m" />
+
+            <include layout="@layout/v_split_line" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

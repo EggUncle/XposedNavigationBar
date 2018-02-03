@@ -30,7 +30,7 @@ import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
  * Created by egguncle on 17-6-21.
  */
 
-public abstract class NavBarBtns extends VibrateClick implements View.OnLongClickListener {
+public abstract class NavBarBtns extends NavbarBaseClick implements View.OnLongClickListener {
     private int mType;
     public final static int BTN_BACK = 1;
     public final static int BTN_HOME = 2;
@@ -65,7 +65,7 @@ public abstract class NavBarBtns extends VibrateClick implements View.OnLongClic
     }
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         switch (mType) {
             case BTN_BACK:
                 XpNavbarThreadPool.getInstance().execute(new Runnable() {

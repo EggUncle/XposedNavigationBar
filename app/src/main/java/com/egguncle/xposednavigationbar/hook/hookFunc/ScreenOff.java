@@ -27,14 +27,14 @@ import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
  * Created by egguncle on 17-6-10.
  */
 
-public abstract class ScreenOff extends VibrateClick implements View.OnLongClickListener {
+public abstract class ScreenOff extends NavbarBaseClick implements View.OnLongClickListener {
 
     protected abstract void screenOff(Context context);
 
     protected abstract void showPowerMenu(Context context);
 
     @Override
-    void onVibrateClick(View v) {
+    void onBaseClick(View v) {
         screenOff(v.getContext());
     }
 
