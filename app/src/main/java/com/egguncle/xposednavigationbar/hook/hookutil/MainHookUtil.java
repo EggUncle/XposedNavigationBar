@@ -66,7 +66,15 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
             case ANDROID:
                 try {
                     AMHook.hook(lpparam.classLoader);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+                try {
                     PhoneWindowManagerHook.hook(lpparam);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+                try {
                     PointerEventDispatcherHook.hook(lpparam.classLoader);
                 } catch (Exception e) {
                     XpLog.e(e);
@@ -75,11 +83,20 @@ public class MainHookUtil implements IXposedHookLoadPackage, IXposedHookZygoteIn
             case SYSTEM_UI:
                 try {
                     MoKeeUtil.hook(lpparam.classLoader);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+                try {
                     PhoneSatatusBarHook.hook(lpparam.classLoader);
+                } catch (Exception e) {
+                    XpLog.e(e);
+                }
+                try {
                     NavBarHook.hook(lpparam.classLoader);
                 } catch (Exception e) {
                     XpLog.e(e);
                 }
+
                 break;
 //            case BuildConfig.APPLICATION_ID:
 //                try {

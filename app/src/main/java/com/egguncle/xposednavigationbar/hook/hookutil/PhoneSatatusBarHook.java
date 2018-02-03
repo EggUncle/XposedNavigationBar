@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -41,11 +42,19 @@ import de.robv.android.xposed.XposedHelpers;
 public class PhoneSatatusBarHook {
 
     private final static String PHONE_STATUS_BRA_CLASS = "com.android.systemui.statusbar.phone.PhoneStatusBar";
+    private final static String PHONE_STATUS_BRA_CLASS_OREO = "com.android.systemui.statusbar.phone.StatusBar";
 
     public static void hook(ClassLoader classLoader) throws Throwable {
+        String psbClassPath;
+        if (Build.VERSION.SDK_INT >= 26) {
+            psbClassPath = PHONE_STATUS_BRA_CLASS_OREO;
+        } else {
+            psbClassPath = PHONE_STATUS_BRA_CLASS;
+        }
+
         //获取清除通知的方法
         Class<?> phoneStatusBarClass =
-                classLoader.loadClass(PHONE_STATUS_BRA_CLASS);
+                classLoader.loadClass(psbClassPath);
         XposedHelpers.findAndHookMethod(phoneStatusBarClass,
                 "start", new XC_MethodHook() {
                     @Override
