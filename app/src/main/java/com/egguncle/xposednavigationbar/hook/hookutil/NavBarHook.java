@@ -142,7 +142,9 @@ public class NavBarHook {
                 ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
         rootView.addView(vpXpHook, 0, params);
 
-        setNavbarHeight(context, DataHook.navbarHeight);
+        if (DataHook.navbarOpt) {
+            setNavbarHeight(context, DataHook.navbarHeight);
+        }
     }
 
     private static void initVpHook(final ViewPager vpXpHook, final ViewGroup navbarView,
@@ -318,10 +320,10 @@ public class NavBarHook {
             }
         }
 
-        if (DataHook.navbarHeight != navbarHeight && navbarHightOpt) {
+        if (navbarHightOpt) {
             setNavbarHeight(context, navbarHeight);
             DataHook.navbarHeight = navbarHeight;
-        } else if(!navbarHightOpt){
+        } else {
             navbarHeight = -1;
             DataHook.navbarHeight = -1;
             setNavbarHeight(context, navbarHeight);

@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Build;
+import android.view.Display;
 import android.view.WindowManager;
 
 import com.egguncle.xposednavigationbar.constant.ConstantStr;
@@ -128,6 +129,13 @@ public class PhoneWindowManagerHook {
                 });
             }
         });
+        XposedHelpers.findAndHookMethod(pwmClass, "setInitialDisplaySize",
+                Display.class, int.class, int.class, int.class, new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        setNavBarDimensions(param.thisObject, navbarH, defaultNavbarH);
+                    }
+                });
     }
 
     public static void setNavBarDimensions(Object sPhoneWindowManager, int hp, int defaultNavbarH) {
