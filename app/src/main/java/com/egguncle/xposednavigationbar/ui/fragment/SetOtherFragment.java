@@ -42,7 +42,7 @@ import com.egguncle.xposednavigationbar.util.SPUtil;
  * Created by egguncle on 17-8-11.
  */
 
-public class SetOtherFragment extends BaseFragment implements View.OnClickListener {
+public class SetOtherFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private final static String TAG = SetOtherFragment.class.getName();
 
     private LinearLayout btnHomePoint;
@@ -58,6 +58,7 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
     private Switch swChameleonNavbar;
     private Switch swVibrate;
     private Switch swHideAppIcon;
+    private Switch swNavbarHeight;
     private LinearLayout settingAboutMarshmallow;
 
     private SPUtil spUtil;
@@ -94,53 +95,20 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         tvNavbarHeight = (TextView) view.findViewById(R.id.tv_navbar_height);
         swVibrate = (Switch) view.findViewById(R.id.sw_navbar_vibrate);
         swHideAppIcon = (Switch) view.findViewById(R.id.sw_hide_app_icon);
+        swNavbarHeight = (Switch) view.findViewById(R.id.sw_navbar_height);
     }
 
     @Override
     void initAction() {
-        //在Android M 上有一个通知栏下拉动画缓慢的bug，这里为它添加一个设置选项，只有M可见
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
-            settingAboutMarshmallow.setVisibility(View.VISIBLE);
-        }
-
         btnHomePoint.setOnClickListener(this);
         btnClearMemLevel.setOnClickListener(this);
         btnIconSize.setOnClickListener(this);
         btnNavbarHeight.setOnClickListener(this);
-        swRootDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                spUtil.setRootDown(isChecked);
-            }
-        });
-        swChameleonNavbar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                spUtil.setChameleonNavbar(isChecked);
-            }
-        });
-        swVibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                spUtil.setNavbarVibrate(isChecked);
-            }
-        });
-        swHideAppIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                spUtil.setHideAppIcon(isChecked);
-//                if (isChecked) {
-//                    p.setComponentEnabledSetting(activity.getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-//                } else {
-//                    p.setComponentEnabledSetting(activity.getComponentName(), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-//                }
-                int mode = isChecked ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED :
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-                getActivity().getPackageManager().setComponentEnabledSetting(
-                        new ComponentName(getActivity(), "com.egguncle.xposednavigationbar.ui.activity.HomeActivity-Alias"), mode, PackageManager.DONT_KILL_APP);
-
-            }
-        });
+        swRootDown.setOnCheckedChangeListener(this);
+        swChameleonNavbar.setOnCheckedChangeListener(this);
+        swVibrate.setOnCheckedChangeListener(this);
+        swHideAppIcon.setOnCheckedChangeListener(this);
+        swNavbarHeight.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -156,6 +124,15 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
         tvNavbarHeight.setText(navbarHeight + "%");
         swVibrate.setChecked(spUtil.isNavbarVibrate());
         swHideAppIcon.setChecked(spUtil.isHideAppIcon());
+        boolean navbarHeightOpt = spUtil.isNavbarHeightOpt();
+        swNavbarHeight.setChecked(navbarHeightOpt);
+        btnNavbarHeight.setVisibility(navbarHeightOpt ? View.VISIBLE : View.GONE);
+
+        //在Android M 上有一个通知栏下拉动画缓慢的bug，这里为它添加一个设置选项，只有M可见
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            settingAboutMarshmallow.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -265,6 +242,43 @@ public class SetOtherFragment extends BaseFragment implements View.OnClickListen
                                 tvNavbarHeight.setText(navbarHeight + "%");
                             }
                         }).create().show();
+            }
+            break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.sw_chameleon_navbar: {
+                spUtil.setChameleonNavbar(isChecked);
+            }
+            break;
+            case R.id.sw_hide_app_icon: {
+                spUtil.setHideAppIcon(isChecked);
+                int mode = isChecked ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED :
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+                getActivity().getPackageManager().setComponentEnabledSetting(
+                        new ComponentName(getActivity(), "com.egguncle.xposednavigationbar.ui.activity.HomeActivity-Alias"),
+                        mode, PackageManager.DONT_KILL_APP);
+
+            }
+            break;
+            case R.id.sw_navbar_height: {
+                spUtil.setNavbarHeightOpt(isChecked);
+                if (isChecked) {
+                    btnNavbarHeight.setVisibility(View.VISIBLE);
+                } else {
+                    btnNavbarHeight.setVisibility(View.GONE);
+                }
+            }
+            break;
+            case R.id.sw_navbar_vibrate: {
+                spUtil.setNavbarVibrate(isChecked);
+            }
+            break;
+            case R.id.sw_root_down: {
+                spUtil.setRootDown(isChecked);
             }
             break;
         }

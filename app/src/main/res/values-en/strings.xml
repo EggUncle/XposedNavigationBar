@@ -108,6 +108,7 @@
     <string name="chameleon_navbar">chameleon navbar(beta)</string>
     <string name="chameleon_tip">this function is not enough stable,maybe made some app can not open</string>
     <string name="navbar_height">navbar height</string>
+    <string name="navbar_height_opt">navbar height option</string>
     <string name="navbar_vibrate">vibrate</string>
     <string name="hide_app_icon">hide launcher icon</string>
     <string name="tip_hide_app_icon">may require launcher restart</string>

@@ -41,13 +41,14 @@ public class XpNavBarSetting implements Parcelable {
     private boolean mChameleonNavbar;
     private int mNavbarHeight;
     private boolean mVibrate;
+    private boolean mNavbarHeightOpt;
 
     public final static int LEFT = 0;
     public final static int RIGHT = 1;
     public final static int DISMISS = 2;
 
     public XpNavBarSetting(List<ShortCut> shortCutData, int homePointPosition, int iconSize,
-                           boolean rootDown, int clearMenLevel, boolean chameleonNavbar, int navbarHeight, boolean vibrate) {
+                           boolean rootDown, int clearMenLevel, boolean chameleonNavbar, int navbarHeight, boolean vibrate, boolean navbarHeightOpt) {
         mShortCutData = shortCutData;
         mHomePointPosition = homePointPosition;
         mIconSize = iconSize;
@@ -56,6 +57,7 @@ public class XpNavBarSetting implements Parcelable {
         mChameleonNavbar = chameleonNavbar;
         mNavbarHeight = navbarHeight;
         mVibrate = vibrate;
+        mNavbarHeightOpt = navbarHeightOpt;
     }
 
 
@@ -68,6 +70,7 @@ public class XpNavBarSetting implements Parcelable {
         mChameleonNavbar = in.readByte() != 0;
         mNavbarHeight = in.readInt();
         mVibrate = in.readByte() != 0;
+        mNavbarHeightOpt = in.readByte() != 0;
     }
 
     public static final Creator<XpNavBarSetting> CREATOR = new Creator<XpNavBarSetting>() {
@@ -89,7 +92,6 @@ public class XpNavBarSetting implements Parcelable {
     public int getHomePointPosition() {
         return mHomePointPosition;
     }
-
 
     public int getIconSize() {
         return mIconSize;
@@ -115,6 +117,10 @@ public class XpNavBarSetting implements Parcelable {
         return mVibrate;
     }
 
+    public boolean isNavbarHeightOpt() {
+        return mNavbarHeightOpt;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -130,5 +136,6 @@ public class XpNavBarSetting implements Parcelable {
         dest.writeByte((byte) (mChameleonNavbar ? 1 : 0));
         dest.writeInt(mNavbarHeight);
         dest.writeByte((byte) (mVibrate ? 1 : 0));
+        dest.writeByte((byte) (mNavbarHeightOpt ? 1 : 0));
     }
 }

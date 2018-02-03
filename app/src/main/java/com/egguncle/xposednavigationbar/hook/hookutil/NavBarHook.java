@@ -298,6 +298,7 @@ public class NavBarHook {
         boolean chameleonNavbar = setting.isChameleonNavbar();
         int navbarHeight = setting.getNavbarHeight();
         boolean vibrate = setting.isVibrate();
+        boolean navbarHightOpt = setting.isNavbarHeightOpt();
 
         setHomePointPosition(onHomeNavbar);
         DataHook.rootDown = rootDown;
@@ -306,6 +307,7 @@ public class NavBarHook {
         DataHook.chameleonNavbar = chameleonNavbar;
         DataHook.homePointPosition = homePosition;
         DataHook.vibrate = vibrate;
+        DataHook.navbarOpt = navbarHightOpt;
         musicControllerPanel.updateIconSize();
 
         btnFuncFactory.clearAllBtn();
@@ -316,9 +318,13 @@ public class NavBarHook {
             }
         }
 
-        if (DataHook.navbarHeight != navbarHeight) {
+        if (DataHook.navbarHeight != navbarHeight && navbarHightOpt) {
             setNavbarHeight(context, navbarHeight);
             DataHook.navbarHeight = navbarHeight;
+        } else if(!navbarHightOpt){
+            navbarHeight = -1;
+            DataHook.navbarHeight = -1;
+            setNavbarHeight(context, navbarHeight);
         }
     }
 
@@ -329,6 +335,7 @@ public class NavBarHook {
         context.sendBroadcast(intent);
     }
 
+    //目前并没有用到
     private static void changeNavbarIconsColor(ViewGroup navbarView, float scale) {
         ArrayList<ImageView> iconList = new ArrayList<>();
         findImgView(iconList, navbarView);

@@ -203,8 +203,9 @@ public class HomeActivity extends BaseActivity {
                 boolean chameleonNavbar = spUtil.isChameleonNavBar();
                 int navbarHeight = spUtil.getNavbarHeight();
                 boolean vibrate = spUtil.isNavbarVibrate();
+                boolean navbarHeightOpt = spUtil.isNavbarHeightOpt();
                 XpNavBarSetting setting = new XpNavBarSetting(shortCutList, homePosition, iconSize, rootDown,
-                        clearMemLevel, chameleonNavbar, navbarHeight, vibrate);
+                        clearMemLevel, chameleonNavbar, navbarHeight, vibrate, navbarHeightOpt);
                 intent.putExtra("data", setting);
                 intent.setAction(XpNavBarAction.ACT_NAV_BAR_DATA);
                 sendBroadcast(intent);
@@ -266,6 +267,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    //目前并没有用到
     private void checkActivated() {
         if (getActivatedVersion() != BuildConfig.VERSION_CODE) {
             new AlertDialog.Builder(this)

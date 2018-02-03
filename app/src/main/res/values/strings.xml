@@ -105,6 +105,7 @@
     <string name="chameleon_navbar">导航栏变色(测试)</string>
     <string name="chameleon_tip">这个功能目前不够稳定，可能导致某些应用无法打开</string>
     <string name="navbar_height">导航栏高度</string>
+    <string name="navbar_height_opt">导航栏高度调整</string>
     <string name="navbar_vibrate">震动</string>
     <string name="hide_app_icon">隐藏app图标</string>
     <string name="tip_hide_app_icon">可能需要重启启动器</string>

@@ -63,6 +63,8 @@ public class DataHook {
 
     public static boolean vibrate;
 
+    public static boolean navbarOpt;
+
     public static void init(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XSharedPreferences pre = new XSharedPreferences(BuildConfig.APPLICATION_ID, "xpnavbar");
         pre.makeWorldReadable();
@@ -89,6 +91,8 @@ public class DataHook {
         iconScale = pre.getInt(ConstantStr.ICON_SIZE, 40);
 
         navbarHeight = pre.getInt(SPUtil.NAVBAR_HEIGHT, 100);
+
+        navbarOpt = pre.getBoolean(SPUtil.NAVBAR_HEIGHT_OPT, false);
 
         //加载图片资源文件
         Resources res = XModuleResources.createInstance(startupParam.modulePath, null);

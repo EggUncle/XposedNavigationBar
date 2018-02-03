@@ -47,6 +47,7 @@ public class PhoneWindowManagerHook {
 
     public static int screenH;
     public static int navbarH;
+    public static int defaultNavbarH;
 
     public static void hook(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         String pwmClassPath;
@@ -65,7 +66,8 @@ public class PhoneWindowManagerHook {
                 screenH = wm.getDefaultDisplay().getHeight();
                 final Resources resources = mContext.getResources();
                 final int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                navbarH = resources.getDimensionPixelSize(resourceId);
+                defaultNavbarH = resources.getDimensionPixelSize(resourceId);
+                navbarH = defaultNavbarH;
                 if (navbarH == 0) {
                     navbarH = 150;
                 }
@@ -84,13 +86,13 @@ public class PhoneWindowManagerHook {
                                     }
                                     break;
                                 case ConstantStr.HIDE_NAVBAR: {
-                                    setNavBarDimensions(param.thisObject, 0);
+                                    setNavBarDimensions(param.thisObject, 0, defaultNavbarH);
                                 }
                                 break;
                                 case ConstantStr.NAVBAR_H: {
                                     navbarH = resources.getDimensionPixelSize(resourceId);
                                     navbarH = (int) (navbarH * (((float) intent.getIntExtra(ConstantStr.NAVBAR_HEIGHT, 100) / 100)));
-                                    setNavBarDimensions(param.thisObject, navbarH);
+                                    setNavBarDimensions(param.thisObject, navbarH, defaultNavbarH);
                                 }
                                 break;
                             }
@@ -111,7 +113,7 @@ public class PhoneWindowManagerHook {
 
                     @Override
                     public void onSwipeFromBottom() {
-                        setNavBarDimensions(param.thisObject, navbarH);
+                        setNavBarDimensions(param.thisObject, navbarH, defaultNavbarH);
                     }
 
                     @Override
@@ -128,7 +130,11 @@ public class PhoneWindowManagerHook {
         });
     }
 
-    public static void setNavBarDimensions(Object sPhoneWindowManager, int hp) {
+    public static void setNavBarDimensions(Object sPhoneWindowManager, int hp, int defaultNavbarH) {
+        if (hp == -1) {
+            hp = defaultNavbarH;
+        }
+
         int[] navigationBarHeightForRotation;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
             navigationBarHeightForRotation = (int[]) XposedHelpers.getObjectField(
