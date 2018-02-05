@@ -16,6 +16,12 @@ https://github.com/EggUncle/XposedNavigationBar/blob/master/ChangeLog.md
 
 
 # -开发中-
+
+## 小本本
+把反馈里面有意思的功能记下来回头实现一下，偏技术类的，改图之类的就先不记下来了233333
+仿mBack功能键
+添加手机导航栏的开关什么的，给有实体按键的手机来开启导航栏用
+
 ## 扩展的实现
 实现的方法还是很简单的，只是在导航栏对应的view中使用addview加入一些布局，但是获取到view实例的方法有两种，一种通过布局文件，一种通过view这个类的onFinishInflate方法，起初使用的是前一种方法，现在用的是后一种，因为目前发现在lineage OS上，对应布局文件的hook无法生效，但是目前通过第二种方法以及可以hook成功了，rr上也有类似的问题，使用第二种方法也无法解决，原因不详，因为xposed的handleInitPackageResources方法会在布局文件加载的时候生效，可能是不同的rom在这个地方的行为有一些不同，rr上很多对导航栏进行修改的模块都没有生效。
 
