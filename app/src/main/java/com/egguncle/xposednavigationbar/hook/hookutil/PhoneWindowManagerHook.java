@@ -49,9 +49,11 @@ public class PhoneWindowManagerHook {
     public static int screenH;
     public static int navbarH;
     public static int defaultNavbarH;
+    private static boolean isHide;
 
     public static void hook(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         String pwmClassPath;
+        isHide = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             pwmClassPath = PHONE_WINDOW_MANAGER_M;
         } else {
@@ -88,6 +90,7 @@ public class PhoneWindowManagerHook {
                                     break;
                                 case ConstantStr.HIDE_NAVBAR: {
                                     setNavBarDimensions(param.thisObject, 0, defaultNavbarH);
+                                    isHide = true;
                                 }
                                 break;
                                 case ConstantStr.NAVBAR_H: {
@@ -114,6 +117,7 @@ public class PhoneWindowManagerHook {
 
                     @Override
                     public void onSwipeFromBottom() {
+                        isHide = false;
                         setNavBarDimensions(param.thisObject, navbarH, defaultNavbarH);
                     }
 
@@ -133,7 +137,12 @@ public class PhoneWindowManagerHook {
                 Display.class, int.class, int.class, int.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        setNavBarDimensions(param.thisObject, navbarH, defaultNavbarH);
+                        if (isHide) {
+                            setNavBarDimensions(param.thisObject, 0, defaultNavbarH);
+                        } else {
+                            setNavBarDimensions(param.thisObject, navbarH, defaultNavbarH);
+                        }
+
                     }
                 });
     }
