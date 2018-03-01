@@ -18,8 +18,10 @@
 
 package com.egguncle.xposednavigationbar.hook.hookFunc;
 
+import android.content.Context;
 import android.view.View;
 
+import com.egguncle.xposednavigationbar.hook.util.XpLog;
 import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
 
 /**
@@ -29,18 +31,19 @@ import com.egguncle.xposednavigationbar.hook.util.XpNavbarThreadPool;
 public abstract class StartCommand extends NavbarBaseClick {
     private String mCommand;
 
-    protected abstract void startCommand(String command);
+    protected abstract void startCommand(String command,Context context);
 
     public StartCommand(String command) {
         mCommand = command;
+        XpLog.i(command+"----");
     }
 
     @Override
-    void onBaseClick(View v) {
+    void onBaseClick(final View v) {
         XpNavbarThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {
-                startCommand(mCommand);
+                startCommand(mCommand,v.getContext());
             }
         });
     }

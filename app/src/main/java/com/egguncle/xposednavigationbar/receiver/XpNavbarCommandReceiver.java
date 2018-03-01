@@ -1,6 +1,6 @@
 /*
  *     Navigation bar function expansion module
- *     Copyright (C) 2017 egguncle cicadashadow@gmail.com
+ *     Copyright (C) 2018 egguncle cicadashadow@gmail.com
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,35 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.egguncle.xposednavigationbar.hook.btnFunc;
+package com.egguncle.xposednavigationbar.receiver;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
-import com.egguncle.xposednavigationbar.constant.ConstantStr;
-import com.egguncle.xposednavigationbar.hook.hookFunc.StartCommand;
-import com.egguncle.xposednavigationbar.hook.util.XpLog;
+import android.widget.Toast;
 
 import static com.egguncle.xposednavigationbar.constant.ConstantStr.COMMAND_STR;
 
-/**
- * Created by egguncle on 17-6-25.
- */
-
-public class BtnStartCommand extends StartCommand {
-    private Intent mIntent;
-
-    public BtnStartCommand(String command) {
-        super(command);
-        mIntent = new Intent();
-        mIntent.setAction(ConstantStr.ACTION_COMMAND);
-    }
+public class XpNavbarCommandReceiver extends BroadcastReceiver {
 
     @Override
-    protected void startCommand(String command, Context context) {
-        mIntent.putExtra(COMMAND_STR, command);
-        XpLog.i(command);
-        context.sendBroadcast(mIntent);
+    public void onReceive(Context context, Intent intent) {
+
+        String command = intent.getStringExtra(COMMAND_STR);
+        try {
+            Log.i("XpNavBar","startCommand: " + command);
+            Process p = Runtime.getRuntime().exec(command);
+            Toast.makeText(context,"run command success",Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context,"run command failed",Toast.LENGTH_SHORT).show();
+        }
     }
 }

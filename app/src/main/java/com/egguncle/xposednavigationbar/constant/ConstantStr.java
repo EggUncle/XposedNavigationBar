@@ -106,5 +106,8 @@ public class ConstantStr {
     public static final int TAKE_SCREENSHOT = 4;
     public static final int NAVBAR_H = 5;
 
-    public static final String NAVBAR_HEIGHT="navbar_height";
+    public static final String NAVBAR_HEIGHT = "navbar_height";
+
+    public static final String ACTION_COMMAND = "com.egguncle.xposednavigationbar.command";
+    public static final String COMMAND_STR="command_str";
 }

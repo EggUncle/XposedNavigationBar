@@ -28,7 +28,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".ui.activity.HomeActivity"
             android:label="@string/app_name"
@@ -47,6 +46,7 @@
             android:targetActivity=".ui.activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -97,6 +97,15 @@
         <activity
             android:name=".ui.activity.ManualActivity"
             android:parentActivityName=".ui.activity.HomeActivity" />
+
+        <receiver
+            android:name=".receiver.XpNavbarCommandReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.egguncle.xposednavigationbar.command"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

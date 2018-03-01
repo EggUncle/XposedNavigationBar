@@ -133,7 +133,7 @@
         <item>home</item>
         <item>recent</item>
         <item>clipboard</item>
-        <item>command(Disabled)</item>
+        <item>command</item>
         <item>hide navbar</item>
     </string-array>
 </resources>
