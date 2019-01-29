@@ -64,6 +64,7 @@
     <string name="set_fun_dialog">
         choose "add" button to add new functions，long press and drag the list to adjust order，click the "save" button in the upper right corner to save it。
     </string>
+    <string name="copy">copy</string>
     <string name="i_know">get it</string>
     <string name="taps">taps</string>
     <string name="nolonger_apper">nolonger appear</string>

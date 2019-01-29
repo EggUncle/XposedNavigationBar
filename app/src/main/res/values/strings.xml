@@ -62,6 +62,7 @@
     <string name="set_fun_dialog">
         使用添加按钮添加新功能，列表项可以长按拖动来调整顺序，点击右上角保存按钮进行保存。
     </string>
+    <string name="copy">复制</string>
     <string name="i_know">我知道了</string>
     <string name="taps">提示</string>
     <string name="nolonger_apper">不再显示</string>

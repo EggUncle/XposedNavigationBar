@@ -37,7 +37,7 @@ import java.util.List;
  * Created by egguncle on 17-8-11.
  */
 
-public class MomoFragment extends  BaseFragment{
+public class MomoFragment extends BaseFragment {
     private RecyclerView rcvMomo;
 
     private List<Momo> momoList;
@@ -46,10 +46,10 @@ public class MomoFragment extends  BaseFragment{
 
     @Override
     void initView(View view) {
-        rcvMomo = (RecyclerView)view.findViewById(R.id.rcv_momo);
+        rcvMomo = (RecyclerView) view.findViewById(R.id.rcv_momo);
         rcvMomo.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        momoList=new ArrayList<>();
-        adapter=new MomoAdapter(momoList);
+        momoList = new ArrayList<>();
+        adapter = new MomoAdapter(momoList, view.getContext());
         rcvMomo.setAdapter(adapter);
     }
 

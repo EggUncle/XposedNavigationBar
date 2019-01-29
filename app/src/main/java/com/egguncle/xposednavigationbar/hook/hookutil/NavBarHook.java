@@ -211,9 +211,10 @@ public class NavBarHook {
         Context context = homeNavbar.getContext();
 
         ImageButton btnCall = new ImageButton(context);
+        btnCall.setBackgroundColor(Color.RED);
         btnCall.setImageBitmap(ImageUtil.byte2Bitmap(DataHook.mapImgRes.get(ConstantStr.FUNC_SMALL_POINT_CODE)));
         btnCall.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        btnCall.setBackgroundColor(Color.alpha(255));
+        //btnCall.setBackgroundColor(Color.alpha(255));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         homeNavbar.addView(btnCall, params);

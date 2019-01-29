@@ -18,6 +18,8 @@
 
 package com.egguncle.xposednavigationbar.ui.adapter;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -39,9 +41,11 @@ import java.util.List;
 
 public class MomoAdapter extends RecyclerView.Adapter<MomoAdapter.MomoViewHolder> {
     private List<Momo> mListMomo;
+    private ClipboardManager cm;
 
-    public MomoAdapter(List<Momo> listMomo) {
+    public MomoAdapter(List<Momo> listMomo, Context context) {
         mListMomo = listMomo;
+        cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
     @Override
@@ -78,6 +82,27 @@ public class MomoAdapter extends RecyclerView.Adapter<MomoAdapter.MomoViewHolder
                         })
                         .create().show();
                 return true;
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setTitle(momo.getDate().toString())
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setPositiveButton(R.string.copy, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                cm.setText(momo.getContent());
+                            }
+                        })
+                        .setMessage(momo.getContent())
+                        .create().show();
             }
         });
     }
