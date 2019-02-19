@@ -153,7 +153,7 @@ public class BtnFuncFactory {
     public void createBtnAndSetFunc(LinearLayout line, ShortCut sc) {
         int iconScale = DataHook.iconScale;
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         p.weight = 1;
         p.gravity = Gravity.CENTER;
 
@@ -171,7 +171,7 @@ public class BtnFuncFactory {
         }
         btn.setImageBitmap(iconBitmap);
 
-        ColorStateList colorStateList = createColorStateList(0xffffffff, 0xffffff00, 0xff0000ff, 0xffff0000);
+        ColorStateList colorStateList = createColorStateList(0xffffffff, 0xffcccccc, 0xff0000ff, 0xffff0000);
         RippleDrawable ripple = new RippleDrawable(colorStateList, null, null);
         btn.setBackground(ripple);
         btn.setScaleType(ImageView.ScaleType.CENTER);
